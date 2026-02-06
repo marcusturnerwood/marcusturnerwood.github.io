@@ -4,4 +4,5 @@ title: About
 permalink: /about/
 ---
 
-Write your about page here.
+Writing short articles on topics I find interesting or important.
+- [LinkedIn](https://www.linkedin.com/in/marcus-turner-wood/)
