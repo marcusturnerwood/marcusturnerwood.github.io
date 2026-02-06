@@ -4,9 +4,12 @@ title: Themes
 permalink: /themes/
 ---
 
-## Themes (categories)
-{% for c in site.categories %}
-  {% assign name = c[0] %}
-  {% assign slug = name | slugify %}
-- [{{ name }}](/themes/{{ slug }}/)
+{% assign cats = site.categories | sort %}
+{% for c in cats %}
+## {{ c[0] }}
+
+{% for post in c[1] %}
+- [{{ post.title }}]({{ post.url }}) ({{ post.date | date: "%Y-%m-%d" }})
+{% endfor %}
+
 {% endfor %}
