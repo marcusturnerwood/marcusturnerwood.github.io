@@ -2,7 +2,7 @@ title: "Marcus Turner-Wood"
 description: ""
 theme: minima
 
-linkedin_url: "https://www.linkedin.com/in/marcus-turner-wood/"
+author: "Marcus Turner-Wood"
 
 minima:
   social_links:
@@ -15,7 +15,6 @@ paginate: 5
 paginate_path: "/page:num/"
 
 header_pages:
-  - about.md
-  - themes.md
+  - about.html
+  - themes.html
 
-author: ""
