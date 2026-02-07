@@ -1,8 +1,0 @@
----
-layout: page
-title: About
-permalink: /about/
----
-
-This is a publication of short articles on interesting or important topics which is periodically updated. If you need to contact me please contact me via:
-- [LinkedIn](https://www.linkedin.com/in/marcus-turner-wood/)
