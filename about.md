@@ -4,5 +4,5 @@ title: About
 permalink: /about/
 ---
 
-Writing short articles on topics I find interesting or important.
+This is a publication of short articles on interesting or important topics which is periodically updated. If you need to contact me please contact me via:
 - [LinkedIn](https://www.linkedin.com/in/marcus-turner-wood/)
