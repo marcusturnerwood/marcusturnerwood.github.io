@@ -9,7 +9,7 @@ image: /assets/images/fusion-map.png
 An overview of Europe’s fusion reactors for the general reader.
 For an exhaustive list, down to university-scale machines, the IAEA’s fusion device database is the best resource available.  
 
- ![Fusion reactors map]({{ "/assets/images/fusion-map.png" | relative_url }})
+![Fusion reactors map]({{ page.image | relative_url }})
 
 ITER (France, Saint-Paul-lès-Durance)
 The famed international tokomak under construction from 2010, designed to demonstrate Q≥10 burning splasmas. 
