@@ -39,8 +39,8 @@ A D–T plant must breed tritium to close the fuel cycle, which makes breeding b
 
 EU reference concepts often cite ceramic breeders such as:
 
-- lithium orthosilicate \$( \mathrm{Li_4SiO_4} $\)
-- lithium metatitanate \$( \mathrm{Li_2TiO_3} $\)
+lithium orthosilicate Li<sub>4</sub>SiO<sub>4</sub>  
+lithium metatitanate Li<sub>2</sub>TiO<sub>3</sub>
 
 Breeder ceramics must survive thermal cycling and irradiation, maintain porosity, avoid swelling and cracking, and interact safely with purge gases and extraction technologies.
 
