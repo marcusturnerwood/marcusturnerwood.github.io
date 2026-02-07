@@ -9,7 +9,7 @@ tags: [Fusion, STEP, UK, Economics]
 
 STEP is the UK’s programme to design and deliver a prototype fusion power plant at West Burton (Nottinghamshire), with first operation targeted for around 2040.
 
-A key technical milestone is net electricity export. The prototype must demonstrate at least \(100 \, \mathrm{MWe}\) net to the national grid to be considered a success.
+A key technical milestone is net electricity export. The prototype must demonstrate at least 100 MWe net to the national grid to be considered a success.
 
 STEP is pursuing a spherical tokamak, a more compact tokamak geometry (often described as “apple core” rather than doughnut-shaped). The idea is that a smaller, potentially simpler machine could reduce the cost and complexity of reaching a power plant prototype, while remaining relevant to later designs.
 
