@@ -16,13 +16,8 @@ The divertor and first wall must tolerate intense thermal loads without cracking
 High-energy neutrons displace atoms, generate parasitic helium and hydrogen in materials, and degrade strength, toughness, and dimensional stability.
 
 ###  Tritium, permeation, and contamination control
-If the leading pathway is deuterium tritium (D–T), a fusion plant is not just an electricity generator. It is also a tritium facility, with continuous fuel handling, inventory accounting, and regulatory compliance built into day-to-day operations.
-
-Tritium readily permeates many metals at elevated temperatures, so leakage, migration into structures, and cross-contamination of coolant and vacuum systems become design drivers, not secondary concerns.
-
-That reality pushes a whole engineering stack into the critical path: permeation barriers and surface treatments, ultra-tight vacuum and sealing technology, monitored purge and detritiation systems, and robust measurement and control hardware that can operate under radiation while maintaining cleanliness standards.
-
-In practice, “making tritium and keeping track of it” becomes a reliability problem on the same level as heat flux and neutron damage, because small losses and trapped inventories compound over long operating periods.
+If the main reaction is deuterium tritium (D–T), a fusion plant needs continual production of Tritium.
+Tritium readily permeates many metals at high temperatures, so leakage, migration into structures, and cross-contamination of coolant and vacuum systems must be considered in design and operation.
 
 ## The core materials
 
