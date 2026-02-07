@@ -31,8 +31,8 @@ Fusion plants can have large internal electricity demands (magnets, heating and 
 
 One example indicates roughly:
 
-- \(925 \, \mathrm{MWe}\) gross generation
-- \(750 \, \mathrm{MWe}\) required to run plant subsystems
+- (925 MWe) gross generation
+- (750 MWe) required to run plant subsystems
 
 That is economically relevant because:
 
