@@ -1,3 +1,10 @@
 title: "Marcus Turner-Wood"
 description: ""
 theme: minima
+
+linkedin_url: "https://www.linkedin.com/in/marcus-turner-wood/"
+
+minima:
+  social_links:
+    - { platform: linkedin, user_url: "https://www.linkedin.com/in/marcus-turner-wood/" }
+
