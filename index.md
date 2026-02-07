@@ -3,4 +3,4 @@ layout: home
 title: Home
 ---
 
-Welcome to my blog.
+Marcus Turner-Wood's blog: articles I have written on topics I find to be interesting or important.
