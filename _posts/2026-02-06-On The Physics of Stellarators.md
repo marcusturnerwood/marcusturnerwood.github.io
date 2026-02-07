@@ -16,6 +16,8 @@ The most common answer is **magnetic confinement**, holding plasmas in place usi
 
 ![Proxima Fusion stellarator concept]({{ page.image | relative_url }})
 
+*Image: Proxima Fusion*
+
 ## 1) Magnetic fields
 
 Plasma is made of charged particles. Charged particles respond strongly to magnetic fields. In a strong field they tend to spiral around, and travel along, magnetic field lines. When the field lines are arranged in the right configuration, particles mostly stay away from the walls.
@@ -71,4 +73,3 @@ In practice you are always fighting two kinds of loss:
 
 The best stellarators try to reduce the first without making the second worse, which is part of why this is still such an active field.
 
-*Image: Proxima Fusion*
