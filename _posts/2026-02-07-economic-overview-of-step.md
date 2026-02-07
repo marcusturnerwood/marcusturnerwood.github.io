@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "An economic overview of STEP"
-categories: [Fusion, Energy Infrastructure, Policy]
+categories: [Fusion, Energy Infrastructure, Policy, Economics]
 tags: [Fusion, STEP, UK, Economics]
 ---
 
