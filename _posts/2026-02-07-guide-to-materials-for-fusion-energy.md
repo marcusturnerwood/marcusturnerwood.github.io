@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A guide to materials for fusion energy"
+title: "A Guide to Materials for Fusion"
 categories: [Fusion, Materials Science]
 tags: [Fusion, Materials, Engineering]
 ---
