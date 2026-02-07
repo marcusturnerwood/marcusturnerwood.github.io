@@ -3,7 +3,7 @@ layout: post
 title: "An overview of Europe’s fusion reactors for the general reader."
 categories: [Fusion, Energy Infrastructure]
 tags: [Fusion, Energy]
-image: /assets/images/fusion-map.png
+image: /assets/images/Europes-Fusion.png
 ---
 
 An overview of Europe’s fusion reactors for the general reader.
