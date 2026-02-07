@@ -18,7 +18,7 @@ The most common answer is **magnetic confinement**, holding plasmas in place usi
 
 *Image: Proxima Fusion*
 
-## 1) Magnetic fields
+##  Magnetic fields
 
 Plasma is made of charged particles. Charged particles respond strongly to magnetic fields. In a strong field they tend to spiral around, and travel along, magnetic field lines. When the field lines are arranged in the right configuration, particles mostly stay away from the walls.
 
@@ -30,7 +30,7 @@ To fix that, the field lines need to do something special:
 
 That twist makes many of the pushes and drifts cancel out over a full trip around the device, improving confinement.
 
-## 2) Two approaches: tokamak vs stellarator
+##  Two approaches: tokamak vs stellarator
 
 This is where stellarators stand out.
 
@@ -39,7 +39,7 @@ This is where stellarators stand out.
 
 This difference matters because driving a large current through a plasma is powerful, but it can also make the plasma harder to control and is linked to certain sudden loss-of-confinement events. Stellarators aim for a magnetic structure that is naturally suited to steady, long-duration operation.
 
-## 3) Why stellarators are hard
+##  Why stellarators are hard
 
 A big advantage of simpler, symmetric designs is that symmetry gives you conservation laws that are built into the geometry and help keep particle motion easier to model. When you move to a fully 3D magnetic shape, you lose a lot of that symmetry.
 
@@ -52,7 +52,7 @@ Modern stellarators fight this with careful design:
 
 You might see phrases like **optimised stellarator** for exactly this reason: a device whose magnetic geometry has undergone heavy computational testing and iteration.
 
-## 4) The plasma pushes back
+##  The plasma pushes back
 
 A hot plasma exerts pressure. Magnetic fields provide a restoring squeeze against the plasma’s outward push. A key measure is **beta**, \( \beta \), the ratio of plasma pressure to magnetic pressure.
 
@@ -62,14 +62,14 @@ Higher \( \beta \) is attractive because it means greater plasma performance for
 - stability at high pressure
 - a magnetic geometry that is possible to build
 
-## 5) Turbulence
+##  Turbulence
 
 Even with great magnetic design, the plasma does not behave nicely. It is turbulent, meaning it is full of small swirling motions that can carry heat outward.
 
 In practice you are always fighting two kinds of loss:
 
-1. **drifts** (particles drifting in a 3D field)
-2. **turbulent losses** (plasma micro-instabilities moving heat outward)
+ **drifts** (particles drifting in a 3D field)
+ **turbulent losses** (plasma micro-instabilities moving heat outward)
 
 The best stellarators try to reduce the first without making the second worse, which is part of why this is still such an active field.
 
