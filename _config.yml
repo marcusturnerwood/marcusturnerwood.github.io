@@ -1,8 +1,10 @@
 title: "Marcus Turner-Wood"
-description: ""
+description: "Essays on philosophy, science, and culture."
 theme: minima
 
 author: "Marcus Turner-Wood"
+
+show_excerpts: true
 
 minima:
   social_links:
