@@ -18,7 +18,17 @@
     window.MathJax = {
       tex: {
         inlineMath: [['\\(', '\\)']],
-        displayMath: [['\\[', '\\]']]
+        displayMath: [['\\[', '\\]']],
+        macros: {
+          R: '{\\mathbb{R}}',
+          vect: ['{\\mathbf{#1}}', 1],
+          homog: ['{\\tilde{\\mathbf{#1}}}', 1],
+          argmin: '{\\operatorname{arg\\,min}}',
+          rank: '{\\operatorname{rank}}',
+          diag: '{\\operatorname{diag}}',
+          median: '{\\operatorname{median}}',
+          IoU: '{\\operatorname{IoU}}'
+        }
       },
       svg: { fontCache: 'global' }
     };

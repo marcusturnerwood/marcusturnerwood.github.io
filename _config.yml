@@ -1,5 +1,6 @@
 title: "Marcus Turner-Wood"
 description: "Essays on philosophy, science, and culture."
+url: "https://marcusturnerwood.github.io"
 theme: minima
 
 author: "Marcus Turner-Wood"
@@ -12,6 +13,8 @@ minima:
 
 plugins:
   - jekyll-paginate
+  - jekyll-feed
+  - jekyll-seo-tag
 
 paginate: 5
 paginate_path: "/page:num/"
@@ -19,4 +22,17 @@ paginate_path: "/page:num/"
 header_pages:
   - about.html
   - themes.html
+
+# Comments + reactions (likes), via giscus (github.com/apps/giscus), backed by GitHub Discussions.
+# Setup steps (one-time, done on github.com — see README):
+#   1. Enable Discussions on the repo (Settings > General > Features).
+#   2. Install the giscus app on this repo: https://github.com/apps/giscus
+#   3. Go to https://giscus.app, fill in this repo, pick a Discussion category
+#      (a dedicated "Comments" category works well), and copy the four values
+#      it generates (repo_id, category, category_id) into the fields below.
+giscus:
+  repo: "marcusturnerwood/marcusturnerwood.github.io"
+  repo_id: "R_kgDORKa5Qw"
+  category: "General"
+  category_id: "DIC_kwDORKa5Q84DBDrX"
 

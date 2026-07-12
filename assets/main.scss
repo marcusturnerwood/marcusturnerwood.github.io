@@ -344,6 +344,92 @@ a:hover { text-decoration: underline; }
     font-style: normal;
   }
 
+  // ---- Data/results tables (e.g. reproduced paper results) ----
+  .results-table-wrap {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .results-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    white-space: nowrap;
+
+    th, td {
+      padding: 0.65rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--surface);
+      font-weight: 500;
+      color: var(--text-soft);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    tr:last-child td { border-bottom: none; }
+  }
+
+  // ---- Redrawn taxonomy / ontology-tree figures ----
+  figure.ontology-figure {
+    text-align: left;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+
+    img { box-shadow: none; }
+  }
+
+  .tax-tree,
+  .tax-tree ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  .tax-tree ul {
+    padding-left: 1.4rem;
+    margin: 0.3rem 0 0.3rem 0.55rem;
+    border-left: 1px dashed var(--border);
+  }
+
+  .tax-tree li {
+    margin: 0.35rem 0;
+  }
+
+  .tax-node {
+    display: inline-block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.15rem 0.7rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .tax-node.tax-root {
+    background: var(--accent-surface);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .tax-example {
+    margin-left: 0.5rem;
+    font-size: 0.82rem;
+    font-style: italic;
+    color: var(--text-soft);
+  }
+
   code {
     font-family: $mono-font-family;
     background: var(--surface);
@@ -355,6 +441,20 @@ a:hover { text-decoration: underline; }
   pre code {
     padding: 0;
   }
+}
+
+// ---- Comments (giscus) ----
+.comments {
+  max-width: $content-width;
+  margin: ($spacing-unit * 1.5) auto 0;
+  padding-top: $spacing-unit * 0.75;
+  border-top: 1px solid var(--border);
+}
+
+.comments-heading {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
 }
 
 // ---- Themes / categories page ----

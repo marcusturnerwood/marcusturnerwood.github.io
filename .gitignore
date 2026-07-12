@@ -3,6 +3,9 @@ _site/
 .jekyll-metadata
 .sass-cache/
 
+# Work-in-progress articles (Jekyll drafts: unpublished, excluded from the built site)
+_drafts/
+
 # OS cruft
 .DS_Store
 Thumbs.db
