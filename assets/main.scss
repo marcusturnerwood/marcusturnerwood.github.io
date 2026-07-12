@@ -4,79 +4,73 @@
 @charset "utf-8";
 
 // ---- Palette & type overrides (must precede the minima import) ----
-$base-font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
-$heading-font-family: "Fraunces", Georgia, serif;
-$base-font-size: 18px;
-$base-line-height: 1.65;
+$base-font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+$heading-font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+$mono-font-family: "Roboto Mono", "SFMono-Regular", Consolas, monospace;
+$base-font-size: 17px;
+$base-line-height: 1.6;
 $spacing-unit: 32px;
 
-$text-color: #2b2621;
-$background-color: #faf7f2;
-$brand-color: #a8481f;
+$text-color: #202124;
+$background-color: #ffffff;
+$brand-color: #1a73e8;
 
-$grey-color: #8a8175;
-$grey-color-light: #e7e1d6;
-$grey-color-dark: #4a443c;
+$grey-color: #5f6368;
+$grey-color-light: #eef1f4;
+$grey-color-dark: #3c4043;
 
-$content-width: 760px;
+$content-width: 720px;
 
 @import "minima";
 
-// ---- Design tokens for the custom layer below ----
+// ---- Design tokens (Material-style neutrals + a single confident accent) ----
 :root {
-  --bg: #{$background-color};
+  --bg: #ffffff;
+  --surface: #f8f9fa;
   --bg-card: #ffffff;
-  --text: #{$text-color};
-  --text-soft: #{$grey-color};
-  --border: #e6ded0;
-  --accent: #{$brand-color};
-  --shadow: 0 1px 2px rgba(30, 20, 10, 0.04), 0 8px 24px rgba(30, 20, 10, 0.06);
+  --text: #202124;
+  --text-soft: #5f6368;
+  --border: #dadce0;
+  --accent: #1a73e8;
+  --accent-surface: rgba(26, 115, 232, 0.08);
+  --shadow-1: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  --shadow-2: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #17140f;
-    --bg-card: #201c16;
-    --text: #ece5d8;
-    --text-soft: #a89e8d;
-    --border: #322c22;
-    --accent: #e08252;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+    --bg: #202124;
+    --surface: #292a2d;
+    --bg-card: #292a2d;
+    --text: #e8eaed;
+    --text-soft: #9aa0a6;
+    --border: #3c4043;
+    --accent: #8ab4f8;
+    --accent-surface: rgba(138, 180, 248, 0.14);
+    --shadow-1: 0 1px 2px 0 rgba(0, 0, 0, 0.45), 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+    --shadow-2: 0 1px 2px 0 rgba(0, 0, 0, 0.5), 0 2px 6px 2px rgba(0, 0, 0, 0.35);
   }
 
   html, body { background: var(--bg); }
   body { color: var(--text); }
 
-  .site-header {
-    background: var(--bg);
-    border-bottom-color: var(--border);
-  }
+  .site-header { background: var(--bg); border-bottom-color: var(--border); }
   .site-title, .site-title:visited { color: var(--text) !important; }
   .site-nav .page-link { color: var(--text-soft) !important; }
   .site-nav .page-link:hover { color: var(--accent) !important; }
 
-  .post-content, .page-content, .home {
-    color: var(--text);
-  }
+  .post-content, .page-content, .home { color: var(--text); }
   a { color: var(--accent); }
 
-  .post-card, .theme-block {
-    background: var(--bg-card);
-    border-color: var(--border);
-  }
-  .post-card-tags li { background: var(--border); color: var(--text-soft); }
+  .post-card, .theme-block { background: var(--bg-card); border-color: var(--border); }
+  .post-card-tags li { background: var(--surface); color: var(--text-soft); }
   .post-meta, .post-card-excerpt { color: var(--text-soft) !important; }
 
   figure figcaption { color: var(--text-soft); }
-  figure img { box-shadow: var(--shadow); }
 
-  code, pre { background: var(--border) !important; color: var(--text) !important; }
+  code, pre { background: var(--surface) !important; color: var(--text) !important; }
 
-  .site-footer {
-    background: var(--bg-card);
-    border-top-color: var(--border);
-    color: var(--text-soft);
-  }
+  .site-footer { background: var(--bg); border-top-color: var(--border); color: var(--text-soft); }
 }
 
 // ---- Global type ----
@@ -84,29 +78,29 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   background: var(--bg);
+  -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: $heading-font-family;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.25;
+  color: var(--text);
 }
 
 a {
   color: var(--accent);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
-  transition: color 0.15s ease;
+  text-decoration: none;
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
-a:hover { color: scale-color($brand-color, $lightness: -15%); }
+a:hover { text-decoration: underline; }
 
 // ---- Header ----
 .site-header {
   border-top: none;
   border-bottom: 1px solid var(--border);
-  background: rgba(250, 247, 242, 0.85);
-  backdrop-filter: saturate(140%) blur(8px);
+  background: var(--bg);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -114,55 +108,53 @@ a:hover { color: scale-color($brand-color, $lightness: -15%); }
 
 .site-title {
   font-family: $heading-font-family;
-  font-weight: 700;
-  font-size: 1.6rem;
-  letter-spacing: -0.02em;
+  font-weight: 500;
+  font-size: 1.35rem;
+  letter-spacing: 0;
   color: $text-color !important;
 
   &:hover { text-decoration: none; color: var(--accent) !important; }
 }
 
 .site-nav .page-link {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: $grey-color-dark;
+  font-family: $base-font-family;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: $grey-color;
 
   &:hover { color: var(--accent); text-decoration: none; }
 }
 
-// ---- Homepage hero intro ----
+// ---- Homepage intro ----
 .home > p:first-of-type {
   font-family: $heading-font-family;
-  font-size: 1.35rem;
-  font-weight: 500;
-  font-style: italic;
+  font-size: 1.15rem;
+  font-weight: 400;
   color: var(--text-soft);
-  border-bottom: 1px solid var(--border);
-  padding-bottom: $spacing-unit * 0.75;
-  margin-bottom: $spacing-unit * 0.75;
+  padding-bottom: $spacing-unit * 0.6;
+  margin-bottom: $spacing-unit * 0.6;
 }
 
 .page-heading {
-  font-size: 2.25rem;
+  font-size: 1.9rem;
+  font-weight: 500;
 }
 
 .post-list-heading {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: var(--text-soft);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-weight: 600;
+  font-family: $base-font-family;
+  font-weight: 500;
   margin-bottom: calc(#{$spacing-unit} / 2);
 }
 
 // ---- Post list / cards ----
 .post-list {
   display: grid;
-  gap: 1.5rem;
+  gap: 1rem;
   margin-left: 0;
   list-style: none;
 }
@@ -173,21 +165,21 @@ a:hover { color: scale-color($brand-color, $lightness: -15%); }
   align-items: stretch;
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 1.25rem;
-  box-shadow: var(--shadow);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: none;
+  transition: box-shadow 0.18s ease, border-color 0.18s ease;
   position: relative;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(30, 20, 10, 0.06), 0 16px 32px rgba(30, 20, 10, 0.1);
+    box-shadow: var(--shadow-1);
+    border-color: transparent;
   }
 }
 
 .post-card-thumb {
-  flex: 0 0 180px;
-  border-radius: 9px;
+  flex: 0 0 176px;
+  border-radius: 8px;
   overflow: hidden;
   display: block;
 
@@ -214,32 +206,32 @@ a:hover { color: scale-color($brand-color, $lightness: -15%); }
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.6rem;
   padding: 0;
 
   li {
-    background: $grey-color-light;
-    color: $grey-color-dark;
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 0.15rem 0.55rem;
+    background: var(--surface);
+    color: var(--text-soft);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 0.2rem 0.65rem;
     border-radius: 999px;
   }
 }
 
 .post-card h3 {
-  margin: 0 0 0.15rem;
-  font-size: 1.3rem;
-  line-height: 1.25;
+  margin: 0 0 0.2rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.3;
 }
 
 .post-card .post-link {
   color: var(--text);
   text-decoration: none;
 
-  &:hover { color: var(--accent); }
+  &:hover { color: var(--accent); text-decoration: none; }
 }
 
 .post-card .post-meta {
@@ -248,8 +240,8 @@ a:hover { color: scale-color($brand-color, $lightness: -15%); }
 }
 
 .post-card-excerpt {
-  margin: 0.6rem 0 0.4rem;
-  font-size: 0.95rem;
+  margin: 0.6rem 0 0.5rem;
+  font-size: 0.925rem;
   color: var(--text-soft);
   overflow: hidden;
   display: -webkit-box;
@@ -260,9 +252,11 @@ a:hover { color: scale-color($brand-color, $lightness: -15%); }
 .post-card-more {
   margin-top: auto;
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--accent);
   text-decoration: none;
+
+  &:hover { text-decoration: underline; }
 }
 
 @include media-query($on-palm) {
@@ -289,20 +283,19 @@ a:hover { color: scale-color($brand-color, $lightness: -15%); }
     height: 2.25rem;
     border-radius: 999px;
     font-size: 0.85rem;
+    font-weight: 500;
   }
 
   .current-page {
-    background: var(--accent);
-    color: #fff;
-    font-weight: 600;
+    background: var(--accent-surface);
+    color: var(--accent);
   }
 
   a {
-    border: 1px solid var(--border);
     text-decoration: none;
-    color: var(--text);
+    color: var(--text-soft);
 
-    &:hover { border-color: var(--accent); color: var(--accent); }
+    &:hover { background: var(--surface); color: var(--accent); }
   }
 }
 
@@ -310,30 +303,23 @@ a:hover { color: scale-color($brand-color, $lightness: -15%); }
 .post-header { margin-bottom: $spacing-unit * 0.75; }
 
 .post-title {
-  font-size: 2.4rem;
-  line-height: 1.15;
+  font-size: 2.1rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0;
 }
 
 .post-content {
-  h2 { margin-top: 2.2em; font-size: 1.6rem; }
-  h3 { margin-top: 1.8em; font-size: 1.25rem; }
+  font-weight: 400;
+
+  h2 { margin-top: 2.2em; font-size: 1.5rem; font-weight: 500; }
+  h3 { margin-top: 1.8em; font-size: 1.2rem; font-weight: 500; }
 
   > .lede {
-    font-family: $heading-font-family;
-    font-size: 1.3rem;
-    font-weight: 500;
-    line-height: 1.5;
-    color: var(--text);
-
-    &::first-letter {
-      font-family: $heading-font-family;
-      font-weight: 700;
-      float: left;
-      font-size: 3.4em;
-      line-height: 0.85;
-      padding-right: 0.08em;
-      color: var(--accent);
-    }
+    font-size: 1.2rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--text-soft);
   }
 
   figure {
@@ -341,8 +327,7 @@ a:hover { color: scale-color($brand-color, $lightness: -15%); }
     text-align: center;
 
     img {
-      border-radius: 10px;
-      box-shadow: var(--shadow);
+      border-radius: 8px;
       max-width: 100%;
     }
 
@@ -350,20 +335,25 @@ a:hover { color: scale-color($brand-color, $lightness: -15%); }
       margin-top: 0.6rem;
       font-size: 0.85rem;
       color: var(--text-soft);
-      font-style: italic;
     }
   }
 
   blockquote {
     border-left: 3px solid var(--accent);
     color: var(--text-soft);
-    font-style: italic;
+    font-style: normal;
   }
 
   code {
-    background: $grey-color-light;
+    font-family: $mono-font-family;
+    background: var(--surface);
     border-radius: 4px;
-    padding: 0.1em 0.35em;
+    padding: 0.1em 0.4em;
+    font-size: 0.9em;
+  }
+
+  pre code {
+    padding: 0;
   }
 }
 
@@ -371,14 +361,15 @@ a:hover { color: scale-color($brand-color, $lightness: -15%); }
 .theme-block {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 1.5rem 1.75rem;
-  margin-bottom: 1.5rem;
-  box-shadow: var(--shadow);
+  margin-bottom: 1.25rem;
+  box-shadow: none;
 
   h2 {
     margin-top: 0;
-    font-size: 1.3rem;
+    font-size: 1.15rem;
+    font-weight: 500;
   }
 
   ul {
@@ -397,7 +388,7 @@ a:hover { color: scale-color($brand-color, $lightness: -15%); }
 // ---- Footer ----
 .site-footer {
   border-top: 1px solid var(--border);
-  background: var(--bg-card);
+  background: var(--bg);
   padding: 1.5rem 0;
 
   .wrapper {
@@ -412,9 +403,9 @@ a:hover { color: scale-color($brand-color, $lightness: -15%); }
   .footer-copy { margin-right: auto; }
 
   .footer-link {
-    color: $grey-color-dark;
+    color: $grey-color;
     text-decoration: none;
 
-    &:hover { color: var(--accent); }
+    &:hover { color: var(--accent); text-decoration: underline; }
   }
 }
