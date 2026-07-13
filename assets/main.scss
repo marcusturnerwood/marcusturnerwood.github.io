@@ -151,6 +151,33 @@ a:hover { text-decoration: underline; }
   margin-bottom: calc(#{$spacing-unit} / 2);
 }
 
+// ---- Articles / Projects tab switcher ----
+.section-tabs {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background: var(--surface);
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+}
+
+.section-tab {
+  padding: 0.4rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-soft);
+  text-decoration: none;
+
+  &:hover { color: var(--text); text-decoration: none; }
+
+  &.active {
+    background: var(--bg-card);
+    color: var(--accent);
+    box-shadow: var(--shadow-1);
+  }
+}
+
 // ---- Post list / cards ----
 .post-list {
   display: grid;
