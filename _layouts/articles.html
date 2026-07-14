@@ -11,11 +11,9 @@ layout: default
 
   {{ content }}
 
-  {% if site.paginate and paginator %}
-    {% assign posts = paginator.posts %}
-  {% else %}
-    {% assign posts = site.posts %}
-  {% endif %}
+  {%- assign pinned_posts = site.posts | where_exp: "post", "post.pinned == true" -%}
+  {%- assign other_posts = site.posts | where_exp: "post", "post.pinned != true" -%}
+  {%- assign posts = pinned_posts | concat: other_posts -%}
 
   {%- if posts and posts.size > 0 -%}
     {%- if page.list_title -%}
@@ -32,6 +30,7 @@ layout: default
             </a>
           {%- endif -%}
           <div class="post-card-body">
+            {%- if post.pinned -%}<p class="post-card-eyebrow">Pinned</p>{%- endif -%}
             {%- if post.categories.size > 0 -%}
               <ul class="post-card-tags">
                 {%- for category in post.categories limit: 3 -%}
@@ -49,33 +48,5 @@ layout: default
         </li>
       {%- endfor -%}
     </ul>
-
-    {% if site.paginate and paginator %}
-      <div class="pager">
-        <ul class="pagination">
-          {%- if paginator.previous_page %}
-            <li>
-              <a href="{{ paginator.previous_page_path | relative_url }}" class="previous-page" title="Go to Page {{ paginator.previous_page }}">
-                {{ paginator.previous_page }}
-              </a>
-            </li>
-          {%- else %}
-            <li><div class="pager-edge">&bull;</div></li>
-          {%- endif %}
-
-          <li><div class="current-page">{{ paginator.page }}</div></li>
-
-          {%- if paginator.next_page %}
-            <li>
-              <a href="{{ paginator.next_page_path | relative_url }}" class="next-page" title="Go to Page {{ paginator.next_page }}">
-                {{ paginator.next_page }}
-              </a>
-            </li>
-          {%- else %}
-            <li><div class="pager-edge">&bull;</div></li>
-          {%- endif %}
-        </ul>
-      </div>
-    {%- endif -%}
   {%- endif -%}
 </div>

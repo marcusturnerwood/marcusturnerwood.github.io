@@ -1,0 +1,16 @@
+{%- if site.buttondown.username and site.buttondown.username != "" -%}
+<form
+  action="https://buttondown.com/api/emails/embed-subscribe/{{ site.buttondown.username }}"
+  method="post"
+  class="subscribe-form{% if include.class %} {{ include.class }}{% endif %}"
+>
+  <label for="{{ include.id | default: 'bd-email' }}" class="subscribe-label">{{ include.label | default: "Get new posts by email" }}</label>
+  <div class="subscribe-row">
+    <input type="email" name="email" id="{{ include.id | default: 'bd-email' }}" placeholder="you@example.com" required>
+    <button type="submit" class="subscribe-button">Subscribe</button>
+  </div>
+  <p class="subscribe-attribution">
+    <a href="https://buttondown.com/refer/{{ site.buttondown.username }}" target="_blank" rel="noopener">Powered by Buttondown.</a>
+  </p>
+</form>
+{%- endif -%}

@@ -13,10 +13,10 @@ $spacing-unit: 32px;
 
 $text-color: #202124;
 $background-color: #ffffff;
-$brand-color: #1a73e8;
+$brand-color: #e63946;
 
 $grey-color: #5f6368;
-$grey-color-light: #eef1f4;
+$grey-color-light: #f1f3f4;
 $grey-color-dark: #3c4043;
 
 $content-width: 720px;
@@ -24,53 +24,19 @@ $content-width: 720px;
 @import "minima";
 
 // ---- Design tokens (Material-style neutrals + a single confident accent) ----
+// Light-only by design, matching tokens.css's `color-scheme: light` — no dark-mode override.
 :root {
+  color-scheme: light;
   --bg: #ffffff;
   --surface: #f8f9fa;
   --bg-card: #ffffff;
   --text: #202124;
   --text-soft: #5f6368;
   --border: #dadce0;
-  --accent: #1a73e8;
-  --accent-surface: rgba(26, 115, 232, 0.08);
+  --accent: #e63946;
+  --accent-surface: rgba(230, 57, 70, 0.10);
   --shadow-1: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
   --shadow-2: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #202124;
-    --surface: #292a2d;
-    --bg-card: #292a2d;
-    --text: #e8eaed;
-    --text-soft: #9aa0a6;
-    --border: #3c4043;
-    --accent: #8ab4f8;
-    --accent-surface: rgba(138, 180, 248, 0.14);
-    --shadow-1: 0 1px 2px 0 rgba(0, 0, 0, 0.45), 0 1px 3px 1px rgba(0, 0, 0, 0.3);
-    --shadow-2: 0 1px 2px 0 rgba(0, 0, 0, 0.5), 0 2px 6px 2px rgba(0, 0, 0, 0.35);
-  }
-
-  html, body { background: var(--bg); }
-  body { color: var(--text); }
-
-  .site-header { background: var(--bg); border-bottom-color: var(--border); }
-  .site-title, .site-title:visited { color: var(--text) !important; }
-  .site-nav .page-link { color: var(--text-soft) !important; }
-  .site-nav .page-link:hover { color: var(--accent) !important; }
-
-  .post-content, .page-content, .home { color: var(--text); }
-  a { color: var(--accent); }
-
-  .post-card, .theme-block { background: var(--bg-card); border-color: var(--border); }
-  .post-card-tags li { background: var(--surface); color: var(--text-soft); }
-  .post-meta, .post-card-excerpt { color: var(--text-soft) !important; }
-
-  figure figcaption { color: var(--text-soft); }
-
-  code, pre { background: var(--surface) !important; color: var(--text) !important; }
-
-  .site-footer { background: var(--bg); border-top-color: var(--border); color: var(--text-soft); }
 }
 
 // ---- Global type ----
@@ -178,6 +144,89 @@ a:hover { text-decoration: underline; }
   }
 }
 
+// ---- Email subscribe form (Buttondown) ----
+.subscribe-form {
+  .subscribe-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-soft);
+    margin-bottom: 0.5rem;
+  }
+
+  .subscribe-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  input[type="email"] {
+    flex: 1;
+    min-width: 0;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: $base-font-family;
+    font-size: 0.9rem;
+    background: var(--bg);
+    color: var(--text);
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+  }
+
+  .subscribe-button {
+    flex-shrink: 0;
+    padding: 0.55rem 1.1rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-family: $base-font-family;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover { background: scale-color($brand-color, $lightness: -12%); }
+  }
+
+  .subscribe-attribution {
+    margin: 0.5rem 0 0;
+    font-size: 0.72rem;
+
+    a { color: var(--text-soft); }
+  }
+}
+
+.subscribe-form--compact .subscribe-attribution { display: none; }
+
+.subscribe-form--card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  max-width: 26rem;
+}
+
+.subscribe-form--compact {
+  .subscribe-label { display: none; }
+  .subscribe-row { gap: 0.4rem; }
+
+  input[type="email"] {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.8rem;
+    width: 11rem;
+  }
+
+  .subscribe-button {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
 // ---- Post list / cards ----
 .post-list {
   display: grid;
@@ -226,6 +275,16 @@ a:hover { text-decoration: underline; }
   flex-direction: column;
   min-width: 0;
   flex: 1;
+}
+
+.post-card-eyebrow {
+  margin: 0 0 0.4rem;
+  font-family: $base-font-family;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
 }
 
 .post-card-tags {
@@ -534,5 +593,87 @@ a:hover { text-decoration: underline; }
     text-decoration: none;
 
     &:hover { color: var(--accent); text-decoration: underline; }
+  }
+}
+
+// ---- Landing page (self-contained, for the NFC card) ----
+.landing-body {
+  // minima's base.scss forces `body { display:flex; flex-direction:column; min-height:100vh }`
+  // site-wide for its sticky-footer layout. Class beats element specificity for the properties
+  // declared here, but flex-direction must be overridden explicitly or "column" leaks through.
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  margin: 0;
+  background: var(--bg);
+}
+
+.landing {
+  width: 100%;
+  max-width: 22rem;
+  text-align: center;
+}
+
+.landing-avatar {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1.25rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $heading-font-family;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.landing-name {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.landing-bio {
+  margin: 0 0 2rem;
+  color: var(--text-soft);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.landing-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.landing-link {
+  display: block;
+  padding: 0.85rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-card);
+  color: var(--text);
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: var(--shadow-1);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-2);
+    text-decoration: none;
+  }
+
+  &.landing-link--primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: transparent;
+
+    &:hover { background: scale-color($brand-color, $lightness: -12%); }
   }
 }

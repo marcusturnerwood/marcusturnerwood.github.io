@@ -2,7 +2,7 @@
 layout: project
 title: "Research Organiser"
 date: 2026-07-12
-image: /assets/images/research-organiser-library.png
+image: /assets/images/research-organiser-login.png
 status: "Active"
 tags: [FastAPI, Python, SQLite, Self-Hosted]
 description: "A local, self-hosted web app for managing academic reading: PDF library, citation graph, analytics, diary, and more."
@@ -34,8 +34,9 @@ description: "A local, self-hosted web app for managing academic reading: PDF li
   FastAPI + SQLAlchemy + SQLite on the backend, PyMuPDF for PDF parsing, and a vanilla-JS frontend with no build step. The reference graph runs on <a href="https://github.com/vasturiano/3d-force-graph">3d-force-graph</a> (Three.js/WebGL); code highlighting is Prism.js.
 </p>
 
-<!-- Links to the "How to Use Research Organiser" article, currently in _drafts/ — this URL depends on it
-     being published under the 2026-07-12 date. Update if the date changes when it's moved to _posts/. -->
+{%- assign howto_post = site.posts | where: "title", "How to Use Research Organiser: A Walkthrough" | first -%}
+{%- if howto_post -%}
 <p>
-  I wrote up a full screenshot walkthrough of the interface in <a href="/tools/productivity/2026/07/12/how-to-use-research-organiser.html">a separate article</a> if you want to see it screen by screen.
+  I wrote up a full screenshot walkthrough of the interface in <a href="{{ howto_post.url | relative_url }}">a separate article</a> if you want to see it screen by screen.
 </p>
+{%- endif -%}

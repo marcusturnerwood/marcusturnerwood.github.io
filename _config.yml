@@ -12,12 +12,8 @@ minima:
     - { platform: linkedin, user_url: "https://www.linkedin.com/in/marcus-turner-wood/" }
 
 plugins:
-  - jekyll-paginate
   - jekyll-feed
   - jekyll-seo-tag
-
-paginate: 5
-paginate_path: "/page:num/"
 
 collections:
   projects:
@@ -25,6 +21,7 @@ collections:
     permalink: /projects/:name/
 
 header_pages:
+  - articles.html
   - projects.html
   - about.html
   - themes.html
@@ -41,4 +38,11 @@ giscus:
   repo_id: "R_kgDORKa5Qw"
   category: "General"
   category_id: "DIC_kwDORKa5Q84DBDrX"
+
+# Email subscription (replaces RSS as the primary "follow this blog" option), via Buttondown.
+# Setup: sign up free at https://buttondown.com, then set your username below.
+# Bonus: Buttondown can also auto-import new posts from /feed.xml and email them out,
+# so the existing RSS feed doesn't go to waste even though readers just see an email box.
+buttondown:
+  username: "marcusturnerwood"
 
