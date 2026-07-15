@@ -1,0 +1,136 @@
+---
+layout: post
+title: "An Introduction to Muon-Enhanced Proton-Boron-11 Fusion and a Brief Assessment of its Feasibility"
+categories: [Fusion, Physics]
+tags: [Muon Catalysed Fusion, Proton-Boron-11, Aneutronic Fusion, Nuclear Physics]
+image: /assets/images/triumf-cyclotron.jpg
+description: "How swapping an electron for a muon might lower the Coulomb barrier for proton-boron-11 fusion, with the real cross-section numbers from Wang, Cui et al.'s two 2026 papers, and why producing muons is still the hard part."
+keywords: "muon catalysed fusion, proton-boron-11, p-11B fusion, aneutronic fusion, Coulomb barrier, quantum tunnelling, WKB approximation"
+---
+
+<p class="lede">
+  Most fusion research bets on deuterium-tritium fuel because it has the lowest Coulomb barrier of any practical reaction, and therefore the easiest path to net energy. But it is not the only route on the table. I recently came across an interesting alternative called muon-enhanced proton-boron-11 (p-<sup>11</sup>B) fusion &mdash; a scheme that trades a lower barrier for a cleaner reaction, and then tries to claw the barrier back down with an unstable subatomic particle.
+</p>
+
+<h2>Why proton-boron-11?</h2>
+
+<p>
+  Proton-boron-11 is what is known as an &ldquo;aneutronic&rdquo; reaction, meaning it does not directly release neutrons. The reaction runs as follows:
+</p>
+
+<p style="text-align:center; font-size:1.1em;">
+  p + <sup>11</sup>B &rarr; 3&alpha; + 8.7 MeV
+</p>
+
+<p>
+  A proton fuses with a boron-11 nucleus to produce three alpha particles (helium-4 nuclei) and 8.7 MeV of energy, with no free neutrons in the immediate output. This matters because neutrons are what make fusion reactors dirty in practice: they activate the surrounding structural material, causing it to become radioactive and progressively damaging it through displacement cascades. A reactor that avoids producing them directly sidesteps a large share of the shielding, material-lifetime, and waste-disposal problems that dominate deuterium-tritium reactor design. Boron-11 is also the dominant natural isotope of boron (roughly 80% of it) and is not radioactive, unlike tritium, which has to be bred inside the reactor itself.
+</p>
+
+<figure>
+  <img src="/assets/images/borax-crystals.jpg" alt="Borax crystals, a naturally occurring boron mineral">
+  <figcaption><strong>Figure.</strong> Borax (sodium borate) crystals &mdash; boron, the fuel side of p-<sup>11</sup>B fusion, is abundant and naturally occurring, unlike tritium. Photo: Aram Dulyan, public domain, via Wikimedia Commons.</figcaption>
+</figure>
+
+<h2>The problem: a much higher Coulomb barrier</h2>
+
+<p>
+  The catch is that p-<sup>11</sup>B is far harder to ignite than deuterium-tritium. Before two nuclei can fuse, they have to get close enough for the strong nuclear force to take over, and to do that they first have to overcome their mutual electrostatic repulsion &mdash; the Coulomb barrier. In fusion, this barrier is proportional to the product of the two nuclear charges and inversely proportional to the distance between them. Boron has five protons to hydrogen&rsquo;s one, so the p-<sup>11</sup>B barrier is substantially higher than the barrier between a deuteron and a triton, which is why it demands much higher plasma temperatures and makes a sustained burning plasma considerably harder to achieve.
+</p>
+
+<h2>Muon catalysed fusion: shrinking the atom</h2>
+
+<p>
+  This is where two recent papers by Wang, Cui, and collaborators come in. Their work develops the reaction in terms of Muon Catalysed Fusion (MCF), a scheme in which the electron in a hydrogen atom is swapped for its heavier cousin, the muon. The muon is a lepton almost identical to the electron in every respect except mass: it is about 207 times heavier.
+</p>
+
+<p>
+  Because the radius of an electron-like orbital scales inversely with the mass of the orbiting particle, replacing the electron with a much heavier muon collapses the orbital radius of the resulting &ldquo;muonic hydrogen&rdquo; atom by roughly the same factor: its first Bohr radius works out to \( a_\mu \approx 284.6 \) fm, around 200 times tighter than ordinary hydrogen&rsquo;s. The proton is now shielded by an orbiting charge sitting far closer in, which lowers the effective charge the boron nucleus sees at a given approach distance, and correspondingly lowers the Coulomb barrier it has to overcome to fuse.
+</p>
+
+<h2>What the numbers actually say</h2>
+
+<p>
+  In <em>A Novel Approach to Proton-Boron-11 Fusion</em> (Wang, Li, Wu &amp; Cui, 2026), the authors treat the muonic hydrogen atom (p&mu;) as a screening charge orbiting the proton, and derive an effective charge seen by the approaching boron nucleus at separation \( r_{pB} \):
+</p>
+
+<p>
+  \[ q_{\text{eff}}(r_{pB}) = -q_\mu \left[ 1 + \frac{2 r_{pB}}{a_\mu} + \frac{2 r_{pB}^2}{a_\mu^2} \right] \exp\!\left(-\frac{2 r_{pB}}{a_\mu}\right) \]
+</p>
+
+<p>
+  which feeds into a modified Coulomb potential \( V^{\text{eff}}_{p\mu\text{-}B}(r_{pB}) = \dfrac{1}{4\pi\varepsilon_0} \dfrac{q_B\, q_{\text{eff}}(r_{pB})}{r_{pB}} \), and from there into a WKB tunnelling probability
+</p>
+
+<p>
+  \[ P_{\text{WKB}}(E) = \exp\left\{ -\frac{2}{\hbar} \int \sqrt{2m\left(V_{pB}(r) - V_{pB}(r_{\min})\right)}\; dr \right\} \]
+</p>
+
+<p>
+  Run through this machinery, the muon screening turns out to matter a lot at low energy and very little at high energy. Below about 33.5 keV the tunnelling probability is enhanced by several orders of magnitude over the bare-nucleus case; the enhancement crosses over and becomes negligible above roughly 107.4 keV, and the paper&rsquo;s reaction-rate calculation shows the effect has essentially vanished by 40 keV. That is the central catch with this whole approach: conventional p-<sup>11</sup>B fusion needs plasma energies on the order of 200&ndash;300 keV for a favourable reaction rate, which is exactly the regime where muon screening stops helping.
+</p>
+
+<p>
+  The follow-up paper, <em>A Semi-Classical Study of Muon-Enhanced Proton-Boron-11 Fusion</em> (Wang, Chen, Ma &amp; Cui, 2026), checks the same physics with a different method &mdash; a classical trajectory Monte Carlo treatment, sampling 10<sup>5</sup> trajectories per energy from the muonic atom&rsquo;s ground-state phase-space distribution (ground-state energy \( E_{\text{g.s.}} \approx -2.815 \) keV) and integrating them with a velocity-Verlet scheme until they reach boron&rsquo;s nuclear contact radius, \( r_n = 3.284 \) fm. It reports actual reactivity values, an excerpt of which is worth reproducing directly:
+</p>
+
+<div class="results-table-wrap">
+  <table class="results-table">
+    <thead>
+      <tr>
+        <th>Plasma temperature</th>
+        <th>Bare-nucleus &#10216;&sigma;v&#10217;</th>
+        <th>Muon-catalysed &#10216;&sigma;v&#10217;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0.10 keV</td>
+        <td>1.120 &times; 10<sup>&minus;42</sup> m&sup3;/s</td>
+        <td>3.016 &times; 10<sup>&minus;19</sup> m&sup3;/s</td>
+      </tr>
+      <tr>
+        <td>148.10 keV</td>
+        <td>1.740 &times; 10<sup>0</sup> m&sup3;/s</td>
+        <td>9.266 &times; 10<sup>&minus;1</sup> m&sup3;/s</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>
+  Read the two rows together and the shape of the result becomes clear. At 0.10 keV, the muon-catalysed reactivity is around 23 orders of magnitude higher than the bare-nucleus case &mdash; the headline result. But at 148.10 keV, close to the reaction&rsquo;s resonance region, the muon-catalysed rate is actually very slightly <em>below</em> the bare-nucleus rate. The muon helps enormously at energies far too low to be useful for a power plant, and has essentially nothing left to give right where a reactor would actually want to operate. Despite using entirely different methods &mdash; full quantum-mechanical tunnelling in the first paper, classical trajectories in the second &mdash; both studies land on the same qualitative picture.
+</p>
+
+<h2>The catch: making the muons</h2>
+
+<figure>
+  <img src="/assets/images/triumf-cyclotron.jpg" alt="The TRIUMF cyclotron, a large particle accelerator used to produce muons">
+  <figcaption><strong>Figure.</strong> The cyclotron at TRIUMF, Canada&rsquo;s national particle accelerator centre &mdash; the kind of large accelerator infrastructure needed to manufacture a usable muon supply. Photo: Adam Foster, CC BY-SA 2.0, via Wikimedia Commons.</figcaption>
+</figure>
+
+<p>
+  The biggest barrier to this approach is not physics but engineering economics. Muons are unstable, with a mean lifetime of only about 2.2 &mu;s, and they do not occur freely in any useful quantity &mdash; they have to be manufactured, typically by firing a high-energy proton beam at a target to produce pions that then decay into muons, which requires large accelerator infrastructure like the cyclotron above. Any reactor built around this concept would need to generate an extremely high energy output just to justify the energy and capital cost of continuously producing the muon supply that catalyses the reaction in the first place, on top of replacing muons as fast as they decay or are lost to unproductive side-reactions &mdash; and, per the numbers above, doing so in an energy regime where the muon's help is already fading out.
+</p>
+
+<h2>A risk worth taking</h2>
+
+<p>
+  Wang, Cui, and collaborators are candid about how far this still is from a working reactor concept. As they put it in the second paper:
+</p>
+
+<blockquote>
+  <p>&ldquo;Finding breakthroughs requires risk taking, while we believe that revisiting low energy nuclear reactions is a risk worth taking.&rdquo;</p>
+</blockquote>
+
+<p>
+  Which I think is a good way to round this off. Muon-enhanced p-<sup>11</sup>B fusion is not close to a competitor for deuterium-tritium tokamaks in the near term, and the two papers' own numbers are honest about exactly where the effect runs out of road. But as a piece of low-energy nuclear physics it is a genuinely interesting reminder that the Coulomb barrier is not a fixed wall &mdash; it is a function of the charge distribution around a nucleus, and that distribution is something we can, in principle, engineer, even if only in a narrow energy window so far.
+</p>
+
+<h2>References</h2>
+
+<p>
+  Wang, H.-Y., Li, Y.-Q., Wu, Q., &amp; Cui, Z.-F. (2026). A novel approach to proton-boron-11 fusion. <em>arXiv:2604.18928</em>. <a href="https://arxiv.org/abs/2604.18928">arxiv.org/abs/2604.18928</a>.
+</p>
+<p>
+  Wang, H.-Y., Chen, M.-Y., Ma, H.-L., &amp; Cui, Z.-F. (2026). A semi-classical study of muon-enhanced proton-boron-11 fusion. <em>arXiv:2606.01551</em>. <a href="https://arxiv.org/abs/2606.01551">arxiv.org/abs/2606.01551</a>.
+</p>
