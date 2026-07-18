@@ -881,11 +881,22 @@ a:hover { text-decoration: underline; }
   margin-top: 1rem;
 }
 
-.password-lock-frame {
+.password-lock-frame,
+.embedded-pdf-frame {
   width: 100%;
   height: 80vh;
   min-height: 500px;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--bg);
+}
+
+.embedded-pdf {
+  margin: 1.5rem 0;
+}
+
+.embedded-pdf-fallback {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-soft);
 }
