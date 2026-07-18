@@ -1,0 +1,32 @@
+---
+layout: project
+title: "Gamma-Gamma Coincidence Spectroscopy of 175Au"
+date: 2026-04-25
+status: "Completed — final year project"
+tags: [Nuclear Physics, Gamma Spectroscopy, Machine Learning, Python]
+description: "Final-year physics project: recoil-decay tagged gamma-gamma coincidence spectroscopy of 175Au, evidence for shape coexistence, and a machine-learning assisted coincidence interpreter. Password-protected download."
+---
+
+<p class="lede">
+  My final-year physics project at the University of Liverpool: a recoil-decay tagged &gamma;-&gamma; coincidence spectroscopy study of <sup>175</sup>Au, supervised by Prof Robert Page and Prof David Joss. <sup>175</sup>Au sits below the Z&nbsp;=&nbsp;82 shell closure, where near-spherical hole configurations compete with deformation-driving intruder excitations &mdash; a textbook setting for shape coexistence. Using recoil-decay tagged data from the JUROGAM + RITU + GREAT setup at the University of Jyv&auml;skyl&auml; Accelerator Laboratory, I built an updated level scheme (including 30 previously unpublished weak linking transitions), used rotational diagnostics to argue for distinct intrinsic deformations across the observed bands, and separately built a reproducible coincidence-analysis workflow with a machine-learning assisted parameter-selection stage for a deterministic coincidence interpreter.
+</p>
+
+<h2>What's in the report</h2>
+
+<p>
+  The full report covers the nuclear-structure background (liquid-drop and Nilsson models, rotational coupling schemes, signature and staggering, Harris plots), the experimental setup (JUROGAM's HPGe array, the RITU gas-filled recoil separator, and the GREAT focal-plane spectrometer), the coincidence-gating analysis workflow in Radware, the resulting level scheme and band-by-band interpretation for <sup>175</sup>Au, and the machine-learning assisted coincidence interpreter built to speed up peak-finding and cascade-seeding on future datasets. It closes with systematics comparisons against neighbouring Au, Hg, and Pt isotopes, and full appendices covering the level-scheme validation checks, the angular-momentum coupling logic behind the band assignments, and supplementary figures.
+</p>
+
+<p>
+  Since this was submitted as an assessed university report rather than written for public distribution, I'm keeping the PDF itself behind a password rather than posting it in the open &mdash; happy to share the password directly if you'd like to read it.
+</p>
+
+<h2>Read the report</h2>
+
+{% include password-lock.html
+   enc_src="/assets/protected/175au-report.enc.json"
+   mode="view"
+   label="Enter the password to view the PDF"
+   button_label="Unlock"
+   viewer_title="175Au gamma-gamma coincidence spectroscopy report"
+   note="The file is AES-256 encrypted and decrypted entirely in your browser, then opened for reading only — the password never leaves your device. That said: once a browser can render a document it can generally also be printed or screenshotted, so treat this as a courtesy barrier rather than a guarantee against saving a copy." %}

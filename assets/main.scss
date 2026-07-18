@@ -853,6 +853,20 @@ a:hover { text-decoration: underline; }
   color: var(--text-soft);
 }
 
+.download-button {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff !important;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none !important;
+  transition: opacity 0.15s ease;
+
+  &:hover { opacity: 0.9; }
+}
+
 .password-lock-status {
   margin: 1rem 0 0;
   font-size: 0.9rem;
@@ -861,4 +875,17 @@ a:hover { text-decoration: underline; }
   &--pending { color: var(--text-soft); }
   &--success { color: #1a7f37; }
   &--error { color: var(--accent); }
+}
+
+.password-lock-viewer {
+  margin-top: 1rem;
+}
+
+.password-lock-frame {
+  width: 100%;
+  height: 80vh;
+  min-height: 500px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
 }

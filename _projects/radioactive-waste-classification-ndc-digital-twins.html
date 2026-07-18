@@ -1,0 +1,32 @@
+---
+layout: project
+title: "Radioactive Waste Classification, Non-Destructive Assay, and the Role of Digital Twins"
+date: 2025-12-07
+status: "Completed — Practical Physics III, Section C"
+tags: [Nuclear Physics, Radioactive Waste, Gamma Spectroscopy, Monte Carlo, Digital Twins]
+description: "Linking UK radioactive waste policy with non-destructive assay: HPGe and NaI(Tl) gamma measurements on a lab phantom, Monte Carlo attenuation modelling, and a small-scale digital-twin prototype for waste classification."
+---
+
+<p class="lede">
+  A report from Practical Physics III linking current UK radioactive waste policy to non-destructive assay technique, using a laboratory gamma cube phantom standing in for a low-level waste package.
+</p>
+
+<h2>What it covers</h2>
+
+<p>
+  Radioactive waste management requires precise classification of waste, evidence-based estimates of radionuclide inventories, and sound strategies for long-term storage, disposal, and repurposing. The UK's current policy framework emphasises the waste hierarchy, lifecycle consideration, and a graded, risk-informed approach to regulation; alongside this, digital twins that couple detailed physical models to live data streams are emerging as tools for monitoring and decision support in nuclear facilities. This report links the two, using high-resolution gamma spectra from a Canberra HPGe detector combined with Cs-137 transmission measurements from a NaI(Tl) detector, all processed through a Python workflow that performs radionuclide identification, extracts activity/efficiency/resolution, and carries out Monte Carlo based attenuation modelling over a 3&times;3&times;3 grid of Cu, Al, and PMMA voxels.
+</p>
+
+<h2>Headline results</h2>
+
+<ul>
+  <li>Cs-137 transmission data, combined with the Monte Carlo attenuation model, reconstruct the phantom's internal material layout and cross-check the aluminium density against reference data.</li>
+  <li>HPGe cube spectra were fit to a four-nuclide activity model dominated by Eu-152 and Y-88, with smaller Ba-133 and Cs-137 contributions.</li>
+  <li>A separate six-face analysis uses the reconstructed attenuation map and normalised count patterns to localise the principal Eu-152, Y-88, and Ba-133 sources to restricted regions of the cube volume.</li>
+  <li>Using the Eu-152 calibration source, the total Eu-152 activity in the cube is estimated at order 10<sup>2</sup>&nbsp;Bq &mdash; an activity concentration many orders of magnitude below UK low-level-waste limits, consistent with the phantom representing straightforward LLW or VLLW material.</li>
+  <li>The integrated modelling and measurement chain is presented as a small-scale prototype for digital twins supporting radioactive waste classification, disposal strategy, and repurposing routes.</li>
+</ul>
+
+<p>
+  <a class="download-button" href="{{ '/assets/files/radioactive-waste-classification-ndc-digital-twins.pdf' | relative_url }}">Download the full report (PDF)</a>
+</p>
