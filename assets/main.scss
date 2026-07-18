@@ -793,3 +793,72 @@ a:hover { text-decoration: underline; }
     color: var(--text-soft);
   }
 }
+
+// ---- Password-lock widget (client-side encrypted downloads) ----
+.password-lock {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.password-lock-label {
+  display: block;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+}
+
+.password-lock-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.password-lock-input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: var(--bg);
+  color: var(--text);
+
+  &:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+}
+
+.password-lock-row button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+
+  &:hover { opacity: 0.9; }
+  &:disabled { opacity: 0.6; cursor: default; }
+}
+
+.password-lock-note {
+  margin: 0.6rem 0 0;
+  font-size: 0.82rem;
+  color: var(--text-soft);
+}
+
+.password-lock-status {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  &--pending { color: var(--text-soft); }
+  &--success { color: #1a7f37; }
+  &--error { color: var(--accent); }
+}
