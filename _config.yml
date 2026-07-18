@@ -15,6 +15,12 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
 
+# Non-Jekyll source files that live inside content directories (e.g. an original
+# .docx alongside its converted .html draft in _drafts/) must be excluded, or
+# `jekyll serve --drafts` will try to parse them as posts and crash outright.
+exclude:
+  - "_drafts/*.docx"
+
 collections:
   projects:
     output: true
