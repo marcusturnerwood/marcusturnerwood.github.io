@@ -1,70 +1,66 @@
 ---
 layout: project
 title: "Research Organiser"
-date: 2026-07-12
+date: 2026-07-05
 image: /assets/images/research-organiser-logo-card.png
 status: "Active"
 tags: [FastAPI, Python, SQLite, Self-Hosted]
-description: "A local, self-hosted web app for managing academic reading: PDF library, citation graph, analytics, diary, and more."
+description: "A local, self-hosted web app for managing academic reading: PDF library, citation extraction, analytics, diary, code snippets, and a research feed."
 ---
 
 <p class="lede">
-  A local web app for managing my own academic reading life: uploading PDFs, tracking what I've actually read, taking notes, building a citation graph, and keeping a research diary &mdash; all stored on my own machine rather than in someone else's cloud. This is a walkthrough of what it actually looks like to use it, screen by screen.
+  A local web app for managing my own academic reading life: uploading PDFs, tracking what I've actually read, taking notes, extracting citations, running a research diary, and a few other things besides &mdash; all stored on my own machine rather than in someone else's cloud. This piece is in two parts: first a walkthrough of what it actually looks like to use, screen by screen; then an explanation of how it's actually built, for anyone who wants the software side of it.
 </p>
 
 <figure>
-  <img src="/assets/images/research-organiser-login.png" alt="Research Organiser logo/wordmark on the profile picker screen">
-  <figcaption><strong>Figure.</strong> Research Organiser.</figcaption>
+  <img src="/assets/images/research-organiser-login.png" alt="Research Organiser profile picker screen, showing the Marcus profile">
+  <figcaption><strong>Figure.</strong> The profile picker &mdash; no password, since everything is local to your own machine.</figcaption>
 </figure>
 
-<h2>What it is</h2>
+<h2>Part one: a walkthrough</h2>
 
-<p>
-  Under the hood it's a FastAPI backend with a SQLite database and a plain-JavaScript frontend (no build step) &mdash; you run it locally with <code>python main.py</code> and open <code>localhost:8000</code>. There's no separate account system or external server: every profile's library, diary, and reading queue live in one local <code>research.db</code> file, and uploaded PDFs sit in an <code>uploads/</code> folder next to it. The one external dependency is optional &mdash; a free Groq API key, used to auto-extract metadata and generate summaries when you upload a paper.
-</p>
-
-<h2>Getting it running</h2>
+<h3>Getting it running</h3>
 
 <p>
   Setup is three steps: get a free API key from <a href="https://console.groq.com">console.groq.com</a> (no card required), drop it into a <code>.env</code> file as <code>GROQ_API_KEY=...</code>, then start the server. On Windows that's <code>.\start.ps1</code>; on macOS/Linux, <code>bash start.sh</code>. Both scripts install dependencies, create the <code>.env</code> from the template if it doesn't exist yet, and check whether port 8000 is already taken before launching &mdash; or you can skip the script and just run <code>pip install -r requirements.txt</code> followed by <code>python main.py</code> directly. Either way, it comes up at <code>http://localhost:8000</code>.
 </p>
 
-<h2>Profiles</h2>
+<h3>Profiles</h3>
 
 <p>
   The app opens on a profile picker rather than a login screen (pictured above) &mdash; there's no password, since everything is local to your own machine. Profiles exist so you can keep separate libraries for separate projects, or so more than one person can use the same install without their reading queues getting mixed together. Every profile has its own library, diary, and queue, except for one shared &ldquo;Bridging Papers&rdquo; collection that's visible across all profiles &mdash; useful for papers that are relevant to more than one project.
 </p>
 
-<h2>The library</h2>
+<h3>The library</h3>
 
 <p>
   This is the main screen and the one you'll spend the most time on. Papers go in by drag-and-drop or the &ldquo;Add papers&rdquo; button, multiple at a time, and uploading doesn't block the UI &mdash; the AI metadata extraction (title, authors, year, journal, DOI, abstract, research fields, a short summary, and a first pass at cited references) runs in the background while you keep working, and each card shows a pending indicator until it's done.
 </p>
 
 <p>
-  Down the left, papers are organised by reading status &mdash; Unread, In Progress, Completed &mdash; and by colour-coded topics you define yourself, with a running count next to each. The main panel supports grid, list, and compact views, sorting by date added, rating, or publication year, and a search box that matches on title, author, DOI, or your own notes. Each paper gets a 1&ndash;5 star rating, a page-progress tracker, and a notes field that autosaves as you type.
+  Down the left, papers are organised by reading status &mdash; Unread, In Progress, Completed &mdash; and by colour-coded topics you define yourself, with a running count next to each. The main panel supports grid, list, and compact views, sorting by date added, rating, or publication year, and a search box that matches on title, author, DOI, or your own notes. Each paper gets a 1&ndash;5 star rating, a page-progress tracker, and a notes field that autosaves as you type. Mine currently has sixty papers in it, mostly general relativity and QFT lecture notes alongside some classic papers I keep coming back to.
 </p>
 
 <figure>
-  <img src="/assets/images/research-organiser-library.png" alt="Research Organiser library view showing a grid of papers organised by topic">
+  <img src="/assets/images/research-organiser-library.png" alt="Research Organiser library view showing a grid of sixty papers organised by topic">
   <figcaption><strong>Figure.</strong> The library: papers as cards, topics and reading status in the sidebar, search and view controls along the top.</figcaption>
 </figure>
 
-<h2>The reference graph</h2>
+<h3>Extraction</h3>
 
 <p>
-  The <code>/graph</code> page turns the library into an interactive 3D force-directed network (built on <a href="https://github.com/vasturiano/3d-force-graph">3d-force-graph</a>, so it's WebGL/Three.js under the hood, not a static plot). Nodes are colour-coded by reading status &mdash; unread, reading, read &mdash; plus two extra categories for papers the graph knows about but that aren't in your library yet: cited-but-not-uploaded references, and papers the AI has suggested you read next based on what's already there. Clicking a node opens an info panel with its summary and connections, and a direct link back to that paper in the library. There's also a separate Extraction tab: a table view of AI-extraction status per paper, with the per-paper reference list the graph edges are actually built from &mdash; useful for spotting a paper the extraction step choked on.
+  The <code>/graph</code> page is a table view of AI-extraction status per paper: how many references were pulled out of each PDF, how many were matched automatically to something already in the library, and how many are still unmatched. A &ldquo;Re-run&rdquo; button lets you retry a paper whose extraction failed or came back incomplete &mdash; useful when a PDF's reference list is formatted awkwardly enough that the first pass chokes on it &mdash; and a &ldquo;Refs&rdquo; button expands the full per-paper reference list inline. A &ldquo;Reconcile&rdquo; action at the top re-runs the matching step across the whole library at once, for when you've added several papers that cite each other and want the links to catch up.
 </p>
 
 <figure>
-  <img src="/assets/images/research-organiser-graph.png" alt="Research Organiser reference graph page, showing the legend and view controls">
-  <figcaption><strong>Figure.</strong> The reference graph controls: reading-status legend on the left, view/filter controls on the right and bottom. (Captured before any papers were loaded into the view &mdash; with a populated library this fills with a navigable node network.)</figcaption>
+  <img src="/assets/images/research-organiser-extraction.png" alt="Research Organiser extraction page, a table of papers with reference counts, match status, and re-run controls">
+  <figcaption><strong>Figure.</strong> Extraction status per paper &mdash; reference counts, matched/unmatched, and per-paper controls to re-run or expand the reference list. (This used to be paired with a 3D force-directed citation graph; that view has since been retired in favour of this table, which is more directly useful day to day.)</figcaption>
 </figure>
 
-<h2>Analytics</h2>
+<h3>Analytics</h3>
 
 <p>
-  A dashboard of what your library actually looks like: total papers, how many are currently being read, finished, or unread, completion percentage, and total pages read. Below that, a papers-added-per-month bar chart, a status-breakdown donut chart, a rating-distribution bar chart, and a ranked bar chart of your top research fields (drawn from the AI-extracted field tags), plus breakdowns of top authors and topics. It's a nice sanity check on reading habits &mdash; a fast way to notice that you have, say, fifteen unread nuclear physics papers piling up.
+  A dashboard of what your library actually looks like: total papers, how many are currently being read, finished, or unread, completion percentage, and total pages read. Below that, a papers-added-per-month bar chart, a status-breakdown donut chart, a rating-distribution bar chart, and a ranked bar chart of your top research fields (drawn from the AI-extracted field tags), plus breakdowns of top authors and topics. It's a nice sanity check on reading habits &mdash; a fast way to notice that theoretical physics and nuclear physics dominate what I've actually added, which, looking at the chart, they do.
 </p>
 
 <figure>
@@ -72,41 +68,97 @@ description: "A local, self-hosted web app for managing academic reading: PDF li
   <figcaption><strong>Figure.</strong> The analytics dashboard &mdash; summary stats up top, charts and ranked breakdowns below.</figcaption>
 </figure>
 
-<h2>Diary and tasks</h2>
+<h3>Diary and tasks</h3>
 
 <p>
-  The <code>/diary</code> page is a dated research journal, separate from per-paper notes: entries can be searched by text, linked to specific papers, and exported as Markdown with YAML frontmatter (title, date, linked papers) if you want them somewhere else too. A second tab, Tasks, is a straightforward to-do list with priorities (low/medium/high/urgent), due dates, and a status of todo/in-progress/done, with overdue tasks highlighted so they don't quietly disappear.
+  The <code>/diary</code> page is a dated research journal, separate from per-paper notes: entries can be searched by text, linked to specific papers, and exported as Markdown with YAML frontmatter (title, date, linked papers) if you want them somewhere else too, with a live KaTeX preview for entries that include maths. A second tab, Tasks, is a straightforward to-do list with priorities (low/medium/high/urgent), due dates, and a status of to-do/in-progress/done, with overdue tasks highlighted so they don't quietly disappear.
 </p>
 
 <figure>
-  <img src="/assets/images/research-organiser-diary.png" alt="Research Organiser diary page, empty state before any entries have been created">
-  <figcaption><strong>Figure.</strong> The diary&rsquo;s Entries tab in its empty state &mdash; a new entry is one click away via the plus button.</figcaption>
+  <img src="/assets/images/research-organiser-diary.png" alt="Research Organiser diary page showing a written entry with linked papers">
+  <figcaption><strong>Figure.</strong> The diary's Entries tab, mid-entry &mdash; autosave confirms in the corner as you type.</figcaption>
 </figure>
 
-<h2>Resources</h2>
+<figure>
+  <img src="/assets/images/research-organiser-tasks.png" alt="Research Organiser tasks tab showing two to-do items with priority and status badges">
+  <figcaption><strong>Figure.</strong> The Tasks tab &mdash; priority and status badges per item, filterable by All/To Do/In Progress/Done/Overdue.</figcaption>
+</figure>
+
+<h3>Resources</h3>
 
 <p>
   A catch-all for material that isn't a paper: a Videos tab for saving YouTube videos with auto-fetched title and thumbnail (via YouTube's oEmbed metadata), tagged by topic and watchable inline; a Playlists tab for the same with an embedded player; and a Datasets tab for tracking datasets by source URL, description, and file upload, for when the thing you need to keep track of is data rather than a paper.
 </p>
 
 <figure>
-  <img src="/assets/images/research-organiser-resources.png" alt="Research Organiser resources page, Videos tab, empty state">
-  <figcaption><strong>Figure.</strong> The Resources page&rsquo;s Videos tab &mdash; Playlists and Datasets sit alongside it.</figcaption>
+  <img src="/assets/images/research-organiser-resources.png" alt="Research Organiser resources page, Videos tab, showing one saved video with auto-fetched thumbnail and title">
+  <figcaption><strong>Figure.</strong> The Resources page's Videos tab, with a saved lecture &mdash; title, thumbnail, and channel pulled automatically from the URL.</figcaption>
 </figure>
 
-<h2>The rest: code, feed, and the research agent</h2>
+<h3>Code</h3>
 
 <p>
-  Three more sections round out the app, though I don't have screenshots of these yet to show. <code>/code</code> is a place to save syntax-highlighted code snippets (Python, JS, R, MATLAB, C, Bash, Julia) and link them to the paper they came from. <code>/feed</code> is a small social layer &mdash; post research updates as a Read, Insight, Recommendation, or Note, optionally with a photo attached, and follow other profiles to see theirs. And <code>/agent</code> is a natural-language question box over your entire library: it reads paper summaries, abstracts, and metadata to answer grounded questions and cites the specific papers it drew on, with clickable links back into the library. Like the metadata extraction, it runs on Groq/Llama 3.3, so it needs the same API key already set up in <code>.env</code>.
+  <code>/code</code> is a place to save syntax-highlighted code snippets (Python, JS, R, MATLAB, C, Bash, Julia, via Prism.js) with a live preview pane, link them to the paper they came from, add free-text notes, and copy them to the clipboard. There's also a GitHub tab alongside Snippets for browsing a linked GitHub account's repos directly.
 </p>
 
-<h2>Stack</h2>
+<figure>
+  <img src="/assets/images/research-organiser-code.png" alt="Research Organiser code page showing a Python snippet with syntax highlighting in the edit and preview panes">
+  <figcaption><strong>Figure.</strong> A saved snippet, syntax-highlighted in both the edit pane and the live preview.</figcaption>
+</figure>
+
+<h3>Feed</h3>
 
 <p>
-  FastAPI + SQLAlchemy + SQLite on the backend, PyMuPDF for PDF parsing, and a vanilla-JS frontend with no build step. The reference graph runs on <a href="https://github.com/vasturiano/3d-force-graph">3d-force-graph</a> (Three.js/WebGL); code highlighting is Prism.js.
+  <code>/feed</code> is a small social layer on top of all of this: post research updates tagged as a Note, Read, Insight, or Recommendation, optionally with a photo attached and a paper linked, and follow other profiles to see theirs alongside your own.
 </p>
 
-<h2>A few practical notes</h2>
+<figure>
+  <img src="/assets/images/research-organiser-feed.png" alt="Research Organiser feed page showing a posted Insight update">
+  <figcaption><strong>Figure.</strong> A posted update, tagged Insight, with the compose box above it.</figcaption>
+</figure>
+
+<h3>Research Agent</h3>
+
+<p>
+  <code>/agent</code> is a natural-language question box over your entire library: it reads paper summaries, abstracts, and metadata to answer grounded questions and cites the specific papers it drew on, with clickable links back into the library &mdash; things like &ldquo;what methodologies appear most in my library?&rdquo; or &ldquo;suggest a reading order for a newcomer to this field.&rdquo; Like the metadata extraction, it runs on Groq/Llama 3.3, so it needs the same API key already set up in <code>.env</code>.
+</p>
+
+<figure>
+  <img src="/assets/images/research-organiser-agent.png" alt="Research Organiser research agent page with a question box and suggested prompts">
+  <figcaption><strong>Figure.</strong> The Research Agent's landing state, with a handful of suggested starting questions.</figcaption>
+</figure>
+
+<h2>Part two: how it's built</h2>
+
+<h3>Overall shape</h3>
+
+<p>
+  It's a single FastAPI backend (one <code>main.py</code>, currently a little over a hundred kilobytes) talking to a SQLite database through SQLAlchemy, with a plain-JavaScript frontend and no build step &mdash; each page is a static HTML file under <code>static/</code> that calls a small set of JSON API routes directly. There's no separate account system or external server: every profile's library, diary, and reading queue live in one local <code>research.db</code> file, and uploaded PDFs sit in an <code>uploads/</code> folder next to it. The one external dependency is optional &mdash; a free Groq API key, used to auto-extract metadata and generate summaries when you upload a paper.
+</p>
+
+<h3>The data model</h3>
+
+<p>
+  The schema is built around a <code>Paper</code> table (title, authors, year, journal, DOI, abstract, status, rating, notes, page progress, AI summary and extracted fields, plus an <code>ai_status</code> column that drives the pending indicator in the library view) and a <code>Reference</code> table that records, for each paper, the references the AI extraction pulled out of its text and whatever <code>target_id</code> they were matched to in the library, along with a match confidence and method. A separate <code>Suggestion</code> table holds AI-recommended related papers, and <code>PaperRelationship</code> records explicit links between papers you've made yourself. Topics are a many-to-many join (<code>Topic</code> / <code>PaperTopic</code>) so a paper can carry several colour-coded tags at once. Diary entries, tasks, code snippets, feed posts, videos, and datasets are each their own table, mostly following the same shape: a content table plus a join table where something needs linking back to a specific paper.
+</p>
+
+<h3>The upload and extraction pipeline</h3>
+
+<p>
+  Uploading a PDF writes the file to <code>uploads/</code>, creates a <code>Paper</code> row with <code>ai_status="pending"</code>, and hands off to a background task (FastAPI's <code>BackgroundTasks</code>, backed by a plain <code>threading.Thread</code> for the reanalyse path) rather than blocking the HTTP response &mdash; this is what lets you drop in a stack of PDFs at once and keep working while metadata extraction happens behind the scenes. Text extraction itself goes through <code>pdfplumber</code>; the extracted text is then sent to Groq's Llama 3.3 endpoint with a prompt asking for structured metadata, a short summary, research field tags, and a first pass at the paper's reference list. Each extracted reference is then run through a matching step against titles already in the library to decide whether it should link to an existing paper or sit as an external, cited-but-not-uploaded entry &mdash; the same matching logic the Extraction page's &ldquo;Reconcile&rdquo; button re-runs on demand.
+</p>
+
+<p>
+  This pipeline is also the reason the free Groq tier's rate limit shows up occasionally as an &ldquo;Error&rdquo; status in the Extraction table rather than a silent failure &mdash; a paper that hits a 429 during analysis is left in a re-runnable state instead of being marked complete with partial data.
+</p>
+
+<h3>Stack</h3>
+
+<p>
+  FastAPI + SQLAlchemy + SQLite on the backend, <code>pdfplumber</code> for PDF text extraction, Groq's Llama 3.3 for the AI analysis, and a vanilla-JS frontend with no build step. Diary maths rendering is KaTeX; code highlighting is Prism.js; icons are Phosphor.
+</p>
+
+<h3>A few practical notes</h3>
 
 <p>
   Everything stays local: <code>uploads/</code> and <code>research.db</code> are gitignored if you keep the project in version control, and so is <code>.env</code>, so your papers, notes, and API key never end up committed anywhere. If a cited paper's title matches one already sitting in your library, the reference graph links them automatically rather than treating them as two separate things. And because AI analysis runs in the background rather than blocking the upload, it's entirely reasonable to drop in a stack of twenty PDFs at once and just let the pending indicators clear on their own while you keep working.
