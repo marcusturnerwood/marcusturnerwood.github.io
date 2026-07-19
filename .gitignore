@@ -13,8 +13,3 @@ Desktop.ini
 
 # Secrets (password-protected project content, etc.)
 .env
-
-# Work-in-progress project (visible on localhost, not for the public repo)
-_projects/plastic-scintillator-cosmic-ray-detector.html
-assets/images/plastic-scintillator-fibre-block.jpg
-assets/images/plastic-scintillator-winding-jig.jpg
