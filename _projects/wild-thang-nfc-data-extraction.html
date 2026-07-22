@@ -1,0 +1,84 @@
+---
+layout: project
+title: "Wild Thang: NFC Check-In and Live Machine Data Extraction"
+date: 2026-07-21
+status: "Draft — Work in Progress"
+image: /assets/images/wild-thang-dashboard-landing.png
+tags: [Raspberry Pi, USB Gadget, Flask, MongoDB, IoT, Automation]
+description: "An NFC/QR check-in system for a workshop floor, paired with a Raspberry Pi that impersonates a USB mouse and flash drive to pull live production data straight off an embroidery machine's own touchscreen."
+---
+
+<p class="lede">
+  Wild Thang started as a simple problem: get staff to log which machine they're on and what job they're doing, without buying into a commercial time-and-attendance system. It grew into something more interesting once one particular machine &mdash; an HCR3 embroidery machine, nicknamed DARREN &mdash; needed its production data extracted automatically too, which meant teaching a Raspberry Pi to physically operate the machine's touchscreen on command.
+</p>
+
+<figure>
+  <img src="/assets/images/wild-thang-nfc-index.png" alt="Wild Thang machine log web page, showing a machine dropdown and three action buttons: Check In, Change Your Job, Extract Data">
+  <figcaption><strong>Figure.</strong> The front end: one static page, reached by tapping an NFC tag or scanning a QR code stuck to the machine.</figcaption>
+</figure>
+
+<h2>The front end</h2>
+
+<p>
+  Every machine gets the same NFC tag/QR code, pointing at one URL. Tap it, pick your machine from a dropdown, and choose one of three actions: <strong>Check In</strong>, <strong>Change Your Job</strong>, or <strong>Extract Data</strong>. Check In and Change Your Job ask for an employee ID and a job &mdash; the job list is pulled live from a shared Outlook calendar via Microsoft Graph when that's configured (each calendar event's subject becomes a job name), falling back to a plain text field otherwise, silently and without breaking anything for the person on the shop floor. Extract Data is gated behind a confirmation checkbox ("I confirm this machine is definitely not currently running") before it'll do anything, since triggering an export mid-job is exactly the failure mode worth designing out.
+</p>
+
+<p>
+  There's deliberately no login. Picking a name from a dropdown isn't authentication, and it doesn't need to be &mdash; this is a workshop-floor logging tool, not an access-control system. Every tap logs an event straight into a MongoDB <code>nfc_log</code> collection.
+</p>
+
+<h2>The extraction pipeline</h2>
+
+<p>
+  This is the part that turned into a real hardware project. The HCR3 control box has no API, no network port, and no way to export data except by tapping through its own touchscreen menus and saving a CSV to a USB drive. So the Pi <em>becomes</em> that USB drive &mdash; and the mouse.
+</p>
+
+<p>
+  A Raspberry Pi 4, connected to the HCR3 over a single USB-C cable in USB gadget mode, presents itself as two devices at once: a USB HID mouse (absolute-position, so it can teleport the cursor to an exact touchscreen coordinate and click) and a USB mass-storage device backed by a disk image file living on the Pi's own microSD card. When "Extract Data" is pressed on the web page for machine 1, the Pi's Flask backend replays a pre-recorded tap sequence &mdash; wake the pointer with a right-click, open the menu, open REPORT, tap through all four report categories, save each one to the "USB drive," return home &mdash; then reads the exported CSV straight back out of its own disk image (briefly detaching the gadget, loop-mounting the image read-only, then reattaching) and uploads any new rows to MongoDB, deduplicated against a unique index on <code>(machine_id, "No.")</code> so a bug in the row-tracking can never double-insert a row.
+</p>
+
+<h2>Calibrating the tap sequence</h2>
+
+<p>
+  The tap coordinates aren't guessed &mdash; they're measured against real photos of the HCR3's own 800&times;480 touchscreen, tapped through by hand while noting each screen's pixel position and load time, then encoded into a small CSV (<code>taps.csv</code>: x, y, button, wait&#95;ms, note per row). A set of hardware-free preview scripts overlay the recorded tap sequence (or, for touch targets that need a real cursor path rather than a teleport-click, a recorded move-then-click session) on top of those same screen photos, so the whole sequence can be sanity-checked by eye before it's ever run against the real machine. A small local control panel (browser-based, or a Tkinter desktop equivalent) ties this together for bench testing: switch between tap-sequence and recorded-session input modes, preview either one, or kick off a real recording session on the Pi over SSH.
+</p>
+
+<p>
+  A second, separate script polls the same <code>nfc_log</code> collection this laptop watches for new "Extract Data" events on the HCR3 and pops up a full-screen preview automatically when one happens &mdash; visible feedback for a trigger that otherwise runs invisibly on a Pi sitting inside a workshop.
+</p>
+
+<h2>Getting the Pi talking to the machine</h2>
+
+<p>
+  The USB gadget setup is the fiddly part: `config.txt` needs <code>dtoverlay=dwc2,dr_mode=peripheral</code> to put the Pi 4's USB-C port into peripheral (gadget) mode rather than host mode, which also means USB-C can no longer power the Pi &mdash; it needs a separate 5V supply. The gadget itself is a composite HID + mass-storage device, set up once via a systemd-managed install script and confirmed by checking <code>/dev/hidg0</code> exists after boot. The Pi is reached over SSH by mDNS hostname rather than a fixed IP, since which network it's actually on (university Wi-Fi, direct Ethernet tethering, etc.) changes what IP it gets, and the mDNS name is the one thing that doesn't.
+</p>
+
+<p>
+  The backend itself &mdash; the Flask app serving the web page's API and triggering exports &mdash; runs on the Pi as a systemd service, exposed to the internet through a Cloudflare Tunnel rather than a port-forward, since the Pi has no public IP of its own.
+</p>
+
+<h2>Where the data actually goes: the Twin Thang dashboard</h2>
+
+<p>
+  The extraction pipeline on its own just gets rows into MongoDB &mdash; it doesn't answer "how's the shop floor doing right now." That's a separate, sibling project: <strong>Twin Thang</strong>, a real-time 3D digital-twin dashboard (Vite + Three.js frontend, FastAPI backend) that reads the same <code>wild_thang_real_and_synthetic</code> collection this pipeline feeds and turns it into a walkable 3D view of the machines &mdash; DARREN among them &mdash; alongside a production Gantt chart, per-machine utilisation and thread-break stats, and an LLM-backed chat assistant for querying the data in plain English. It's downstream of everything described above, not part of the NFC/extraction system itself, but it's the reason the extraction pipeline exists in the first place: there'd be nothing for the dashboard to show without it.
+</p>
+
+<figure>
+  <img src="/assets/images/wild-thang-dashboard-landing.png" alt="Twin Thang dashboard landing page, showing four stylised mirror frames labelled 'Wild Thang Digital Twin: Look through the windows into the factory' with an Open dashboard button">
+  <figcaption><strong>Figure.</strong> The Twin Thang landing page &mdash; a separate project from the NFC/extraction system above, built to visualise the data it produces.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/wild-thang-dashboard-overview.png" alt="Twin Thang dashboard overview: a 3D factory layout with three named embroidery machines (Darren, Ian, Nikki), a machine detail panel showing current job and utilisation, and a production Gantt chart below">
+  <figcaption><strong>Figure.</strong> The main dashboard view: a 3D factory layout (click a machine to select it), live job/utilisation detail for the selected machine, and a production Gantt chart underneath &mdash; all driven by data this extraction pipeline puts into MongoDB.</figcaption>
+</figure>
+
+<h2>Stack</h2>
+
+<p>
+  Static HTML/CSS/vanilla JS front end; Flask backend on the Pi; MongoDB for event logging; Microsoft Graph (optional) for the Outlook job list; Cloudflare Tunnel for public exposure; systemd for service management; a Linux USB gadget (<code>configfs</code>-based HID + mass storage) as the actual mechanism for talking to the HCR3's touchscreen and reading back its export.
+</p>
+
+<p style="color:var(--text-soft); font-style:italic;">
+  [Draft note: this is a working system, not a finished write-up &mdash; still to add: a photo of the physical Pi/cable/HCR3 setup and a screenshot of the bench control panel and live preview tooling in action (the Twin Thang dashboard screenshots above cover the downstream visualisation, but not the extraction hardware/software itself), plus results from a longer real-world run (export reliability over weeks, how often taps have needed re-calibrating after a firmware update, etc.) once there's enough data to say something concrete about it.]
+</p>
