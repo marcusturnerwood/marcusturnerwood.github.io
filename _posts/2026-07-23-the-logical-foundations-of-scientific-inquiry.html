@@ -176,6 +176,55 @@ keywords: "deduction, induction, abduction, modus ponens, modus tollens, problem
   This dissolves the raven paradox by making the confirmation Hempel's principles jointly implied precise rather than paradoxical: a black raven confirms "all ravens are black" strongly because \( P(\text{black raven} \mid H) \) and \( P(\text{black raven} \mid \neg H) \) differ substantially (the observation is much more probable if the generalisation is true), while a non-black non-raven confirms the same generalisation, via the equivalent contrapositive, by an amount governed by how many non-black things there are relative to ravens &mdash; a non-zero but minuscule likelihood ratio, matching the intuition that the apple is technically relevant but practically negligible, now derived rather than merely stipulated. It also gives a formal shape to the response to Hume rather than a refutation of him: Bayesian updating never claims to deductively certify \( H \); it is a rule for how credences ought to shift given new evidence, conditional on a prior that itself has to come from somewhere logic does not supply. Whether the priors themselves can be given a non-arbitrary justification (the frequentist objection to Bayesianism generally) is exactly the sort of question that pushes past pure logic and into the epistemology of science, which the companion piece to this one addresses directly.
 </p>
 
+<div class="interactive-widget" id="raven-widget">
+  <p class="interactive-widget-title">Interactive: a black raven vs. a red apple, updated</p>
+  <div class="interactive-widget-controls">
+    <label>Prior \( P(H) \) = <span id="raven-prior-val">0.50</span>
+      <input type="range" id="raven-prior" min="0.01" max="0.99" step="0.01" value="0.5">
+    </label>
+    <label>If \( H \) were false, fraction of ravens that would be non-black = <span id="raven-err-val">0.50</span>
+      <input type="range" id="raven-err" min="0.05" max="0.9" step="0.01" value="0.5">
+    </label>
+  </div>
+  <p class="interactive-widget-readout" id="raven-readout"></p>
+  <p class="interactive-widget-caption">Fixing ravens at roughly 1-in-100,000 of all things (a reasonable illustrative estimate), the two sliders set the prior and how sharply a false generalisation would show up in ravens specifically. Watch how a single black raven moves \( P(H) \) by a real amount, while a single non-black non-raven barely moves it at all &mdash; both are technically confirming evidence for "all ravens are black," but only one of them is doing appreciable work.</p>
+</div>
+
+<script>
+(function () {
+  var priorSlider = document.getElementById('raven-prior');
+  var errSlider = document.getElementById('raven-err');
+  var priorVal = document.getElementById('raven-prior-val');
+  var errVal = document.getElementById('raven-err-val');
+  var readout = document.getElementById('raven-readout');
+  var N = 100000;
+
+  function render() {
+    var p = parseFloat(priorSlider.value);
+    var e = parseFloat(errSlider.value);
+    priorVal.textContent = p.toFixed(2);
+    errVal.textContent = e.toFixed(2);
+
+    var priorOdds = p / (1 - p);
+    var lrRaven = 1 / (1 - e);
+    var lrNonRaven = 1 / (1 - e / N);
+
+    var postOddsRaven = priorOdds * lrRaven;
+    var postProbRaven = postOddsRaven / (1 + postOddsRaven);
+    var postOddsNon = priorOdds * lrNonRaven;
+    var postProbNon = postOddsNon / (1 + postOddsNon);
+
+    readout.innerHTML =
+      'Likelihood ratio, black raven: <strong>' + lrRaven.toFixed(2) + '&times;</strong> &nbsp; → &nbsp; P(H | black raven) = <strong>' + postProbRaven.toFixed(4) + '</strong><br>' +
+      'Likelihood ratio, non-black non-raven: <strong>' + lrNonRaven.toFixed(8) + '&times;</strong> &nbsp; → &nbsp; P(H | red apple) = <strong>' + postProbNon.toFixed(8) + '</strong>';
+  }
+
+  priorSlider.addEventListener('input', render);
+  errSlider.addEventListener('input', render);
+  render();
+})();
+</script>
+
 <h2>Abduction: inference to the best explanation</h2>
 
 <p>

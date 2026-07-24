@@ -101,6 +101,51 @@ keywords: "muon catalysed fusion, proton-boron-11, p-11B fusion, aneutronic fusi
   Read the two rows together and the shape of the result becomes clear. At 0.10 keV, the muon-catalysed reactivity is around 23 orders of magnitude higher than the bare-nucleus case &mdash; the headline result. But at 148.10 keV, close to the reaction&rsquo;s resonance region, the muon-catalysed rate is actually very slightly <em>below</em> the bare-nucleus rate. The muon helps enormously at energies far too low to be useful for a power plant, and has essentially nothing left to give right where a reactor would actually want to operate. Despite using entirely different methods &mdash; full quantum-mechanical tunnelling in the first paper, classical trajectories in the second &mdash; both studies land on the same qualitative picture.
 </p>
 
+<div class="interactive-widget" id="muon-widget">
+  <p class="interactive-widget-title">Interactive: where the muon's help runs out</p>
+  <div class="interactive-widget-controls">
+    <label>Plasma energy = <span id="muon-e-val">0.1</span> keV
+      <input type="range" id="muon-e" min="-1" max="2.27" step="0.01" value="-1">
+    </label>
+  </div>
+  <p class="interactive-widget-readout" id="muon-readout"></p>
+  <p class="interactive-widget-caption">The slider runs (logarithmically) over the same range as the two papers' results. The enhancement factor shown is log&ndash;log interpolated between the three anchor points both papers actually report &mdash; 0.10&nbsp;keV (&asymp;10<sup>23</sup>&times;), the crossover around 107.4&nbsp;keV (1&times;, by definition of "crossover"), and 148.10&nbsp;keV (&asymp;0.53&times;) &mdash; not a live re-run of the WKB integral, so treat it as illustrative of the shape, not a substitute for the papers' own numbers.</p>
+</div>
+
+<script>
+(function () {
+  var slider = document.getElementById('muon-e');
+  var eVal = document.getElementById('muon-e-val');
+  var readout = document.getElementById('muon-readout');
+  // anchors in (log10 E[keV], log10 enhancement)
+  var anchors = [[-1, 23.4298], [2.0311, 0], [2.1706, -0.2733]];
+
+  function interp(logE) {
+    if (logE <= anchors[0][0]) return anchors[0][1];
+    if (logE >= anchors[2][0]) return anchors[2][1];
+    var seg = logE < anchors[1][0] ? [anchors[0], anchors[1]] : [anchors[1], anchors[2]];
+    var t = (logE - seg[0][0]) / (seg[1][0] - seg[0][0]);
+    return seg[0][1] + t * (seg[1][1] - seg[0][1]);
+  }
+
+  function render() {
+    var logE = parseFloat(slider.value);
+    var E = Math.pow(10, logE);
+    eVal.textContent = E < 1 ? E.toFixed(2) : E.toFixed(1);
+    var logEnh = interp(logE);
+    var word;
+    if (logEnh > 3) word = 'muon screening dominates — tunnelling is enhanced by roughly ' + Math.round(logEnh) + ' orders of magnitude.';
+    else if (logEnh > 0.3) word = 'muon screening still helps noticeably.';
+    else if (logEnh > -0.3) word = 'right at the crossover — muon screening is doing essentially nothing.';
+    else word = 'muon-catalysed reactivity is now slightly below the bare-nucleus case.';
+    readout.innerHTML = 'Enhancement factor ≈ 10<sup>' + logEnh.toFixed(2) + '</sup> (' + (logEnh >= 0 ? '×' + Math.pow(10, logEnh).toExponential(2) : (Math.pow(10, logEnh)).toFixed(2) + '×') + ') — ' + word;
+  }
+
+  slider.addEventListener('input', render);
+  render();
+})();
+</script>
+
 <h2>The catch: making the muons</h2>
 
 <figure>

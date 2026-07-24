@@ -722,6 +722,84 @@ keywords: "computer vision, camera calibration, pinhole camera model, homography
   This is the uncertainty-aware generalisation of a fixed-radius gate. A fixed radius treats every direction as equally uncertain, which is wrong whenever the tracker is more confident in one direction than another (for instance, along the direction of motion vs. across it). If \(\Sigma\) is isotropic, the Mahalanobis gate is circular and reduces to the fixed-radius case; if uncertainty is larger in one direction than another, the gate becomes an ellipse aligned with the eigenvectors of \(S_t\), exactly matching the predicted shape of the measurement uncertainty.
 </p>
 
+<div class="interactive-widget" id="maha-widget">
+  <p class="interactive-widget-title">Interactive: the Mahalanobis gate vs. a fixed-radius gate</p>
+  <svg viewBox="0 0 400 300" width="400" height="300" id="maha-svg" aria-label="A gating ellipse around a predicted position; click anywhere to test whether that point would be accepted as a match" style="cursor:crosshair;"></svg>
+  <div class="interactive-widget-controls">
+    <label><input type="checkbox" id="maha-aniso" checked style="width:auto;"> anisotropic \( R_m = \mathrm{diag}(\sigma_x^2, \sigma_y^2) \), \(\sigma_x \neq \sigma_y\)</label>
+    <span class="interactive-widget-readout" id="maha-readout">Click anywhere to test a candidate detection.</span>
+  </div>
+  <p class="interactive-widget-caption">The dashed ellipse is the actual 95% gate, \( d_M^2 \leq \chi^2_{2,0.95} = 5.991 \); the dotted circle is what a naive fixed-radius gate of the same area would look like. Click any point: green if the Mahalanobis gate accepts it, red if not. Toggle anisotropic off and the two gates coincide &mdash; toggle it on and watch the Mahalanobis gate correctly reject a point that's actually closer to the predicted position (in plain pixel distance) than one it accepts along the low-uncertainty axis.</p>
+</div>
+
+<script>
+(function () {
+  var svg = document.getElementById('maha-svg');
+  var anisoBox = document.getElementById('maha-aniso');
+  var readout = document.getElementById('maha-readout');
+  var svgns = 'http://www.w3.org/2000/svg';
+  var cx = 200, cy = 150;
+  var CHI2 = 5.991;
+
+  function sigmas() {
+    return anisoBox.checked ? [55, 20] : [33, 33];
+  }
+
+  function render() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var s = sigmas();
+    var a = s[0] * Math.sqrt(CHI2), b = s[1] * Math.sqrt(CHI2);
+    var equivR = Math.sqrt(a * b); // circle of equal area
+
+    var circ = document.createElementNS(svgns, 'circle');
+    circ.setAttribute('cx', cx); circ.setAttribute('cy', cy); circ.setAttribute('r', equivR);
+    circ.setAttribute('fill', 'none'); circ.setAttribute('stroke', '#94a3b8');
+    circ.setAttribute('stroke-width', '1.5'); circ.setAttribute('stroke-dasharray', '2 3');
+    svg.appendChild(circ);
+
+    var ell = document.createElementNS(svgns, 'ellipse');
+    ell.setAttribute('cx', cx); ell.setAttribute('cy', cy);
+    ell.setAttribute('rx', a); ell.setAttribute('ry', b);
+    ell.setAttribute('fill', 'var(--accent-surface)'); ell.setAttribute('stroke', '#c1440e');
+    ell.setAttribute('stroke-width', '2'); ell.setAttribute('stroke-dasharray', '5 3');
+    svg.appendChild(ell);
+
+    var center = document.createElementNS(svgns, 'circle');
+    center.setAttribute('cx', cx); center.setAttribute('cy', cy); center.setAttribute('r', 4);
+    center.setAttribute('fill', '#2563a8');
+    svg.appendChild(center);
+    var label = document.createElementNS(svgns, 'text');
+    label.setAttribute('x', cx + 8); label.setAttribute('y', cy - 8);
+    label.setAttribute('font-size', '12'); label.setAttribute('fill', '#2563a8');
+    label.textContent = 'predicted position';
+    svg.appendChild(label);
+  }
+
+  svg.addEventListener('click', function (evt) {
+    var rect = svg.getBoundingClientRect();
+    var x = (evt.clientX - rect.left) * (400 / rect.width);
+    var y = (evt.clientY - rect.top) * (300 / rect.height);
+    var s = sigmas();
+    var dx = x - cx, dy = y - cy;
+    var d2 = (dx * dx) / (s[0] * s[0]) + (dy * dy) / (s[1] * s[1]);
+    var accepted = d2 <= CHI2;
+
+    var svgns2 = 'http://www.w3.org/2000/svg';
+    var pt = document.createElementNS(svgns2, 'circle');
+    pt.setAttribute('cx', x); pt.setAttribute('cy', y); pt.setAttribute('r', 5);
+    pt.setAttribute('fill', accepted ? '#1a7a4c' : '#b3261e');
+    pt.setAttribute('stroke', 'white'); pt.setAttribute('stroke-width', '1.5');
+    svg.appendChild(pt);
+
+    var plainDist = Math.sqrt(dx * dx + dy * dy);
+    readout.innerHTML = 'd&#x00B2;<sub>M</sub> = ' + d2.toFixed(2) + ' vs. threshold 5.991 → <strong style="color:' + (accepted ? '#1a7a4c' : '#b3261e') + '">' + (accepted ? 'accepted' : 'rejected') + '</strong> (plain pixel distance from predicted position: ' + plainDist.toFixed(0) + 'px)';
+  });
+
+  anisoBox.addEventListener('change', render);
+  render();
+})();
+</script>
+
 <h3>Appearance memory bank</h3>
 
 <p>
