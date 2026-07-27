@@ -1,0 +1,378 @@
+---
+layout: post
+title: "The Logical Foundations of Scientific Inquiry"
+categories: [Philosophy]
+tags: [Logic, Philosophy of Science, Induction, Deduction, Abduction, Falsifiability, Epistemology, Cognitive Science]
+image: /assets/images/1919-eclipse-positive-card.jpg
+description: "The formal machinery behind scientific reasoning: deduction and validity, syllogistic logic, induction and the raven paradox, Bayesian confirmation, abduction, and why the hypothetico-deductive method needs all three &mdash; plus the psychological question logic alone can't answer: how minds actually perform the inductive leap, from Piaget's developmental stages to Tversky and Kahneman's heuristics."
+keywords: "deduction, induction, abduction, modus ponens, modus tollens, problem of induction, falsifiability, Karl Popper, hypothetico-deductive method, Duhem-Quine thesis, raven paradox, Bayesian confirmation, syllogism, philosophy of science, formal logic, context of discovery, context of justification, Hans Reichenbach, Jean Piaget, Willard Quine, natural kinds, representativeness heuristic, availability heuristic, conjunction fallacy, Tversky and Kahneman"
+---
+
+<p class="lede">
+  Scientific reasoning is often described as "logical," but the word does real work only if it is possible to specify precisely which logic is meant, and where it applies. Deduction, induction, and abduction are three distinct inferential processes, only one of which is deductively valid in the strict sense, and a working scientist moves between all three without necessarily being able to name which is which, or even articulate their basic definitions. This piece sets out the formal skeleton behind each of the three, and behind the hypothetico-deductive method that stitches them together into what has come to be known as the scientific method.
+</p>
+
+<figure>
+  <img src="/assets/images/1919-eclipse-positive.jpg" alt="One of the 1919 solar eclipse photographic plates from the Eddington expedition, showing the corona around the eclipsed sun">
+  <figcaption><strong>Figure.</strong> One of the plates from the 1919 Sobral/Príncipe eclipse expedition. Its measured star positions supplied the observation \( O \) that the worked example later in this piece uses to compare two rival deductive predictions. (Dyson, Eddington and Davidson, 1920; public domain, via Wikimedia Commons.)</figcaption>
+</figure>
+
+<h2>A method older than its name</h2>
+
+<p>
+  Long before "the scientific method" was named as such, Socrates had already put an elementary form of it into practice, in what has since come to be called the Socratic method. In the fifth century BC, rather than asserting claims outright, he questioned people who believed they understood some concept &mdash; justice, courage, piety &mdash; and pushed them, through successive questions, toward consequences of their own definitions that they could not accept. This exchange is not the scientific method in any full sense: it deduced no cumulative body of truths the way science does. But it established the idea later scientific inquiry inherits at its core: that a claim earns its keep only by surviving deliberate attempts to break it. The same instinct, preserved in Plato's dialogues, resurfaces almost unchanged in Francis Bacon's push for systematic experiment in the seventeenth century, and again in Karl Popper's twentieth-century insistence that a theory must be falsifiable to count as scientific at all.
+</p>
+
+<h2>Deduction: the only fully truth-preserving move</h2>
+
+<p>
+  Deductive inference is the inference form standardly written with the turnstile \( \vdash \): a set of premises \( \Gamma \) deductively entails a conclusion \( \varphi \), written \( \Gamma \vdash \varphi \), just in case there is no possible way for every member of \( \Gamma \) to be true and \( \varphi \) false at once. This is a purely formal property, indifferent to subject matter: it depends only on the logical form of the premises and conclusion, via the connectives (\( \neg \) for negation, \( \land \) for conjunction, \( \lor \) for disjunction, \( \rightarrow \) for the conditional, \( \leftrightarrow \) for the biconditional) and, once predicate logic is reached, the quantifiers \( \forall \) ("for all") and \( \exists \) ("there exists").
+</p>
+
+<p>
+  The two inference rules cited most often in scientific argument are modus ponens and modus tollens. Modus ponens:
+</p>
+<p>
+  \[
+  P \rightarrow Q, \quad P \ \vdash\ Q.
+  \]
+</p>
+<p>
+  If a theory (together with initial conditions) entails an observation, and the theory-plus-conditions in fact obtain, the observation follows. Modus tollens is the same conditional run in the other direction, and it is the inference actually being used whenever an experiment is described as testing a theory:
+</p>
+<p>
+  \[
+  P \rightarrow Q, \quad \neg Q \ \vdash\ \neg P.
+  \]
+</p>
+<p>
+  If a theory entails an observation that fails to occur, the theory is false &mdash; not "weakened" or "disconfirmed" in some soft sense, but strictly, deductively false, provided the conditional premise \( P \rightarrow Q \) was correct in the first place. This is the formal fact underneath Popper's entire account of falsification, discussed below.
+</p>
+
+<p>
+  A classical syllogism is the same apparatus one level further into predicate logic. "All ravens are black; this is a raven; therefore this is black" is, formally,
+</p>
+<p>
+  \[
+  \forall x\,(Rx \rightarrow Bx), \quad Ra \ \vdash\ Ba,
+  \]
+</p>
+<p>
+  and its validity again depends only on form: substitute any predicates whatsoever for \( R \) and \( B \) and the argument remains valid, even if the premises happen to be false of the world. Validity is not truth; a deductively valid argument with a false premise deductively entails nothing true about reality, which is why deduction alone cannot get scientific inquiry off the ground. Deduction only ever unpacks what is already contained, implicitly, in the premises originally assumed. This raises the question the rest of this piece is about: where do the premises come from?
+</p>
+
+<h2>Validity versus soundness: form is not enough</h2>
+
+<p>
+  It is worth making the distinction between validity and soundness completely explicit, with a worked truth table, since scientific arguments go wrong at exactly this joint far more often than they go wrong by using an invalid inference rule. An argument is valid when its conclusion cannot be false while its premises are true, as a matter of form alone. It is sound when it is valid and its premises are genuinely true. Modus ponens, \( P \rightarrow Q, P \vdash Q \), is valid in every case, which the truth table for the conditional makes exhaustive:
+</p>
+<p>
+  \[
+  \begin{array}{cc|c}
+  P & Q & P \rightarrow Q \\
+  \hline
+  T & T & T \\
+  T & F & F \\
+  F & T & T \\
+  F & F & T
+  \end{array}
+  \]
+</p>
+<p>
+  The only row in which \( P \rightarrow Q \) and \( P \) are both true is the first, and in that row \( Q \) is also true &mdash; there is no row in the table where the premises of modus ponens hold and the conclusion fails, which is exactly what validity requires and what a truth table can verify mechanically, without knowing what \( P \) and \( Q \) actually mean. But validity says nothing about whether \( P \rightarrow Q \) or \( P \) are true of the actual world: an argument can be perfectly valid and completely worthless if built on a false premise. "All swans are white; this is a swan; therefore this is white" is exactly as valid as the raven syllogism, and was standardly used as an example of sound scientific reasoning until 1697, when Willem de Vlamingh's expedition to the Swan River in Western Australia found black ones. The syllogism's form was never the problem; its major premise was simply false, and no amount of formal correctness could have been expected to catch that. Logic is necessary but not sufficient for scientific knowledge: it guarantees that true premises yield true conclusions, but the burden of securing true premises in the first place falls outside deduction entirely, onto induction, abduction, and observation.
+</p>
+
+<h2>Necessary and sufficient conditions, and where scientific explanation actually lives</h2>
+
+<p>
+  A great deal of what a scientific explanation is trying to state can be made precise using the vocabulary of necessary and sufficient conditions, which is simply the conditional \( \rightarrow \) read in two directions. To say \( A \) is a sufficient condition for \( B \) is to assert \( A \rightarrow B \): \( A \)'s obtaining guarantees \( B \)'s obtaining, though \( B \) might arise other ways too. To say \( A \) is a necessary condition for \( B \) is to assert \( B \rightarrow A \), equivalently \( \neg A \rightarrow \neg B \): without \( A \), \( B \) cannot occur, though \( A \) alone might not be enough to produce it. A condition that is both, \( A \leftrightarrow B \), is comparatively rare in real scientific explanation, and its scarcity is itself informative. For example: "a spark in the presence of sufficient oxygen and fuel is sufficient for combustion" is a sufficient-condition claim, not a biconditional, since combustion can also be initiated by sufficient heat alone without a spark; "oxygen is necessary for combustion" is a necessary-condition claim, true but useless as a complete explanation on its own, since the vast majority of oxygen-containing environments are not combusting anything.
+</p>
+
+<p>
+  Confusing these two directions is one of the most common informal fallacies dressed up as scientific argument, and it has a precise name once translated into the notation above: affirming the consequent, inferring \( A \) from \( B \) and \( A \rightarrow B \), is exactly the mistake of treating a merely sufficient condition as though it were necessary. "Fever is a symptom of infection; this patient has a fever; therefore this patient has an infection" commits exactly this error, since infection being sufficient for fever (roughly) says nothing about what else is sufficient for fever, and the valid inference runs only in the necessary-condition direction: no infection without the possibility of fever does not mean no fever without infection. Mill's methods of agreement and difference, an early systematic attempt (1843) to formalise how experimental variation isolates causes, are best understood as procedures for empirically discriminating necessary from sufficient conditions in exactly this sense: the method of difference holds every factor fixed except one and checks whether the effect disappears when that factor is removed, a direct probe of necessity, while the method of agreement looks for a factor common to every case in which the effect occurs, probing sufficiency. Both methods are inductive, not deductive, in the sense already established above.
+</p>
+
+<h2>Reductio ad absurdum: proof, and disproof, by contradiction</h2>
+
+<p>
+  One more deductive pattern is common enough in both mathematics and empirical science to deserve its own notation. Reductio ad absurdum has the schema
+</p>
+<p>
+  \[
+  \Gamma, \neg\varphi \ \vdash\ \bot \quad \Longrightarrow \quad \Gamma \ \vdash\ \varphi,
+  \]
+</p>
+<p>
+  where \( \bot \) denotes an explicit contradiction (some \( \psi \land \neg\psi \)): assume the negation of the proposition to be proved, derive a contradiction from that assumption together with the remaining premises \( \Gamma \), and conclude that the negation must be false, hence \( \varphi \) itself. This is not a separate logic from the modus ponens/modus tollens apparatus above; it is a derived pattern, valid precisely because a genuine contradiction cannot be true in any model, so anything whose denial entails one must itself hold in every model consistent with \( \Gamma \) &mdash; which is just soundness again, applied to the special case of a self-defeating assumption.
+</p>
+
+<p>
+  The Michelson&ndash;Morley experiment (1887) is a clean empirical instance of the same structure applied to a physical hypothesis rather than a mathematical one. The luminiferous ether hypothesis, \( \neg\varphi \) in the schema above where \( \varphi \) is "there is no detectable ether wind," entailed, together with auxiliary assumptions about the interferometer's sensitivity and the earth's orbital motion through the supposed ether, a specific observable fringe shift as the apparatus was rotated. No shift of anything like the predicted magnitude was detected, which is a direct empirical \( \bot \): the ether hypothesis, conjoined with the auxiliary assumptions, entailed an observation that failed to occur, which is the modus tollens schema from earlier in this piece, but the negative result was then used constructively, in the reductio pattern, as evidence for the contradictory of the ether hypothesis rather than merely against the conjunction \( T \land A \). The Duhem&ndash;Quine complication from before applies here with full force and is worth stating plainly: strictly, the null result only forced \( \neg T \lor \neg A \), and it took decades &mdash; and Einstein's alternative account of the relevant phenomena via special relativity, rather than a repaired ether theory &mdash; before the disjunction was widely read as falling on the \( \neg T \) side. The reductio pattern establishes that a contradiction has been reached somewhere in \( \Gamma \); it does not, by itself, establish which member of \( \Gamma \) should be discarded, which is the same open question the Duhem&ndash;Quine thesis raises for the hypothetico-deductive schema generally, arrived at here by a different formal route.
+</p>
+
+<h2>Syntax and semantics: two different senses in which an argument can be "valid"</h2>
+
+<p>
+  It matters, for what follows, that there are two independent notions of logical consequence in play, and that a substantial theorem is needed to connect them. The syntactic notion, \( \Gamma \vdash \varphi \), is proof-theoretic: it means there exists a finite derivation of \( \varphi \) from \( \Gamma \) using a fixed set of mechanical inference rules (modus ponens among them), checkable line by line without any reference to meaning or truth at all &mdash; in principle, a computer could verify a syntactic derivation without "understanding" a word of it. The semantic notion, written with the double turnstile \( \Gamma \models \varphi \), is model-theoretic: it means that in every possible interpretation (every assignment of truth values to the atomic sentences, or every model in the predicate-logic case) in which every member of \( \Gamma \) comes out true, \( \varphi \) comes out true as well.
+</p>
+
+<p>
+  These look like they should obviously coincide, but that they do is a genuine result, not a stipulation. Soundness is the direction \( \Gamma \vdash \varphi \Rightarrow \Gamma \models \varphi \): anything the proof system can derive really is a semantic consequence, which is what guarantees the inference rules never manufacture a falsehood from truths. Completeness is the converse, \( \Gamma \models \varphi \Rightarrow \Gamma \vdash \varphi \): anything that is a semantic consequence can in fact be derived by the proof system, which guarantees the rules are not too weak to capture everything that follows. For first-order predicate logic, both directions hold &mdash; this is Gödel's 1929 completeness theorem &mdash; which is the formal fact licensing something scientific practice takes for granted: that a derivation carried out on paper, following syntactic rules alone, faithfully tracks what is really entailed about the models (the possible ways the world could be) consistent with the premises. It is worth flagging, since the name invites confusion, that this completeness theorem is entirely different from Gödel's 1931 incompleteness theorems, which concern what a sufficiently strong formal system can prove about its own arithmetic, not whether first-order logic's proof rules match its semantics; the two results share an author and a decade, not a subject.
+</p>
+
+<h2>Aristotelian syllogistic: the historical starting point</h2>
+
+<p>
+  Modern predicate logic is a nineteenth- and twentieth-century construction (Frege, Peano, Russell and Whitehead), but the study of deductively valid form is far older, and it is worth seeing the older system briefly on its own terms, both for its historical priority and because a great deal of scientific argument outside formal contexts still runs, implicitly, on syllogistic form. Aristotle's syllogistic classifies categorical statements into four types &mdash; universal affirmative ("All \( S \) are \( P \)"), universal negative ("No \( S \) are \( P \)"), particular affirmative ("Some \( S \) are \( P \)"), particular negative ("Some \( S \) are not \( P \)"), traditionally labelled A, E, I, O &mdash; and asks which combinations of two premises sharing a middle term validly yield a conclusion relating the two remaining terms.
+</p>
+
+<p>
+  Barbara, the paradigm case and the one every introductory logic course opens with, is AAA in the first figure: "All \( M \) are \( P \); all \( S \) are \( M \); therefore all \( S \) are \( P \)," which is exactly the raven syllogism above with the middle term \( M \) (raven) mediating between subject \( S \) and predicate \( P \). Celarent is EAE in the same figure: "No \( M \) are \( P \); all \( S \) are \( M \); therefore no \( S \) are \( P \)." Of the 256 syntactically possible combinations of premise-pair and figure, only fifteen are valid, and mediaeval logicians assigned each a mnemonic Latin name (Barbara, Celarent, Darii, Ferio, and so on through Baroco and Bocardo) whose vowels encode which of A, E, I, O occupy the premises and conclusion. The syllogism cannot express relations (it has no device for "taller than" or "causes"), multiple quantification (no way to formalise "every scientist has read some paper"), or the sentential connectives compositionally, all of which is why it was superseded rather than merely extended; but every syllogistic inference translates directly into the \( \forall x (Rx \rightarrow Bx) \) notation used throughout this piece, and the historical continuity is real, not just terminological.
+</p>
+
+<h2>Induction: from particular to general, and the gap that never closes</h2>
+
+<p>
+  Enumerative induction is the inference from a finite run of observed instances to a general claim covering unobserved cases:
+</p>
+<p>
+  \[
+  Pa_1 \land Pa_2 \land \cdots \land Pa_n \ \not\vdash\ \forall x\, Px.
+  \]
+</p>
+<p>
+  The \( \not\vdash \) is doing the important work in that line: no matter how large \( n \) gets, the inference to the universal claim is not deductively valid, because it is always logically possible for every observed instance to satisfy \( P \) while some unobserved instance fails to. This is Hume's problem in its sharpest formal dress: there is no way to add a premise that legitimately bridges observed-so-far to all-without-exception without either begging the question (assuming nature is uniform, which is exactly what needs justifying) or smuggling in a further inductive step to justify that premise, which only regresses the same problem one level back.
+</p>
+
+<p>
+  It is worth being precise that this is not a practical limitation awaiting a cleverer sampling method; it is a structural fact about the relationship between finite evidence and universally quantified conclusions. Statistical inference softens the conclusion (from "all ravens are black" to "with 95% confidence, the proportion of black ravens exceeds some bound") but does not remove the gap, only relocates it: the inference from sample frequency to population parameter is itself an inductive step, licensed by probabilistic assumptions (independence, representative sampling) that are themselves not deductively certified by the data in hand. Every attempt to underwrite induction with a further principle either turns that principle into an empirical claim needing its own inductive support, or turns it into an a priori assumption whose justification lies outside logic altogether. Both routes leave induction exactly as unproven, in the deductive sense, as Hume found it. A separate piece on classification, generalisation, and induction takes up the further question of what, if anything, can close this gap in practice, including an account of induction grounded in causal identification rather than sheer enumeration.
+</p>
+
+<h2>The raven paradox: a puzzle inside confirmation itself</h2>
+
+<p>
+  Carl Hempel noticed in 1945 that even granting some notion of inductive confirmation, without yet worrying about whether it can be fully justified, produces an immediate embarrassment. Take the universal claim \( \forall x (Rx \rightarrow Bx) \), "all ravens are black." By ordinary logic this is equivalent to its contrapositive, \( \forall x (\neg Bx \rightarrow \neg Rx) \), "all non-black things are non-ravens." The Nicod criterion says that an instance of the antecedent-and-consequent both holding, here a black raven, confirms a universal conditional, while an instance of the antecedent holding without the consequent would refute it. The equivalence condition says that whatever confirms a statement confirms anything logically equivalent to it, since they say the same thing. Put the two together: a red apple is neither black nor a raven, so it instantiates \( \neg Bx \land \neg Rx \), confirming "all non-black things are non-ravens" by Nicod's criterion, and therefore, by the equivalence condition, confirming "all ravens are black" as well. A red apple, sitting on a table nowhere near a raven, apparently counts as evidence about the colour of ravens.
+</p>
+
+<p>
+  Hempel's own resolution was to accept the conclusion and explain away the intuitive resistance to it: the apple really does confirm the raven hypothesis, but by an amount so vanishingly small, given how enormously more numerous non-black things are than ravens, that the confirmation is real but practically undetectable, and the intuitive oddness is a failure to notice how weak "some confirmation" is as opposed to "a great deal of confirmation." I. J. Good offered a more detailed diagnosis using the Bayesian tools introduced below: whether an instance confirms a hypothesis at all, not just how much, depends on background assumptions about the relative base rates of ravens and black things, which the syllogistic apparatus alone is silent about and simply does not appear in Hempel's version of the puzzle. Both replies agree on the diagnosis that matters here: an adequate theory of confirmation needs more structure than "instances of \( Rx \land Bx \) confirm \( \forall x(Rx \rightarrow Bx) \)" supplies on its own, which is exactly why the probabilistic treatment below was developed.
+</p>
+
+<h2>Probabilistic and Bayesian induction</h2>
+
+<p>
+  The most developed formal response to both the raven paradox and the general problem of induction reframes confirmation as a matter of degree, using the probability calculus rather than the all-or-nothing categories of syntactic entailment. Bayes' theorem, purely as a piece of probability theory, states
+</p>
+<p>
+  \[
+  P(H \mid E) = \frac{P(E \mid H)\, P(H)}{P(E)},
+  \]
+</p>
+<p>
+  relating the posterior probability of a hypothesis \( H \) given evidence \( E \) to the prior probability \( P(H) \) (credence in \( H \) before \( E \) is taken into account), the likelihood \( P(E \mid H) \) (how probable the evidence would be if \( H \) were true), and \( P(E) \), the unconditional probability of the evidence, which normalises the result. The Bayesian reading of confirmation says \( E \) confirms \( H \) exactly when \( P(H \mid E) > P(H) \), that is, when learning \( E \) raises credence in \( H \) &mdash; equivalently, using the odds form of the theorem, exactly when the likelihood ratio \( P(E \mid H) / P(E \mid \neg H) \) exceeds 1.
+</p>
+
+<p>
+  This dissolves the raven paradox by making the confirmation Hempel's principles jointly implied precise rather than paradoxical: a black raven confirms "all ravens are black" strongly because \( P(\text{black raven} \mid H) \) and \( P(\text{black raven} \mid \neg H) \) differ substantially (the observation is much more probable if the generalisation is true), while a non-black non-raven confirms the same generalisation, via the equivalent contrapositive, by an amount governed by how many non-black things there are relative to ravens &mdash; a non-zero but minuscule likelihood ratio, matching the intuition that the apple is technically relevant but practically negligible, now derived rather than merely stipulated. It also gives a formal shape to the response to Hume rather than a refutation of him: Bayesian updating never claims to deductively certify \( H \); it is a rule for how credences ought to shift given new evidence, conditional on a prior that itself has to come from somewhere logic does not supply. Whether the priors themselves can be given a non-arbitrary justification (the frequentist objection to Bayesianism generally) is exactly the sort of question that pushes past pure logic and into the epistemology of science, which the companion piece to this one addresses directly.
+</p>
+
+<div class="interactive-widget" id="raven-widget">
+  <p class="interactive-widget-title">Interactive: a black raven vs. a red apple, updated</p>
+  <div class="interactive-widget-controls">
+    <label>Prior \( P(H) \) = <span id="raven-prior-val">0.50</span>
+      <input type="range" id="raven-prior" min="0.01" max="0.99" step="0.01" value="0.5">
+    </label>
+    <label>If \( H \) were false, fraction of ravens that would be non-black = <span id="raven-err-val">0.50</span>
+      <input type="range" id="raven-err" min="0.05" max="0.9" step="0.01" value="0.5">
+    </label>
+  </div>
+  <div class="raven-bars" role="img" aria-label="Bar chart comparing the prior probability of the hypothesis to the posterior probability after observing a black raven and after observing a red apple">
+    <div class="raven-bar-row">
+      <span class="raven-bar-label">Prior</span>
+      <div class="raven-bar-track"><div class="raven-bar-fill raven-bar-fill-prior" id="raven-bar-prior"></div></div>
+      <span class="raven-bar-value" id="raven-bar-prior-val">0.50</span>
+    </div>
+    <div class="raven-bar-row">
+      <span class="raven-bar-label">After observing a black raven</span>
+      <div class="raven-bar-track"><div class="raven-bar-fill raven-bar-fill-raven" id="raven-bar-raven"></div></div>
+      <span class="raven-bar-value" id="raven-bar-raven-val">0.50</span>
+    </div>
+    <div class="raven-bar-row">
+      <span class="raven-bar-label">After observing a red apple</span>
+      <div class="raven-bar-track"><div class="raven-bar-fill raven-bar-fill-apple" id="raven-bar-apple"></div></div>
+      <span class="raven-bar-value" id="raven-bar-apple-val">0.50</span>
+    </div>
+  </div>
+  <p class="interactive-widget-readout" id="raven-readout"></p>
+  <p class="interactive-widget-caption">Fixing ravens at roughly 1-in-100,000 of all things (a reasonable illustrative estimate), the two sliders set the prior and how sharply a false generalisation would show up in ravens specifically. The three bars above share one 0-to-1 scale: watch how a single black raven moves \( P(H) \) by a real amount, while a single non-black non-raven barely moves it at all &mdash; both are technically confirming evidence for "all ravens are black," but only one of them is doing appreciable work.</p>
+</div>
+
+<style>
+  #raven-widget .raven-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin: 1rem 0 0.25rem;
+  }
+  #raven-widget .raven-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+  }
+  #raven-widget .raven-bar-label {
+    flex: 0 0 11.5rem;
+    color: var(--text-soft);
+  }
+  #raven-widget .raven-bar-track {
+    flex: 1 1 auto;
+    height: 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  #raven-widget .raven-bar-fill {
+    height: 100%;
+    width: 0%;
+  }
+  #raven-widget .raven-bar-fill-prior { background: #94a3b8; }
+  #raven-widget .raven-bar-fill-raven { background: #1a7a4c; }
+  #raven-widget .raven-bar-fill-apple { background: #2563a8; }
+  #raven-widget .raven-bar-value {
+    flex: 0 0 4.5rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-soft);
+  }
+</style>
+
+<script>
+(function () {
+  var priorSlider = document.getElementById('raven-prior');
+  var errSlider = document.getElementById('raven-err');
+  var priorVal = document.getElementById('raven-prior-val');
+  var errVal = document.getElementById('raven-err-val');
+  var readout = document.getElementById('raven-readout');
+  var barPrior = document.getElementById('raven-bar-prior');
+  var barRaven = document.getElementById('raven-bar-raven');
+  var barApple = document.getElementById('raven-bar-apple');
+  var barPriorVal = document.getElementById('raven-bar-prior-val');
+  var barRavenVal = document.getElementById('raven-bar-raven-val');
+  var barAppleVal = document.getElementById('raven-bar-apple-val');
+  var N = 100000;
+
+  function render() {
+    var p = parseFloat(priorSlider.value);
+    var e = parseFloat(errSlider.value);
+    priorVal.textContent = p.toFixed(2);
+    errVal.textContent = e.toFixed(2);
+
+    var priorOdds = p / (1 - p);
+    var lrRaven = 1 / (1 - e);
+    var lrNonRaven = 1 / (1 - e / N);
+
+    var postOddsRaven = priorOdds * lrRaven;
+    var postProbRaven = postOddsRaven / (1 + postOddsRaven);
+    var postOddsNon = priorOdds * lrNonRaven;
+    var postProbNon = postOddsNon / (1 + postOddsNon);
+
+    readout.innerHTML =
+      'Likelihood ratio, black raven: <strong>' + lrRaven.toFixed(2) + '&times;</strong> &nbsp; → &nbsp; P(H | black raven) = <strong>' + postProbRaven.toFixed(4) + '</strong><br>' +
+      'Likelihood ratio, non-black non-raven: <strong>' + lrNonRaven.toFixed(8) + '&times;</strong> &nbsp; → &nbsp; P(H | red apple) = <strong>' + postProbNon.toFixed(8) + '</strong>';
+
+    barPrior.style.width = (p * 100) + '%';
+    barRaven.style.width = (postProbRaven * 100) + '%';
+    barApple.style.width = (postProbNon * 100) + '%';
+    barPriorVal.textContent = p.toFixed(2);
+    barRavenVal.textContent = postProbRaven.toFixed(4);
+    barAppleVal.textContent = postProbNon.toFixed(4);
+  }
+
+  priorSlider.addEventListener('input', render);
+  errSlider.addEventListener('input', render);
+  render();
+})();
+</script>
+
+<h2>Abduction: inference to the best explanation</h2>
+
+<p>
+  There is a third pattern, distinct from both, usually associated with C. S. Peirce, sometimes written schematically as
+</p>
+<p>
+  \[
+  Q, \quad P \rightarrow Q \ \Longrightarrow\ P \text{ (as a hypothesis worth entertaining)}.
+  \]
+</p>
+<p>
+  Notice the double arrow rather than \( \vdash \): this is not a valid inference in either the deductive or the classical inductive sense &mdash; it is affirming the consequent, a deductive fallacy, if read as a claim about what follows necessarily. Read instead as a claim about what is worth investigating, it is the pattern behind essentially all explanatory reasoning in science: an observation \( Q \) is noted, a hypothesis \( P \) is proposed because \( P \rightarrow Q \) and \( P \) would make \( Q \) unsurprising, and \( P \) is provisionally adopted not because it is proven but because it is judged the best available explanation among the live alternatives. Abduction generates candidate theories; it does not certify them. That is what the next stage is for.
+</p>
+
+<p>
+  Ignaz Semmelweis's 1847 investigation of childbed fever at the Vienna General Hospital is a fitting historical case of the pattern actually running. The observation \( Q \) was a stark mortality gap: women delivering in the doctors' maternity ward died of puerperal fever at several times the rate of those in the midwives' ward, despite the doctors' ward having, on paper, the more qualified staff. Semmelweis considered and eliminated several candidate explanations for \( Q \) by deducing and checking predictions each would entail (overcrowding, the men's presence during delivery, differences in position during birth) before a colleague's death, from a scalpel wound sustained during an autopsy that produced symptoms matching childbed fever, supplied the abductive leap: doctors performing autopsies before attending deliveries were transferring "cadaverous particles" to labouring women. This hypothesis \( P \) was preferred not because it was deductively forced by \( Q \) &mdash; plenty of other hypotheses were also logically compatible with the mortality gap &mdash; but because it best explained the specific pattern, including the otherwise-puzzling fact that the doctors' ward, uniquely among the two, involved routine autopsy work. Semmelweis then did exactly what the hypothetico-deductive method demands next: he deduced a testable prediction (mandatory chlorinated hand-washing between autopsy and delivery should collapse the mortality gap if the hypothesis were correct) and checked it. Ward mortality fell from around 18% to near 1% within a year. The abduction proposed the explanation; the deduction extracted a prediction; the observation checked it. No stage alone would have sufficed.
+</p>
+
+<h2>The hypothetico-deductive method: putting the three together</h2>
+
+<p>
+  The method actually used in practice braids all three patterns rather than relying on any one alone. Abduction proposes a theory \( T \). Deduction extracts a testable prediction: given \( T \) together with auxiliary assumptions \( A \) (about instruments, background conditions, and everything else the derivation quietly relies on),
+</p>
+<p>
+  \[
+  (T \land A) \rightarrow O.
+  \]
+</p>
+<p>
+  The prediction \( O \) is then checked. If \( O \) is observed, modus ponens is satisfied but nothing is proven &mdash; a true consequent does not deductively certify the antecedent (affirming the consequent again), so confirmation is evidentially suggestive, not logically conclusive. If \( O \) fails to occur, modus tollens applies with full deductive force:
+</p>
+<p>
+  \[
+  (T \land A) \rightarrow O, \quad \neg O \ \vdash\ \neg(T \land A) \ \equiv\ \neg T \lor \neg A.
+  \]
+</p>
+<p>
+  And there is the catch that Pierre Duhem identified and Willard Quine generalised into the Duhem&ndash;Quine thesis: a failed prediction only establishes that <em>something</em> in the conjunction \( T \land A \) is false; the logic alone does not establish whether to blame the theory or one of the auxiliary assumptions. Every real test smuggles in instrument calibration, background theory, and ceteris paribus conditions as unstated conjuncts, and a determined defender of \( T \) can always retreat to rejecting some auxiliary \( A \) instead. What actually adjudicates the choice &mdash; theoretical conservatism, independent testability of the auxiliary assumptions, track record, simplicity &mdash; is epistemological rather than purely logical, which is exactly the territory the companion piece to this one is about.
+</p>
+
+<h2>A worked case: the 1919 eclipse expedition</h2>
+
+<p>
+  The photographic plate above is as clean a real-world instance of the \( (T \land A) \rightarrow O \) schema as the history of science offers, precisely because it was set up, in advance, as a two-theory horse race rather than a single theory's test in isolation. General relativity, \( T_1 \), predicted that light passing near the sun's limb would be deflected by \( 1.75 \) arcseconds, twice the value Newtonian gravity plus the corpuscular theory of light, \( T_2 \), predicted for the same geometry, \( 0.875 \) arcseconds &mdash; a case where \( T_1 \) and a rival \( T_2 \) entailed numerically distinct observations \( O_1 \) and \( O_2 \) from the same setup, so that whichever was measured would deductively refute the other via modus tollens, not merely fail to confirm it.
+</p>
+
+<p>
+  The auxiliary assumptions \( A \) were not trivial: that the photographic plates' star positions could be measured to a fraction of an arcsecond, that the comparison starfield photographed months later at Oxford under different atmospheric and instrumental conditions was a valid baseline, and that systematic errors from telescope mirror distortion during the Sobral expedition's daytime heat were adequately corrected for. Eddington's Príncipe plates and Dyson and Davidson's Sobral plates gave deflection values of \( 1.61 \pm 0.30 \) and \( 1.98 \pm 0.12 \) arcseconds respectively (figures that were, and remain, debated on exactly the auxiliary-assumption grounds the Duhem&ndash;Quine thesis predicts any real test will raise) &mdash; both close enough to Einstein's \( 1.75 \) and far enough from Newton's \( 0.875 \) that the joint result was announced as favouring general relativity, the modus tollens above firing against \( T_2 \) rather than \( T_1 \). Nothing in the logic of the test guaranteed which theory would fail, and the theory that did fail was, at the time, the overwhelming consensus view. A test is only as sharp as the numerical distance between the rival predictions and the honesty of the auxiliary assumptions used to read the plates, and both of those are empirical and methodological achievements, not logical ones.
+</p>
+
+<h2>Falsifiability and the demarcation problem</h2>
+
+<p>
+  Karl Popper's proposed solution to the problem of induction was not to solve it but to route around it: a theory earns scientific status not by being confirmed (which the logic above shows can never be conclusive) but by being falsifiable &mdash; by entailing, via the modus tollens schema above, observations that could in principle turn out false. A theory compatible with every possible observation, entailing no \( O \) whose negation would refute it, is unfalsifiable and, on Popper's criterion, not doing scientific work regardless of how much confirming evidence its defenders can cite. This is the demarcation criterion: not "has been confirmed" but "is at risk," structurally, of the modus tollens above actually firing. The 1919 expedition is Popper's own favourite illustration of good scientific practice for exactly this reason: Einstein's theory specified, in advance and with a precise number, an observation that would have refuted it had the plates come out differently, which is precisely the stance Popper contrasted with theories retrofitted to accommodate whatever is observed after the fact.
+</p>
+
+<p>
+  The honest complication, already implicit in the Duhem&ndash;Quine point, is that falsification is never quite as clean in practice as \( \neg O \vdash \neg T \) makes it look, because the theory under test is never alone in the conjunction being refuted. Popper was aware of this and treated it as a matter of scientific convention and honesty &mdash; a live research community that keeps rescuing \( T \) by endlessly adjusting \( A \) rather than genuinely risking \( T \) itself is engaged in what he called immunising a theory against refutation, a methodological vice rather than a logical one. Whether a given rescue is a legitimate refinement of auxiliary assumptions or an ad hoc dodge is not something the formal schema alone can decide; it is a judgment about the epistemic standing of the rescued auxiliary, and that judgment is where logic runs out and epistemology proper begins.
+</p>
+
+<h2>A note on the psychological foundations of induction</h2>
+
+<p>
+  Everything above treats induction as a problem in logic: whether \( Pa_1 \land \cdots \land Pa_n \) entails \( \forall x\, Px \), and the answer is no. But there is a separate and older question sitting underneath that one, which the logic alone can never touch: given that no logical bridge exists from finite instances to universals, how do minds nonetheless perform the leap, reliably enough to build ships and vaccines with it? That is a question for psychology, not logic, and Hans Reichenbach gave the distinction its standard name in 1938: the context of discovery, how a hypothesis actually gets proposed, versus the context of justification, whether the hypothesis so proposed is warranted. Popper, in the same spirit, explicitly excluded the former from what he called the logic of scientific discovery: the process by which Einstein or Semmelweis arrived at a theory is, on Popper's view, a matter for empirical psychology and possibly sociology, while the subsequent testing of the theory belongs to logic proper. This piece has stayed almost entirely on the justification side of that line, but the discovery side is just as important, if only because a purely formal account leaves it looking as though the inductive leap happens by magic.
+</p>
+
+<p>
+  Jean Piaget's developmental studies (1954) supplied the first systematic empirical picture of when and how the leap becomes available to a given mind. Children in the concrete operational stage, roughly ages seven to eleven on Piaget's periodisation, can classify objects and seriate them along a dimension reliably, but Piaget found their generalisations from a small set of cases stay tied to the concrete instances presented and do not extend smoothly to a genuinely novel case outside the presented set until the transition to the formal operational stage, when systematic variation of one variable at a time &mdash; essentially Mill's method of difference, performed spontaneously &mdash; starts to appear. The inductive step, on this account, is a cognitive capacity that itself has a developmental history, which is already a strange thing to say about something Hume treated as a single monolithic problem for all reasoning creatures alike.
+</p>
+
+<p>
+  Willard Quine, known above for generalising Duhem's thesis, offered a different and specifically psychological answer to Hume in a 1969 essay on natural kinds. Quine's point was that induction "works," in the pragmatic sense of usually generalising correctly, because organisms come pre-equipped with an innate similarity space: a built-in metric over possible stimuli that privileges some groupings of instances (black things with black things, raven-shaped things with raven-shaped things) over the combinatorially vast number of other groupings that are logically just as available given the instances seen so far. On this account, evolution did the epistemic work that logic cannot do, by selecting organisms whose similarity space happens to track real regularities in their environment closely enough that generalising along it usually pays off, and by killing off, over evolutionary time, the lineages whose innate groupings did not. This is a psychological and biological answer to a problem Hume posed as though it belonged to logic, and it explains why the raven paradox above feels intuitively wrong even after Hempel's formal resolution: an apple does not fall in a human's innate similarity space anywhere near a raven, whatever the probability calculus says about the technical, vanishingly small confirmation it provides.
+</p>
+
+<p>
+  The most detailed contemporary account of the actual mechanism comes from Amos Tversky and Daniel Kahneman's research programme on judgment under uncertainty, beginning in 1974. Where the Bayesian formalism above is normative &mdash; it specifies how a reasoner ought to update credences given evidence &mdash; Tversky and Kahneman's heuristics are descriptive: an account of the mental shortcuts people actually use to perform the inductive and abductive leap, and of the systematic errors those shortcuts incur. The representativeness heuristic judges the probability that an instance belongs to a category by how closely it resembles the prototype of that category, a fast and often serviceable proxy for the genuine conditional probability, but one that ignores base rates entirely. The availability heuristic, distinctly, judges the probability of an event by how easily instances of it come to mind, which conflates frequency with memorability and recency. The representativeness heuristic is directly diagnosable in the notation developed earlier in this piece, via the conjunction fallacy, in which people rate a conjunction \( A \land B \) as more probable than one of its conjuncts \( A \) alone &mdash; famously, in the Linda problem, rating "bank teller and active in the feminist movement" as more probable than "bank teller" alone. This is a direct violation of the axiom \( P(A \land B) \le P(A) \) that the entire Bayesian apparatus above depends on, produced because the conjunction feels more representative of the character description than the bare conjunct does. Later work by Edward Smith, Daniel Osherson, and Lance Rips (from the mid-1980s onward) built formal category-based induction models predicting, from measured similarity between a premise category and a conclusion category, how strongly people will endorse an inductive argument of the "all \( A \) are \( P \), so probably all \( B \) are \( P \)" form &mdash; essentially an empirically fitted version of Quine's innate similarity space, made precise enough to generate quantitative predictions about argument strength that can be tested against subjects' actual ratings.
+</p>
+
+<p>
+  None of this touches the logical result established earlier: no descriptive account of how induction is actually performed converts \( \not\vdash \) into \( \vdash \), and a heuristic that usually works is not a valid inference rule. When logic alone cannot say which member of \( \Gamma \) to give up, the theoretical conservatism and simplicity that working scientists actually use are themselves psychological dispositions, tuned by training and by something not unlike Quine's similarity space.
+</p>
