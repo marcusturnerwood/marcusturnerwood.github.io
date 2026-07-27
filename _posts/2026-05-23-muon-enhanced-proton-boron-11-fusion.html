@@ -103,13 +103,37 @@ keywords: "muon catalysed fusion, proton-boron-11, p-11B fusion, aneutronic fusi
 
 <div class="interactive-widget" id="muon-widget">
   <p class="interactive-widget-title">Interactive: where the muon's help runs out</p>
+  <svg viewBox="0 0 420 220" width="420" height="220" id="muon-plot-svg" aria-label="Plot of log enhancement factor against log plasma energy, with a marker showing the current slider position" role="img">
+    <line x1="42" y1="176" x2="412" y2="176" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="42" y1="12" x2="42" y2="176" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="42" y1="176" x2="42" y2="180" stroke="#94a3b8" stroke-width="1"/>
+    <text x="42" y="192" font-size="10" fill="#94a3b8" text-anchor="middle">-1</text>
+    <line x1="155.2" y1="176" x2="155.2" y2="180" stroke="#94a3b8" stroke-width="1"/>
+    <text x="155.2" y="192" font-size="10" fill="#94a3b8" text-anchor="middle">0</text>
+    <line x1="268.3" y1="176" x2="268.3" y2="180" stroke="#94a3b8" stroke-width="1"/>
+    <text x="268.3" y="192" font-size="10" fill="#94a3b8" text-anchor="middle">1</text>
+    <line x1="381.4" y1="176" x2="381.4" y2="180" stroke="#94a3b8" stroke-width="1"/>
+    <text x="381.4" y="192" font-size="10" fill="#94a3b8" text-anchor="middle">2</text>
+    <text x="227" y="207" font-size="10" fill="#94a3b8" text-anchor="middle">log10(E [keV])</text>
+    <line x1="38" y1="148.7" x2="42" y2="148.7" stroke="#94a3b8" stroke-width="1"/>
+    <text x="34" y="151.5" font-size="10" fill="#94a3b8" text-anchor="end">0</text>
+    <line x1="38" y1="94.0" x2="42" y2="94.0" stroke="#94a3b8" stroke-width="1"/>
+    <text x="34" y="97" font-size="10" fill="#94a3b8" text-anchor="end">10</text>
+    <line x1="38" y1="39.3" x2="42" y2="39.3" stroke="#94a3b8" stroke-width="1"/>
+    <text x="34" y="42" font-size="10" fill="#94a3b8" text-anchor="end">20</text>
+    <text x="12" y="94" font-size="10" fill="#94a3b8" text-anchor="middle" transform="rotate(-90 12 94)">log10(enhancement)</text>
+    <line x1="42" y1="148.7" x2="412" y2="148.7" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+    <text x="46" y="144" font-size="10" fill="#94a3b8" text-anchor="start">crossover (1&times;)</text>
+    <polyline id="muon-curve" fill="none" stroke="#2563a8" stroke-width="2" points=""/>
+    <circle id="muon-marker" r="5" fill="#c1440e" stroke="white" stroke-width="1.5" cx="42" cy="20.4"/>
+  </svg>
   <div class="interactive-widget-controls">
     <label>Plasma energy = <span id="muon-e-val">0.1</span> keV
       <input type="range" id="muon-e" min="-1" max="2.27" step="0.01" value="-1">
     </label>
   </div>
   <p class="interactive-widget-readout" id="muon-readout"></p>
-  <p class="interactive-widget-caption">The slider runs (logarithmically) over the same range as the two papers' results. The enhancement factor shown is log&ndash;log interpolated between the three anchor points both papers actually report &mdash; 0.10&nbsp;keV (&asymp;10<sup>23</sup>&times;), the crossover around 107.4&nbsp;keV (1&times;, by definition of "crossover"), and 148.10&nbsp;keV (&asymp;0.53&times;) &mdash; not a live re-run of the WKB integral, so treat it as illustrative of the shape, not a substitute for the papers' own numbers.</p>
+  <p class="interactive-widget-caption">The slider runs (logarithmically) over the same range as the two papers' results, and the plot above shows the full curve across that range. The enhancement factor shown is log&ndash;log interpolated between the three anchor points both papers actually report &mdash; 0.10&nbsp;keV (&asymp;10<sup>23</sup>&times;), the crossover around 107.4&nbsp;keV (1&times;, by definition of "crossover"), and 148.10&nbsp;keV (&asymp;0.53&times;) &mdash; not a live re-run of the WKB integral, so treat it as illustrative of the shape, not a substitute for the papers' own numbers.</p>
 </div>
 
 <script>
@@ -117,6 +141,8 @@ keywords: "muon catalysed fusion, proton-boron-11, p-11B fusion, aneutronic fusi
   var slider = document.getElementById('muon-e');
   var eVal = document.getElementById('muon-e-val');
   var readout = document.getElementById('muon-readout');
+  var curve = document.getElementById('muon-curve');
+  var marker = document.getElementById('muon-marker');
   // anchors in (log10 E[keV], log10 enhancement)
   var anchors = [[-1, 23.4298], [2.0311, 0], [2.1706, -0.2733]];
 
@@ -126,6 +152,23 @@ keywords: "muon catalysed fusion, proton-boron-11, p-11B fusion, aneutronic fusi
     var seg = logE < anchors[1][0] ? [anchors[0], anchors[1]] : [anchors[1], anchors[2]];
     var t = (logE - seg[0][0]) / (seg[1][0] - seg[0][0]);
     return seg[0][1] + t * (seg[1][1] - seg[0][1]);
+  }
+
+  // plot geometry, matching the static axes drawn in the SVG markup above
+  var plotLeft = 42, plotRight = 412, plotTop = 12, plotBottom = 176;
+  var xMin = -1, xMax = 2.27, yMin = -5, yMax = 25;
+
+  function xScale(logE) { return plotLeft + (logE - xMin) / (xMax - xMin) * (plotRight - plotLeft); }
+  function yScale(logEnh) { return plotBottom - (logEnh - yMin) / (yMax - yMin) * (plotBottom - plotTop); }
+
+  function drawCurve() {
+    var pts = [];
+    var steps = 120;
+    for (var i = 0; i <= steps; i++) {
+      var logE = xMin + (xMax - xMin) * (i / steps);
+      pts.push(xScale(logE).toFixed(1) + ',' + yScale(interp(logE)).toFixed(1));
+    }
+    curve.setAttribute('points', pts.join(' '));
   }
 
   function render() {
@@ -139,8 +182,11 @@ keywords: "muon catalysed fusion, proton-boron-11, p-11B fusion, aneutronic fusi
     else if (logEnh > -0.3) word = 'right at the crossover — muon screening is doing essentially nothing.';
     else word = 'muon-catalysed reactivity is now slightly below the bare-nucleus case.';
     readout.innerHTML = 'Enhancement factor ≈ 10<sup>' + logEnh.toFixed(2) + '</sup> (' + (logEnh >= 0 ? '×' + Math.pow(10, logEnh).toExponential(2) : (Math.pow(10, logEnh)).toFixed(2) + '×') + ') — ' + word;
+    marker.setAttribute('cx', xScale(logE));
+    marker.setAttribute('cy', yScale(logEnh));
   }
 
+  drawCurve();
   slider.addEventListener('input', render);
   render();
 })();
