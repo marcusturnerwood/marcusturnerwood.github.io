@@ -2,7 +2,7 @@
 layout: project
 title: "Optimising a Plastic-Scintillator Cosmic-Ray Detector"
 date: 2025-06-11
-status: "Completed - summer research placement"
+status: "Completed (summer research placement)"
 image: /assets/images/plastic-scintillator-fibre-block.jpg
 tags: [Nuclear Instrumentation, Plastic Scintillators, Machine Learning, Cosmic Rays]
 description: "Optimising threshold voltage, discriminator width, and PMT voltage for a two-detector plastic-scintillator cosmic-ray telescope, using chi-squared fits, CNNs, SVR, and random forests to model the parameter space."
@@ -37,17 +37,17 @@ description: "Optimising threshold voltage, discriminator width, and PMT voltage
 <h2>Modelling a 2-3 parameter surface</h2>
 
 <p>
-  Several approaches were tried for fitting the resulting response surfaces: a simple linear plane (<code>ax + by + c = z</code>), a sigmoid model optimised by chi-squared, a small convolutional neural network (a single Conv1d layer feeding a linear output, trained for 10,000 epochs with a weighted-MSE loss to down-weight outliers), support-vector regression, and a random-forest regressor. The linear and early sigmoid fits were poor (\( \chi^2/\text{ndf} \) around 17 in the worst case), and a sharp, physically implausible peak in the fitted surface at very low threshold voltage was traced to electrical noise dominating that region rather than to a real feature of the count-rate response. The CNN and later random-forest models handled the joint dependence on threshold voltage and discriminator width considerably better, and the random-forest regressor was ultimately used to search for the operating point that maximised the count-to-noise ratio (CNR) rather than raw count rate.
+  Several approaches were tried for fitting the resulting response surfaces: a simple linear plane (<code>ax + by + c = z</code>), a sigmoid model optimised by chi-squared, a small convolutional neural network (a single Conv1d layer feeding a linear output, trained for 10,000 epochs with a weighted-MSE loss to down-weight outliers), support-vector regression, and a random-forest regressor. The linear and early sigmoid fits were poor (\( \chi^2/\text{ndf} \) around 17 in the worst case), and a sharp, physically implausible peak in the fitted surface at very low threshold voltage was traced to electrical noise dominating that region, not a real feature of the count-rate response. The CNN and later random-forest models handled the joint dependence on threshold voltage and discriminator width considerably better, and the random-forest regressor was ultimately used to search for the operating point that maximised the count-to-noise ratio (CNR), not raw count rate.
 </p>
 
 <h2>Finding the optimal PMT voltage</h2>
 
 <p>
-  With a working threshold/width regime established, the remaining free parameter was PMT high voltage, swept across 1200&ndash;1450&nbsp;V. This stage was hampered by a couple of genuine data-taking mistakes worth recording honestly: one dataset was invalidated by forgetting to update a second channel's voltage in step with the first, and another by a coincidence gate silently configured as OR instead of AND. Both had to be identified from inconsistent downstream model behaviour and the affected data retaken. Using the resulting corrected 1200&ndash;1450&nbsp;V PMT sweep, the count-rate/coincidence surface pointed to optimal PMT voltages of around 1325&ndash;1350&nbsp;V - taken as the inflection point furthest to the right that still minimises noise without cutting into genuine coincident events.
+  With a working threshold/width regime established, the remaining free parameter was PMT high voltage, swept across 1200&ndash;1450&nbsp;V. This stage was hampered by two genuine data-taking mistakes worth recording honestly: one dataset was invalidated by forgetting to update a second channel's voltage in step with the first, another by a coincidence gate silently configured as OR instead of AND. Both were caught from inconsistent downstream model behaviour and the affected data retaken. The corrected 1200&ndash;1450&nbsp;V PMT sweep pointed to optimal PMT voltages of around 1325&ndash;1350&nbsp;V, taken as the inflection point furthest right that still minimises noise without cutting into genuine coincident events.
 </p>
 
 <p>
-  As a sanity check, the equilibrium cosmic-ray count rate measured through the optimised chain (~0.1 events/s) was compared against the expected flux for a 16&nbsp;cm&sup2; scintillator using the standard sea-level muon flux, giving an expected rate of about 0.25 events/s - a discrepancy attributed to some combination of attenuation in the detector stack and the threshold still being set slightly conservatively.
+  As a sanity check, the equilibrium cosmic-ray count rate measured through the optimised chain (~0.1 events/s) was compared against the expected flux for a 16&nbsp;cm&sup2; scintillator using the standard sea-level muon flux, giving an expected rate of about 0.25 events/s. The discrepancy is likely a mix of attenuation in the detector stack and the threshold still being set slightly conservatively.
 </p>
 
 <h2>Building the detectors</h2>
