@@ -15,11 +15,16 @@ layout: default
       {%- endif -%}</p>
   </header>
 
-  <div class="post-content e-content" itemprop="articleBody">
+  <div class="post-content e-content" itemprop="articleBody" data-source-path="{{ page.path }}">
     {{ content }}
   </div>
 
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
+
+{%- if jekyll.environment == 'development' -%}
+  <script type="text/plain" id="post-content-raw">{{ content }}</script>
+  {%- include edit-mode.html -%}
+{%- endif -%}
 
 {%- include comments.html -%}

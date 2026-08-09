@@ -1,0 +1,50 @@
+<!--
+  Dev-only inline text editor for posts/drafts.
+  Only included when jekyll.environment == 'development' (see _layouts/post.html),
+  so this never ships in the production build served by GitHub Pages.
+
+  Lets you edit prose directly in the rendered page. Equations (MathJax \( \) / \[ \]
+  spans) are locked as atomic, non-editable islands so they can't be corrupted by typing.
+  Saving posts the changed blocks to a small local sidecar server (tools/edit_server.py)
+  which splices the new text back into the source .html file on disk. Nothing else in the
+  file is touched.
+-->
+<style>
+  .edit-toolbar {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #1f2328;
+    color: #eee;
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    font-family: -apple-system, sans-serif;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  }
+  .edit-toolbar button {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: #2f81f7;
+    color: white;
+  }
+  .edit-toolbar button:disabled { opacity: 0.5; cursor: default; }
+  .edit-toolbar .edit-status { min-width: 6em; opacity: 0.85; }
+  .edit-block-active {
+    outline: 2px dashed #2f81f7;
+    outline-offset: 3px;
+    background: rgba(47, 129, 247, 0.06);
+  }
+  .edit-block-dirty { outline-color: #d29922 !important; }
+  mjx-container[data-tex] {
+    cursor: not-allowed;
+  }
+</style>
+<script defer src="{{ '/assets/js/edit-mode.js' | relative_url }}"></script>
