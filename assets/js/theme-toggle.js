@@ -19,5 +19,6 @@
     root.setAttribute('data-theme', next);
     try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
     toggle.setAttribute('aria-pressed', String(next === 'dark'));
+    window.dispatchEvent(new CustomEvent('themechange', { detail: next }));
   });
 })();

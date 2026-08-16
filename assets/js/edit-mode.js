@@ -39,10 +39,19 @@
     var rawScript = document.getElementById('post-content-raw');
     if (!rawScript) return;
     var rawDiv = document.createElement('div');
-    rawDiv.innerHTML = rawScript.textContent;
+    // Reverse the "</script" -> "<\/script" escaping applied server-side to stop
+    // a nested widget <script> tag from terminating this raw-text block early.
+    rawDiv.innerHTML = rawScript.textContent.replace(/<\\\/script/gi, '</script');
 
-    var liveBlocks = Array.prototype.slice.call(container.querySelectorAll(TARGET_SELECTOR));
-    var rawBlocks = Array.prototype.slice.call(rawDiv.querySelectorAll(TARGET_SELECTOR));
+    // Interactive widgets can inject their own p/li/etc at runtime (e.g. a
+    // rendered answer) that never existed in the source HTML, which would
+    // otherwise desync the live/raw block counts below. Their content is
+    // data-driven, not hand-authored prose, so it isn't meant to be
+    // text-edited here regardless — exclude it from both sides.
+    function notInWidget(el) { return !el.closest('.interactive-widget'); }
+
+    var liveBlocks = Array.prototype.slice.call(container.querySelectorAll(TARGET_SELECTOR)).filter(notInWidget);
+    var rawBlocks = Array.prototype.slice.call(rawDiv.querySelectorAll(TARGET_SELECTOR)).filter(notInWidget);
 
     if (liveBlocks.length !== rawBlocks.length) {
       console.warn('[edit-mode] live/raw block count mismatch (' + liveBlocks.length + ' vs ' + rawBlocks.length + '); edit mode disabled for this page.');

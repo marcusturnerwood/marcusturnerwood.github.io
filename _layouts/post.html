@@ -47,7 +47,14 @@ layout: default
 </article>
 
 {%- if jekyll.environment == 'development' -%}
-  <script type="text/plain" id="post-content-raw">{{ content }}</script>
+  {%- comment -%}
+    A literal "</script" anywhere inside the post's own content (e.g. an
+    interactive widget's inline <script> block) would otherwise terminate this
+    raw-text script tag early, since HTML's tokenizer doesn't understand
+    nesting here — everything after it would spill out as real, rendered DOM.
+    Escape it so only our own closing tag below actually closes the block.
+  {%- endcomment -%}
+  <script type="text/plain" id="post-content-raw">{{ content | replace: '</script', '<\/script' }}</script>
   {%- include edit-mode.html -%}
 {%- endif -%}
 

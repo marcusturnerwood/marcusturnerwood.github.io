@@ -1,20 +1,47 @@
 {%- if site.giscus.repo_id != "" and site.giscus.category_id != "" -%}
 <section class="comments">
   <h2 class="comments-heading">Discussion</h2>
-  <script src="https://giscus.app/client.js"
-    data-repo="{{ site.giscus.repo }}"
-    data-repo-id="{{ site.giscus.repo_id }}"
-    data-category="{{ site.giscus.category }}"
-    data-category-id="{{ site.giscus.category_id }}"
-    data-mapping="pathname"
-    data-strict="0"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="top"
-    data-theme="light"
-    data-lang="en"
-    crossorigin="anonymous"
-    async>
+  <script>
+    (function () {
+      function isDark() {
+        var explicit = document.documentElement.getAttribute('data-theme');
+        if (explicit === 'dark') return true;
+        if (explicit === 'light') return false;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+
+      function giscusTheme() {
+        return isDark() ? 'transparent_dark' : 'light';
+      }
+
+      var script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.setAttribute('data-repo', '{{ site.giscus.repo }}');
+      script.setAttribute('data-repo-id', '{{ site.giscus.repo_id }}');
+      script.setAttribute('data-category', '{{ site.giscus.category }}');
+      script.setAttribute('data-category-id', '{{ site.giscus.category_id }}');
+      script.setAttribute('data-mapping', 'pathname');
+      script.setAttribute('data-strict', '0');
+      script.setAttribute('data-reactions-enabled', '1');
+      script.setAttribute('data-emit-metadata', '0');
+      script.setAttribute('data-input-position', 'top');
+      script.setAttribute('data-theme', giscusTheme());
+      script.setAttribute('data-lang', 'en');
+      script.setAttribute('crossorigin', 'anonymous');
+      script.async = true;
+      document.currentScript.parentNode.appendChild(script);
+
+      // Keep giscus in sync when the site theme is toggled after load, without
+      // needing a page reload (giscus supports this via postMessage setConfig).
+      window.addEventListener('themechange', function () {
+        var iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: giscusTheme() } } },
+          'https://giscus.app'
+        );
+      });
+    })();
   </script>
 </section>
 {%- endif -%}

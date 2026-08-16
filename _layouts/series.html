@@ -30,7 +30,14 @@ layout: default
             <p class="post-card-eyebrow">Series</p>
             <h3 class="series-summary-name">{{ s }}</h3>
             <span class="post-meta">{{ site.categories[s].size }} article{% if site.categories[s].size != 1 %}s{% endif %}</span>
-            <p class="post-card-excerpt">A themed collection of {{ site.categories[s].size }} piece{% if site.categories[s].size != 1 %}s{% endif %}.</p>
+            <p class="post-card-excerpt">
+              {%- case s -%}
+                {%- when "Comments on" -%}
+                  Comments on papers, articles, literature, and other media.
+                {%- else -%}
+                  A themed collection of {{ site.categories[s].size }} piece{% if site.categories[s].size != 1 %}s{% endif %}.
+              {%- endcase -%}
+            </p>
           </div>
           <span class="series-summary-arrow" aria-hidden="true">
             <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 7.5L10 12.5L15 7.5"/></svg>
