@@ -18,6 +18,7 @@ Never runs in production: the front-end only loads/calls this when
 jekyll.environment == 'development', which GitHub Pages builds never set.
 """
 
+import base64
 import html
 import json
 import re
@@ -25,8 +26,10 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-ALLOWED_DIRS = ("_drafts", "_posts")
+ALLOWED_DIRS = ("_drafts", "_posts", "_projects")
 ALLOWED_SUFFIXES = (".html", ".md", ".markdown")
+IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".gif", ".webp")
+IMAGES_DIR = REPO_ROOT / "assets" / "images"
 PORT = 4001
 
 # Characters the browser's HTML parser silently decodes (e.g. "&ndash;" -> "–")
@@ -96,6 +99,12 @@ class Handler(BaseHTTPRequestHandler):
             self._json(404, {"ok": False, "error": "not found"})
 
     def do_POST(self):
+        if self.path == "/update-front-matter":
+            self._handle_update_front_matter()
+            return
+        if self.path == "/upload-image":
+            self._handle_upload_image()
+            return
         if self.path != "/save":
             self._json(404, {"ok": False, "error": "not found"})
             return
@@ -129,6 +138,86 @@ class Handler(BaseHTTPRequestHandler):
 
             target.write_text(text, encoding="utf-8")
             self._json(200, {"ok": True, "results": results})
+        except Exception as exc:  # noqa: BLE001 - report any failure back to the client
+            self._json(400, {"ok": False, "error": str(exc)})
+
+    def _handle_update_front_matter(self):
+        # Updates only the `image:` and/or `image_position:` lines inside a post's
+        # YAML front matter (used by the card-photo repositioning tool). The body
+        # of the file, and every other front matter key, is left byte-for-byte
+        # untouched.
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+            raw = self.rfile.read(length)
+            payload = json.loads(raw.decode("utf-8"))
+            rel_path = payload.get("path", "")
+            image = payload.get("image")
+            position = payload.get("position")
+            scale = payload.get("scale")
+
+            target = resolve_safe_path(rel_path)
+            text = target.read_text(encoding="utf-8")
+
+            if not text.startswith("---"):
+                raise ValueError("file has no front matter")
+            close_idx = text.index("\n---", 3)
+            fm_end = close_idx + len("\n---")
+            front = text[:fm_end]
+            rest = text[fm_end:]
+            lines = front.split("\n")
+
+            def set_field(key, value):
+                prefix = key + ":"
+                for i, line in enumerate(lines):
+                    if line.startswith(prefix):
+                        lines[i] = "%s: %s" % (key, value)
+                        return
+                lines.insert(len(lines) - 1, "%s: %s" % (key, value))
+
+            if image is not None:
+                set_field("image", image)
+            if position is not None:
+                set_field("image_position", json.dumps(position))
+            if scale is not None:
+                set_field("image_scale", scale)
+
+            target.write_text("\n".join(lines) + rest, encoding="utf-8")
+            self._json(200, {"ok": True})
+        except Exception as exc:  # noqa: BLE001 - report any failure back to the client
+            self._json(400, {"ok": False, "error": str(exc)})
+
+    def _handle_upload_image(self):
+        # Saves an uploaded file into assets/images/ under a sanitized filename,
+        # picking a non-colliding name rather than overwriting anything, and
+        # reports back the site-relative path to use as `image:`.
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+            raw = self.rfile.read(length)
+            payload = json.loads(raw.decode("utf-8"))
+            filename = payload.get("filename", "")
+            data_url = payload.get("data", "")
+
+            if not filename or not data_url:
+                raise ValueError("filename and data are required")
+
+            stem = Path(filename).stem
+            suffix = Path(filename).suffix.lower()
+            if suffix not in IMAGE_SUFFIXES:
+                suffix = ".jpg"
+            safe_stem = re.sub(r"[^a-zA-Z0-9\-_]+", "-", stem).strip("-").lower() or "upload"
+
+            IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+            candidate = IMAGES_DIR / (safe_stem + suffix)
+            n = 1
+            while candidate.exists():
+                candidate = IMAGES_DIR / ("%s-%d%s" % (safe_stem, n, suffix))
+                n += 1
+
+            encoded = data_url.split(",", 1)[1] if "," in data_url else data_url
+            binary = base64.b64decode(encoded)
+            candidate.write_bytes(binary)
+
+            self._json(200, {"ok": True, "path": "/assets/images/" + candidate.name})
         except Exception as exc:  # noqa: BLE001 - report any failure back to the client
             self._json(400, {"ok": False, "error": str(exc)})
 

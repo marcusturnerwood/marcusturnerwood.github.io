@@ -1,0 +1,70 @@
+---
+layout: default
+---
+
+<div class="home">
+  {%- include section-tabs.html active="series" -%}
+
+  {%- if page.title -%}
+    <h1 class="page-heading">{{ page.title }}</h1>
+  {%- endif -%}
+
+  {{ content }}
+
+  {%- assign series_names = "Comments on,A Survey of" | split: "," -%}
+  {%- assign available_series = "" | split: "" -%}
+  {%- for s in series_names -%}
+    {%- if site.categories[s] -%}
+      {%- assign s_arr = s | split: "|" -%}
+      {%- assign available_series = available_series | concat: s_arr -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if available_series.size > 0 -%}
+    <ul class="post-list">
+      {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+      {%- assign posts = site.posts -%}
+      {%- for s in available_series -%}
+        <li class="post-card series-summary-card" data-series-toggle="{{ s }}" role="button" tabindex="0" aria-expanded="false">
+          <div class="post-card-body">
+            <p class="post-card-eyebrow">Series</p>
+            <h3 class="series-summary-name">{{ s }}</h3>
+            <span class="post-meta">{{ site.categories[s].size }} article{% if site.categories[s].size != 1 %}s{% endif %}</span>
+            <p class="post-card-excerpt">A themed collection of {{ site.categories[s].size }} piece{% if site.categories[s].size != 1 %}s{% endif %}.</p>
+          </div>
+          <span class="series-summary-arrow" aria-hidden="true">
+            <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 7.5L10 12.5L15 7.5"/></svg>
+          </span>
+        </li>
+        {%- for post in posts -%}
+          {%- if post.categories contains s -%}
+            {%- include post-card.html post=post date_format=date_format series=s hidden=true -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    </ul>
+
+    <script>
+      (function () {
+        var summaryCards = Array.prototype.slice.call(document.querySelectorAll('.series-summary-card'));
+
+        function toggle(card) {
+          var name = card.getAttribute('data-series-toggle');
+          var expanded = card.getAttribute('aria-expanded') === 'true';
+          card.setAttribute('aria-expanded', String(!expanded));
+          card.classList.toggle('series-summary-card--expanded', !expanded);
+          Array.prototype.slice.call(document.querySelectorAll('.post-card[data-series="' + name + '"]')).forEach(function (li) {
+            li.hidden = expanded;
+          });
+        }
+
+        summaryCards.forEach(function (card) {
+          card.addEventListener('click', function () { toggle(card); });
+          card.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(card); }
+          });
+        });
+      })();
+    </script>
+  {%- endif -%}
+</div>

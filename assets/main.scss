@@ -451,6 +451,8 @@ body.search-open { overflow: hidden; }
   transition: box-shadow 0.18s ease, border-color 0.18s ease;
   position: relative;
 
+  &[hidden] { display: none; }
+
   &:hover {
     box-shadow: var(--shadow-1);
     border-color: transparent;
@@ -470,6 +472,168 @@ body.search-open { overflow: hidden; }
     aspect-ratio: 4 / 3;
     display: block;
   }
+}
+
+// ---- Card-photo editor (dev-only) ----
+.post-card-photo-edit {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+
+  &:hover { background: rgba(0, 0, 0, 0.75); }
+}
+
+.post-card:hover .post-card-photo-edit,
+.post-card-photo-edit:focus-visible {
+  opacity: 1;
+}
+
+body.card-photo-open { overflow: hidden; }
+
+.card-photo-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  justify-content: center;
+  align-items: center;
+  padding: 4vh 1.25rem;
+
+  &[hidden] { display: none; }
+  &:not([hidden]) { display: flex; }
+}
+
+.card-photo-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.card-photo-modal-panel {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-2);
+}
+
+.card-photo-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  cursor: grab;
+  background: var(--surface);
+  touch-action: none;
+
+  &:active { cursor: grabbing; }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+}
+
+.card-photo-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  text-align: center;
+}
+
+.card-photo-field input[type="range"] {
+  accent-color: var(--accent);
+  width: 100%;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+}
+
+.card-photo-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-soft);
+
+  input {
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.88rem;
+    font-family: $base-font-family;
+
+    &:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+    &:disabled { opacity: 0.6; }
+  }
+
+  input[type="file"] {
+    padding: 0.4rem 0;
+    border: none;
+    background: none;
+    font-size: 0.82rem;
+  }
+}
+
+.card-photo-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  button {
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+
+    &:hover { border-color: var(--accent); }
+  }
+
+  .card-photo-save {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+
+    &:hover { opacity: 0.9; }
+  }
+}
+
+.card-photo-status {
+  flex: 1;
+  font-size: 0.8rem;
+  color: var(--text-soft);
 }
 
 .post-card--no-image .post-card-body { padding-left: 0.25rem; }
@@ -936,33 +1100,46 @@ body.search-open { overflow: hidden; }
   margin-bottom: 1rem;
 }
 
-// ---- Themes / categories page ----
-.series-links {
-  display: flex;
-  flex-wrap: wrap;
+// ---- Series summary cards (inline in the articles post-list) ----
+.series-summary-card {
+  cursor: pointer;
   align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
+  border-color: var(--accent);
+
+  &:hover { box-shadow: var(--shadow-1); }
+
+  .post-card-eyebrow { color: var(--accent); }
 }
 
-.series-links-label {
-  color: var(--text-soft);
+.series-summary-name {
+  margin: 0 0 0.2rem;
+  font-size: 1.2rem;
   font-weight: 500;
 }
 
-.series-links a {
-  padding: 0.3rem 0.85rem;
-  border-radius: 999px;
-  background: var(--surface);
+.series-summary-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
   border: 1px solid var(--border);
-  color: var(--text);
-  font-weight: 500;
-  text-decoration: none;
-
-  &:hover { border-color: var(--accent); color: var(--accent); }
+  background: var(--surface);
+  color: var(--accent);
+  transition: transform 0.2s ease, background-color 0.15s ease;
 }
 
+.series-summary-card:hover .series-summary-arrow {
+  background: var(--accent-surface);
+}
+
+.series-summary-card--expanded .series-summary-arrow {
+  transform: rotate(180deg);
+}
+
+// ---- Themes / categories page ----
 .theme-block {
   scroll-margin-top: 5.5rem;
   background: var(--bg-card);

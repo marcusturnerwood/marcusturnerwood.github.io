@@ -1,0 +1,38 @@
+<!--
+  Dev-only tool for changing/repositioning a post's card photo (the front-matter
+  `image:` field used for post-list thumbnails). Only included when
+  jekyll.environment == 'development' (see _layouts/default.html).
+
+  Drag the photo to reposition it (like a LinkedIn profile-picture editor) or type a
+  new path to swap it. Saving posts only the `image:`/`image_position:` front matter
+  lines to the sidecar server (tools/edit_server.py), which splices them into the
+  source file on disk; the rest of the file, including the article body, is untouched.
+-->
+<div id="card-photo-modal" class="card-photo-modal" hidden>
+  <div class="card-photo-modal-backdrop" data-photo-close></div>
+  <div class="card-photo-modal-panel" role="dialog" aria-modal="true" aria-label="Change or reposition card photo">
+    <div class="card-photo-frame" id="card-photo-frame">
+      <img id="card-photo-preview" src="" alt="" draggable="false">
+    </div>
+    <p class="card-photo-hint">Drag to reposition, scroll or use the slider to zoom.</p>
+    <label class="card-photo-field">
+      Zoom
+      <input type="range" id="card-photo-zoom" min="0.1" max="3" step="0.01" value="1">
+    </label>
+    <label class="card-photo-field">
+      Upload a new photo
+      <input type="file" id="card-photo-upload" accept="image/*">
+    </label>
+    <label class="card-photo-field">
+      Or use an existing image path
+      <input type="text" id="card-photo-path" autocomplete="off" spellcheck="false">
+    </label>
+    <div class="card-photo-actions">
+      <span class="card-photo-status" id="card-photo-status"></span>
+      <button type="button" id="card-photo-cancel">Cancel</button>
+      <button type="button" id="card-photo-save" class="card-photo-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ '/assets/js/card-photo-editor.js' | relative_url }}" defer></script>
