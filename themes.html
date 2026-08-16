@@ -5,9 +5,19 @@ permalink: /themes/
 ---
 
 {% assign cats = site.categories | sort %}
+{% assign series_names = "Comments on,A Survey of" | split: "," %}
+
+<nav class="series-links" aria-label="Series">
+  <span class="series-links-label">Series:</span>
+  {% for s in series_names %}
+    {% if site.categories[s] %}
+      <a href="#{{ s | slugify }}">{{ s }}</a>
+    {% endif %}
+  {% endfor %}
+</nav>
 
 {% for c in cats %}
-  <section class="theme-block">
+  <section class="theme-block" id="{{ c[0] | slugify }}">
     <h2>{{ c[0] }}</h2>
 
     <ul>

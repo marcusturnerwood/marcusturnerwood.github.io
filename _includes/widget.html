@@ -1,0 +1,9 @@
+<div class="interactive-widget" id="{{ include.id }}">
+  {%- if include.title -%}
+    <p class="interactive-widget-title">{{ include.title }}</p>
+  {%- endif -%}
+  {{ include.content }}
+  {%- if include.caption -%}
+    <p class="interactive-widget-caption">{{ include.caption }}</p>
+  {%- endif -%}
+</div>

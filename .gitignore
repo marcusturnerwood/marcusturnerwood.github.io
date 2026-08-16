@@ -11,5 +11,9 @@ _drafts/
 Thumbs.db
 Desktop.ini
 
+# Python bytecode cache (tools/edit_server.py)
+__pycache__/
+*.pyc
+
 # Secrets (password-protected project content, etc.)
 .env

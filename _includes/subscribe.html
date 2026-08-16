@@ -1,0 +1,26 @@
+<form
+  action="https://buttondown.com/api/emails/embed-subscribe/{{ site.buttondown.username }}"
+  method="post"
+  target="popupwindow"
+  onsubmit="window.open('https://buttondown.com/{{ site.buttondown.username }}', 'popupwindow')"
+  class="subscribe-form{% if include.style %} subscribe-form--{{ include.style }}{% endif %}"
+>
+  <label class="subscribe-label" for="bd-email-{{ include.id | default: 'default' }}">
+    {{ include.label | default: "Get new posts by email" }}
+  </label>
+  <div class="subscribe-row">
+    <input
+      type="email"
+      name="email"
+      id="bd-email-{{ include.id | default: 'default' }}"
+      placeholder="you@example.com"
+      autocomplete="email"
+      required
+    >
+    <input type="hidden" value="1" name="embed">
+    <button type="submit" class="subscribe-button">Subscribe</button>
+  </div>
+  <p class="subscribe-attribution">
+    <a href="https://buttondown.com/refer/{{ site.buttondown.username }}" target="_blank" rel="noopener">Powered by Buttondown</a>
+  </p>
+</form>

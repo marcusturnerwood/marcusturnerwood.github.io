@@ -18,7 +18,9 @@ Never runs in production: the front-end only loads/calls this when
 jekyll.environment == 'development', which GitHub Pages builds never set.
 """
 
+import html
 import json
+import re
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -26,6 +28,28 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 ALLOWED_DIRS = ("_drafts", "_posts")
 ALLOWED_SUFFIXES = (".html", ".md", ".markdown")
 PORT = 4001
+
+# Characters the browser's HTML parser silently decodes (e.g. "&ndash;" -> "–")
+# without re-encoding back on innerHTML serialization. The client sends us that
+# decoded text as `original`, which then won't literally appear in a source file
+# that still spells it as a named/numeric entity. Match either form.
+FUZZY_CHARS = set('&<>"\'') | {chr(c) for c in range(128, 0x10000)}
+
+
+def build_fuzzy_pattern(original: str):
+    parts = []
+    for ch in original:
+        if ch in FUZZY_CHARS:
+            alts = [re.escape(ch)]
+            name = html.entities.codepoint2name.get(ord(ch))
+            if name:
+                alts.append(re.escape("&" + name + ";"))
+            alts.append(re.escape("&#%d;" % ord(ch)))
+            alts.append(re.escape("&#x%x;" % ord(ch)))
+            parts.append("(?:" + "|".join(alts) + ")")
+        else:
+            parts.append(re.escape(ch))
+    return re.compile("".join(parts))
 
 
 def resolve_safe_path(rel_path: str) -> Path:
@@ -89,8 +113,16 @@ class Handler(BaseHTTPRequestHandler):
             for edit in edits:
                 original = edit.get("original", "")
                 updated = edit.get("updated", "")
-                if original and original in text:
+                if not original:
+                    results.append(False)
+                    continue
+                if original in text:
                     text = text.replace(original, updated, 1)
+                    results.append(True)
+                    continue
+                match = build_fuzzy_pattern(original).search(text)
+                if match:
+                    text = text[:match.start()] + updated + text[match.end():]
                     results.append(True)
                 else:
                     results.append(False)

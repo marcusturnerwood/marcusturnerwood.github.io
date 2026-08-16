@@ -15,9 +15,33 @@ layout: default
       {%- endif -%}</p>
   </header>
 
+  <nav class="toc" id="toc" aria-label="Table of contents"></nav>
+
   <div class="post-content e-content" itemprop="articleBody" data-source-path="{{ page.path }}">
     {{ content }}
   </div>
+
+  {%- assign related_posts = "" | split: "" -%}
+  {%- for cat in page.categories -%}
+    {%- assign related_posts = related_posts | concat: site.categories[cat] -%}
+  {%- endfor -%}
+  {%- assign related_posts = related_posts | uniq | where_exp: "p", "p.url != page.url" | sort: "date" | reverse -%}
+  {%- assign related_posts = related_posts | slice: 0, 3 -%}
+  {%- if related_posts.size > 0 -%}
+    <aside class="related-posts">
+      <h2 class="related-posts-heading">More on this theme</h2>
+      <ul class="related-posts-list">
+        {%- for p in related_posts -%}
+          <li>
+            <a href="{{ p.url | relative_url }}">{{ p.title }}</a>
+            <span class="post-meta">{{ p.date | date: "%b %-d, %Y" }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </aside>
+  {%- endif -%}
+
+  {%- include subscribe.html style="card" id="post" label="Enjoyed this? Get new posts by email." -%}
 
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
@@ -26,5 +50,7 @@ layout: default
   <script type="text/plain" id="post-content-raw">{{ content }}</script>
   {%- include edit-mode.html -%}
 {%- endif -%}
+
+<script src="{{ '/assets/js/toc.js' | relative_url }}" defer></script>
 
 {%- include comments.html -%}
