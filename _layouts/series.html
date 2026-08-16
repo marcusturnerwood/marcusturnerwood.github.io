@@ -34,6 +34,8 @@ layout: default
               {%- case s -%}
                 {%- when "Comments on" -%}
                   Comments on papers, articles, literature, and other media.
+                {%- when "A Survey of" -%}
+                  A structured tour of core branches of mathematics and theoretical physics, from algebra and topology to quantum gravity and string theory.
                 {%- else -%}
                   A themed collection of {{ site.categories[s].size }} piece{% if site.categories[s].size != 1 %}s{% endif %}.
               {%- endcase -%}
