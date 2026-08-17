@@ -1588,3 +1588,245 @@ body.lightbox-open { overflow: hidden; }
     margin: 0 0 0.75rem;
   }
 }
+
+// ---- Places map ----
+.places-layout {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+  }
+}
+
+.places-map {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 60vh;
+  min-height: 22rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+
+  &.places-map--adding { cursor: crosshair; }
+}
+
+.places-list {
+  flex: 0 0 16rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-card);
+
+  @media (max-width: 640px) {
+    flex-basis: auto;
+    max-height: 12rem;
+  }
+}
+
+.places-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: none;
+  color: var(--text);
+  text-align: left;
+  font-family: $base-font-family;
+  cursor: pointer;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: var(--surface); }
+}
+
+.places-list-title {
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.places-list-date {
+  font-size: 0.76rem;
+  color: var(--text-soft);
+}
+
+.places-popup {
+  min-width: 12rem;
+  max-width: 16rem;
+  font-family: $base-font-family;
+}
+
+.places-popup-title {
+  margin: 0 0 0.2rem;
+  font-size: 1rem;
+}
+
+.places-popup-date {
+  margin: 0 0 0.4rem;
+  font-size: 0.78rem;
+  color: var(--text-soft);
+}
+
+.places-popup-note {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+}
+
+.places-popup-photos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+
+  img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: zoom-in;
+  }
+}
+
+.places-popup-delete {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 0.78rem;
+  cursor: pointer;
+
+  &:hover { background: var(--accent-surface); }
+}
+
+.places-toolbar {
+  position: fixed;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #1f2328;
+  color: #eee;
+  padding: 0.5rem 0.7rem;
+  border-radius: 7px;
+  font-family: -apple-system, sans-serif;
+  font-size: 0.78rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+
+  button {
+    font-size: 0.78rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background: #2f81f7;
+    color: #fff;
+  }
+}
+
+body.place-form-open { overflow: hidden; }
+
+.place-form-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  justify-content: center;
+  align-items: center;
+  padding: 4vh 1.25rem;
+
+  &[hidden] { display: none; }
+  &:not([hidden]) { display: flex; }
+}
+
+.place-form-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.place-form-panel {
+  position: relative;
+  width: 100%;
+  max-width: 24rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-2);
+}
+
+.place-form-heading {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.place-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-soft);
+
+  input, textarea {
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.88rem;
+    font-family: $base-font-family;
+    resize: vertical;
+
+    &:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  }
+
+  input[type="file"] {
+    padding: 0.4rem 0;
+    border: none;
+    background: none;
+    font-size: 0.82rem;
+  }
+}
+
+.place-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  button {
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .place-form-status {
+    flex: 1;
+    font-size: 0.78rem;
+    color: var(--text-soft);
+  }
+
+  .place-form-save {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+
+    &:disabled { opacity: 0.6; cursor: default; }
+  }
+}

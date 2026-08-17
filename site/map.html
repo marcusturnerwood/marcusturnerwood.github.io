@@ -1,0 +1,55 @@
+---
+layout: page
+title: Map
+permalink: /map/
+leaflet: true
+---
+
+<p>Places I've been.{% if jekyll.environment == 'development' %} Click "Add pin" below, then click the map to drop a new one.{% endif %}</p>
+
+<div class="post-content">
+  <div class="places-layout">
+    <div id="places-map" class="places-map" data-editable="{% if jekyll.environment == 'development' %}true{% else %}false{% endif %}"></div>
+    <ul class="places-list" id="places-list" aria-label="Visited places"></ul>
+  </div>
+</div>
+
+<script type="application/json" id="places-data">{{ site.data.places | jsonify }}</script>
+
+{%- if jekyll.environment == 'development' -%}
+<div id="place-form-modal" class="place-form-modal" hidden>
+  <div class="place-form-backdrop" data-place-form-close></div>
+  <div class="place-form-panel" role="dialog" aria-modal="true" aria-label="Add a place">
+    <h3 class="place-form-heading">Add a place</h3>
+    <label class="place-form-field">
+      Title
+      <input type="text" id="place-form-title" autocomplete="off">
+    </label>
+    <label class="place-form-field">
+      Date
+      <input type="date" id="place-form-date">
+    </label>
+    <label class="place-form-field">
+      Note
+      <textarea id="place-form-note" rows="3"></textarea>
+    </label>
+    <label class="place-form-field">
+      Photos
+      <input type="file" id="place-form-photos" accept="image/*" multiple>
+    </label>
+    <div class="place-form-actions">
+      <span class="place-form-status" id="place-form-status"></span>
+      <button type="button" id="place-form-cancel">Cancel</button>
+      <button type="button" id="place-form-save" class="place-form-save">Save pin</button>
+    </div>
+  </div>
+</div>
+
+<div class="places-toolbar" id="places-toolbar">
+  <button type="button" id="places-add-toggle">Add pin</button>
+  <span class="places-status" id="places-status"></span>
+</div>
+{%- endif -%}
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+<script src="{{ '/assets/js/map.js' | relative_url }}" defer></script>

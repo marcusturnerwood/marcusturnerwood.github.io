@@ -7,6 +7,9 @@
 # Equivalent to running these in two terminals:
 #   python tools/edit_server.py
 #   bundle exec jekyll serve --drafts
+#
+# Gemfile lives in site/ (not the repo root) — point bundler at it explicitly.
+$env:BUNDLE_GEMFILE = Join-Path $PSScriptRoot "..\site\Gemfile"
 
 $editServer = Start-Job -ScriptBlock {
     Set-Location $using:PWD

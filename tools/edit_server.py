@@ -5,11 +5,15 @@ Run alongside `jekyll serve --drafts`:
 
     python tools/edit_server.py
 
-It listens on http://localhost:4001 and only does one thing: given a source-relative
-path (e.g. "_drafts/how-teams-and-businesses-should-integrate-ai.html") and a list of
+It listens on http://localhost:4001. Its main job: given a source-relative path
+(e.g. "_drafts/how-teams-and-businesses-should-integrate-ai.html") and a list of
 {original, updated} string pairs, it finds each `original` substring in that file and
 replaces it with `updated`, then writes the file back. Nothing else in the file is
-touched, and nothing is written outside _drafts/ or _posts/ inside this repo.
+touched, and text edits are only written inside _drafts/, _posts/, or _projects/.
+
+It also backs two other dev-only tools: the card-photo editor (uploads/repositions
+a post's thumbnail via /upload-image and /update-front-matter) and the places map
+(/save-places, overwriting _data/places.json with the pinned locations).
 
 Jekyll's own file watcher (running in the other terminal) picks up the change and
 rebuilds automatically; just refresh the browser if you want the fully re-rendered page.
@@ -30,6 +34,7 @@ ALLOWED_DIRS = ("_drafts", "_posts", "_projects")
 ALLOWED_SUFFIXES = (".html", ".md", ".markdown")
 IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".gif", ".webp")
 IMAGES_DIR = REPO_ROOT / "assets" / "images"
+PLACES_FILE = REPO_ROOT / "_data" / "places.json"
 PORT = 4001
 
 # Characters the browser's HTML parser silently decodes (e.g. "&ndash;" -> "–")
@@ -104,6 +109,9 @@ class Handler(BaseHTTPRequestHandler):
             return
         if self.path == "/upload-image":
             self._handle_upload_image()
+            return
+        if self.path == "/save-places":
+            self._handle_save_places()
             return
         if self.path != "/save":
             self._json(404, {"ok": False, "error": "not found"})
@@ -218,6 +226,25 @@ class Handler(BaseHTTPRequestHandler):
             candidate.write_bytes(binary)
 
             self._json(200, {"ok": True, "path": "/assets/images/" + candidate.name})
+        except Exception as exc:  # noqa: BLE001 - report any failure back to the client
+            self._json(400, {"ok": False, "error": str(exc)})
+
+    def _handle_save_places(self):
+        # Overwrites _data/places.json wholesale with the array sent by the map
+        # page's pin editor (assets/js/map.js). There's only ever one local editor
+        # touching this file, so a full-array replace is simpler and safer than
+        # trying to patch individual entries in place.
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+            raw = self.rfile.read(length)
+            payload = json.loads(raw.decode("utf-8"))
+            places = payload.get("places")
+            if not isinstance(places, list):
+                raise ValueError("'places' must be a list")
+
+            PLACES_FILE.parent.mkdir(parents=True, exist_ok=True)
+            PLACES_FILE.write_text(json.dumps(places, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+            self._json(200, {"ok": True})
         except Exception as exc:  # noqa: BLE001 - report any failure back to the client
             self._json(400, {"ok": False, "error": str(exc)})
 

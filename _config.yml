@@ -27,10 +27,11 @@ collections:
     permalink: /projects/:name/
 
 header_pages:
-  - articles.html
-  - projects.html
-  - about.html
-  - themes.html
+  - site/articles.html
+  - site/projects.html
+  - site/map.html
+  - site/about.html
+  - site/themes.html
 
 # Comments + reactions (likes), via giscus (github.com/apps/giscus), backed by GitHub Discussions.
 # Setup steps (one-time, done on github.com — see README):
