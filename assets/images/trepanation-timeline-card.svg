@@ -1,0 +1,38 @@
+<svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t d">
+  <title id="t">Timeline of trepanation from Neolithic Europe to modern neurosurgery</title>
+  <desc id="d">A horizontal timeline running from a Neolithic burial in France roughly seven thousand years ago through Bronze Age South Asia, ancient Greece, and pre-Columbian Peru, to a 1962 pamphlet, a 1970 self-trepanation, and modern decompressive craniectomy.</desc>
+  <rect x="0" y="0" width="900" height="400" fill="#f8f9fa"/>
+
+  <line x1="60" y1="200" x2="840" y2="200" stroke="#dadce0" stroke-width="3"/>
+
+  <circle cx="90" cy="200" r="10" fill="#e63946"/>
+  <text x="90" y="170" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="13" font-weight="600" fill="#202124">~5000 BCE</text>
+  <text x="90" y="230" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">Ensisheim,</text>
+  <text x="90" y="246" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">France</text>
+
+  <circle cx="270" cy="200" r="10" fill="#e63946"/>
+  <text x="270" y="170" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="13" font-weight="600" fill="#202124">~4300 BCE</text>
+  <text x="270" y="230" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">Indus Valley</text>
+
+  <circle cx="450" cy="200" r="10" fill="#e63946"/>
+  <text x="450" y="170" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="13" font-weight="600" fill="#202124">5th c. BCE</text>
+  <text x="450" y="230" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">Hippocratic</text>
+  <text x="450" y="246" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">Corpus</text>
+
+  <circle cx="600" cy="200" r="10" fill="#e63946"/>
+  <text x="600" y="170" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="13" font-weight="600" fill="#202124">1000–1400 CE</text>
+  <text x="600" y="230" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">Pre-Columbian</text>
+  <text x="600" y="246" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">Peru</text>
+
+  <circle cx="720" cy="200" r="10" fill="rgba(230,57,70,0.55)"/>
+  <text x="720" y="170" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="13" font-weight="600" fill="#202124">1962 / 1970</text>
+  <text x="720" y="230" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">Huges,</text>
+  <text x="720" y="246" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">Feilding</text>
+
+  <circle cx="830" cy="200" r="10" fill="#e63946"/>
+  <text x="830" y="170" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="13" font-weight="600" fill="#202124">present</text>
+  <text x="830" y="230" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">Decompressive</text>
+  <text x="830" y="246" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">craniectomy</text>
+
+  <text x="450" y="330" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="16" font-weight="600" fill="#202124">Trepanation and Its Modern Resurgence</text>
+</svg>

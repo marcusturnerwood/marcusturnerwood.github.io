@@ -1,0 +1,195 @@
+---
+layout: post
+title: "The History of Psychedelic Research"
+categories: [Neuroscience, History]
+tags: [Psychedelics, LSD, Psilocybin, Medical History, MKUltra, Timothy Leary, MAPS, Clinical Trials]
+image: /assets/images/cc022f1e6c09e1a3ace0de271e883503-1.webp
+description: "From Sandoz distributing LSD to psychiatrists worldwide in 1949, through a large clinical research programme, a covert CIA funding scandal, methodologically compromised landmark studies, and a legal freeze that lasted two decades, to the deliberately cautious reopening that made modern psychedelic medicine possible: how psychedelic research collapsed and how it was rebuilt."
+keywords: "history of psychedelic research, LSD psychotherapy, psychotomimetic, Sidney Cohen, MKUltra, Good Friday Experiment, Walter Pahnke, Concord Prison Experiment, Timothy Leary, Controlled Substances Act, Rick Doblin, MAPS, Rick Strassman, DMT research"
+image_position: "50.0% 50.0%"
+image_scale: 1.02
+---
+
+<p class="lede">
+  Between 1949 and 1970, LSD and psilocybin generated one of the larger clinical research literatures of their era: thousands of published papers, tens of thousands of treated patients, and serious investigation into alcoholism, terminal-illness anxiety, depression, and opioid dependence. By the early 1970s almost all of it had stopped, and human research on classic psychedelics remained close to impossible in the United States for roughly twenty years. A covert intelligence-agency funding operation, a handful of landmark studies that turned out to be less rigorous than they first appeared, and a researcher-turned-advocate who blurred the line between science and cultural movement all did real damage to the field's credibility before prohibition made the question moot. This traces the happenings from Sandoz's first distribution of LSD to research psychiatrists through to the narrow, deliberately cautious reopening in the 1990s that made the modern research era, covered in a companion piece, possible at all.
+</p>
+
+<div class="interactive-widget" id="research-arc-widget">
+  <p class="interactive-widget-title">Interactive: the boom, the freeze, and the reopening</p>
+  <svg viewBox="0 0 900 260" width="900" height="260" id="arc-svg" aria-label="Schematic chart of psychedelic research activity from 1943 to the present, showing a rise through the 1950s and 1960s, a sharp collapse around 1970, two decades near zero, and a slow reopening from 1990">
+    <line x1="60" y1="20" x2="60" y2="210" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="60" y1="210" x2="860" y2="210" stroke="#94a3b8" stroke-width="1"/>
+    <text x="20" y="24" font-size="10" fill="#64748b">high</text>
+    <text x="20" y="214" font-size="10" fill="#64748b">near zero</text>
+    <path id="arc-curve" fill="none" stroke="#c1440e" stroke-width="2.5"/>
+    <g id="arc-markers"></g>
+  </svg>
+  <p class="interactive-widget-readout" id="arc-readout">Select a marker on the curve to read what happened.</p>
+</div>
+
+<script>
+(function () {
+  var svg = document.getElementById('arc-svg');
+  var curve = document.getElementById('arc-curve');
+  var markersG = document.getElementById('arc-markers');
+  var readout = document.getElementById('arc-readout');
+  if (!svg || !curve) return;
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
+  var YEAR_MIN = 1943, YEAR_MAX = 2025;
+  var X_LEFT = 60, X_RIGHT = 860, Y_TOP = 20, Y_BOTTOM = 210;
+
+  function xFor(year) { return X_LEFT + (year - YEAR_MIN) / (YEAR_MAX - YEAR_MIN) * (X_RIGHT - X_LEFT); }
+
+  // Schematic activity level (0 to 1), not real publication data, chosen only to draw the boom/freeze/reopening shape.
+  var CURVE_POINTS = [
+    [1943, 0.02], [1949, 0.15], [1955, 0.45], [1962, 0.85], [1966, 0.9],
+    [1970, 0.55], [1971, 0.08], [1975, 0.03], [1985, 0.02], [1990, 0.08],
+    [1995, 0.1], [2006, 0.22], [2012, 0.3], [2019, 0.55], [2025, 0.75]
+  ];
+
+  var MARKERS = [
+    { year: 1943, label: '1943', text: 'Albert Hofmann self-administers LSD for the first time, three days after an earlier accidental exposure, at Sandoz Laboratories in Basel.' },
+    { year: 1949, label: '1949', text: 'Sandoz begins distributing LSD to psychiatric researchers, initially framed as a tool for producing a temporary, reversible model of psychosis.' },
+    { year: 1957, label: '1957', text: 'Humphry Osmond coins the word "psychedelic" in correspondence with Aldous Huxley, marking a shift from the model-psychosis framing toward a therapeutic and mystical one.' },
+    { year: 1962, label: '1962', text: 'Walter Pahnke runs the Good Friday Experiment at Boston University\'s Marsh Chapel; Sidney Cohen, an early advocate of supervised LSD therapy, begins publicly warning about its spread outside clinical settings.' },
+    { year: 1966, label: '1966', text: 'LSD research and clinical publication reach their peak, alongside rapid, unsanctioned recreational spread that regulators and much of the psychiatric establishment now see as a serious problem.' },
+    { year: 1970, label: '1970', text: 'The US Controlled Substances Act places LSD and psilocybin in Schedule I, followed by the UN Convention on Psychotropic Substances in 1971; federal funding for human research effectively disappears.' },
+    { year: 1975, label: '1975', text: 'Congressional hearings expose Project MKUltra, the CIA\'s covert LSD research programme, retroactively damaging public and scientific trust in a body of research many assumed had been independent all along.' },
+    { year: 1990, label: '1990', text: 'The FDA approves Rick Strassman\'s DMT study at the University of New Mexico, the first new US government-approved human hallucinogen research in roughly two decades.' },
+    { year: 2006, label: '2006', text: 'Roland Griffiths and colleagues publish "Psilocybin can occasion mystical-type experiences" at Johns Hopkins, widely credited with reopening the modern research era.' },
+    { year: 2019, label: '2019', text: 'Imperial College London and Johns Hopkins open the first dedicated psychedelic research centres, funded by private philanthropy rather than government science budgets.' }
+  ];
+
+  function buildPath() {
+    var d = '';
+    CURVE_POINTS.forEach(function (p, i) {
+      var x = xFor(p[0]);
+      var y = Y_BOTTOM - p[1] * (Y_BOTTOM - Y_TOP);
+      d += (i === 0 ? 'M ' : 'L ') + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
+    });
+    curve.setAttribute('d', d.trim());
+  }
+
+  function valueAt(year) {
+    for (var i = 0; i < CURVE_POINTS.length - 1; i++) {
+      var a = CURVE_POINTS[i], b = CURVE_POINTS[i + 1];
+      if (year >= a[0] && year <= b[0]) {
+        var t = (year - a[0]) / (b[0] - a[0]);
+        return a[1] + t * (b[1] - a[1]);
+      }
+    }
+    return CURVE_POINTS[CURVE_POINTS.length - 1][1];
+  }
+
+  function select(m) {
+    readout.textContent = m.label + ': ' + m.text;
+  }
+
+  buildPath();
+
+  MARKERS.forEach(function (m) {
+    var x = xFor(m.year);
+    var y = Y_BOTTOM - valueAt(m.year) * (Y_BOTTOM - Y_TOP);
+    var dot = document.createElementNS(SVG_NS, 'circle');
+    dot.setAttribute('cx', x.toFixed(1));
+    dot.setAttribute('cy', y.toFixed(1));
+    dot.setAttribute('r', 7);
+    dot.setAttribute('fill', '#1c1f24');
+    dot.setAttribute('stroke', '#fff');
+    dot.setAttribute('stroke-width', '2');
+    dot.style.cursor = 'pointer';
+    dot.setAttribute('tabindex', '0');
+    dot.setAttribute('role', 'button');
+    dot.setAttribute('aria-label', m.label);
+    dot.addEventListener('click', function () { select(m); });
+    dot.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(m); } });
+    markersG.appendChild(dot);
+  });
+
+  select(MARKERS[0]);
+})();
+</script>
+
+<nav class="toc" aria-label="Table of contents">
+  <strong>On this page</strong>
+  <ul>
+    <li><a href="#psychotomimetic-era">A Model Psychosis</a></li>
+    <li><a href="#shadow-funder">The Shadow Funder</a></li>
+    <li><a href="#rigour-and-advocacy">Rigour, Advocacy, and Two Landmark Studies</a></li>
+    <li><a href="#the-freeze">Scheduling and the Freeze</a></li>
+    <li><a href="#reopening">Reopening the Field</a></li>
+    <li><a href="#wider-landscape">The Rest of the Clinical Boom</a></li>
+    <li><a href="#further-reading">Further Reading</a></li>
+  </ul>
+</nav>
+
+<section id="psychotomimetic-era">
+  <h2>A Model Psychosis, Then a Sacrament</h2>
+
+  <p>
+    LSD reached psychiatric research in 1949, when Sandoz Laboratories began distributing it to interested researchers under its original framing as a psychotomimetic, a drug capable of producing a temporary, reversible model of psychosis. The idea, current since a 1947 observation of the similarity between LSD's subjective effects and schizophrenia, was that a substance able to induce psychosis-like states on demand might let researchers study the condition directly rather than waiting for it to occur naturally in patients. That framing shifted quickly, however, and by the mid-1950s a Southern Californian circle of researchers and writers, including the psychiatrist Humphry Osmond, had begun describing LSD's effects less as an artificial illness and more as an expansion of ordinary consciousness with therapeutic and even spiritual potential. Osmond coined the word "psychedelic", mind-manifesting, in a 1957 exchange of letters with Aldous Huxley, and the term stuck.
+  </p>
+
+  <p>
+    Under that revised framing, LSD and, somewhat later, psilocybin were investigated across a wide clinical range through the 1950s and 1960s: LSD-assisted psychotherapy for alcoholism, for anxiety and depression in patients with terminal cancer, and for opioid dependence, alongside more exploratory work on creativity and personality change. Sidney Cohen's influential 1960 survey, drawing on some five thousand patients treated across a large number of investigators, concluded that LSD was comparatively safe when administered in a supervised medical setting, with a low rate of serious complications. By the early 1960s the substance had become one of the more extensively studied psychoactive compounds of the period, with a published literature running into the thousands of papers. Cohen would not remain so content as within two years his own public position had shifted toward alarm, as LSD moved beyond supervised clinical settings into recreational and black-market use he had never sanctioned.
+  </p>
+</section>
+
+<section id="shadow-funder">
+  <h2>The Shadow Funder</h2>
+
+  <p>
+    A significant, and for years invisible, share of this research literature had a second, undisclosed sponsor. In 1953 the CIA's director approved Project MKUltra, a covert programme investigating LSD and other drugs for interrogation, behavioural control, and intelligence purposes. Through roughly 149 subprojects, the agency funded LSD-related research at a considerable number of academic and clinical institutions, including Columbia, Stanford, Cornell, Georgetown, and several others, routing money through front foundations so that most of the researchers involved had no idea their work was CIA-funded at all. In the early 1950s the agency reportedly paid a Swiss pharmaceutical concern roughly $240,000 to secure what was, at the time, the world's entire available supply of LSD, guaranteeing itself exclusive access to the compound driving an entire emerging field of psychiatric research.
+  </p>
+
+  <p>
+    None of this affected the science directly while it stayed hidden as a study's methodology does not become worse because its funding source is concealed. It affected the field once the concealment ended. Congressional hearings in the mid-1970s, arriving alongside the broader collapse of legal psychedelic research, exposed MKUltra's scope and its use of unwitting subjects, including some outside any research context at all, and the revelation retroactively cast a shadow over a body of academic LSD research that much of the public, not unreasonably, had assumed was independent of any intelligence-agency interest. A field already contending with prohibition now also had to contend with a scandal attached to its recent history.
+  </p>
+</section>
+
+<section id="rigour-and-advocacy">
+  <h2>Rigour, Advocacy, and Two Landmark Studies</h2>
+
+  <p>
+    Two studies from the early 1960s illustrate a second, largely self-inflicted problem: work that was ambitious for its time turning out, on later re-examination, to be considerably less solid than its initial reception suggested. Walter Pahnke's 1962 Good Friday Experiment, run at Boston University's Marsh Chapel under Timothy Leary's supervision as part of Pahnke's Harvard doctoral research, gave psilocybin or an active placebo to twenty Protestant divinity students before a Good Friday service, in a randomised, double-blind design that was methodologically sophisticated by the standards of the day. Participants who received psilocybin reported markedly more intense mystical-type experiences than the placebo group, and a long-term follow-up found largely positive, self-reported lasting effects. A 1991 methodological critique and follow-up by Rick Doblin, revisiting the original participants decades later, found that Pahnke's published account had also left out real complications: one participant needed to be physically restrained during the session, and another was given an antipsychotic to manage acute distress, details absent from the original report of an otherwise strongly positive study.
+  </p>
+
+  <p>
+    Leary's own Concord Prison Experiment, conducted around the same period, gave psilocybin-assisted group therapy to inmates with the stated aim of reducing reoffending after release, and initial reports described a marked reduction in recidivism among participants. A later, more careful re-analysis, again including work by Doblin, found the original comparison had not been a fair one and that the touted reduction largely disappeared once a proper matched control group was used. Leary's parallel activities, an escalating public advocacy for LSD use well outside any research protocol, his dismissal from Harvard in 1963, and a growing personal identification with the substances he was supposedly studying, made it progressively harder for outside observers to distinguish his research programme from a social movement he was simultaneously leading. Both episodes fed a perception, fair or not, that the field's most publicly visible results had outrun its methodological discipline.
+  </p>
+</section>
+
+<section id="the-freeze">
+  <h2>Scheduling and the Freeze</h2>
+
+  <p>
+    By the late 1960s several currents were converging on the same outcome. Recreational and black-market use of LSD had spread far beyond anything the original clinical research programme intended or could account for, a psychiatric establishment that had earlier been broadly supportive was increasingly alarmed, Leary's advocacy had given prohibition a highly visible public target, and the MKUltra revelations, though not yet public, would soon compound the credibility problem once they surfaced. The United States' Controlled Substances Act of 1970 placed LSD and psilocybin in Schedule I, the category reserved for substances judged to have no accepted medical use and a high potential for abuse, and the 1971 UN Convention on Psychotropic Substances extended equivalent restrictions internationally. Schedule I status did not make human research on these compounds strictly illegal, but the regulatory burden it imposed, combined with the evaporation of any realistic funding pathway, made it practically unfeasible. For roughly the next two decades, essentially no new human research with classic psychedelics took place in the United States.
+  </p>
+</section>
+
+<section id="reopening">
+  <h2>Reopening the Field</h2>
+
+  <p>
+    The field's slow return began not with a scientific breakthrough but with an advocacy organisation built specifically to fund one. Rick Doblin founded the Multidisciplinary Association for Psychedelic Studies in 1986, partly in response to the emergency scheduling of MDMA the previous year, with the explicit long-term goal of rebuilding a legitimate clinical evidence base for psychedelic and entactogen-assisted therapy from the ground up. The first concrete result took until 1990: the FDA approved a study by the psychiatrist Rick Strassman at the University of New Mexico investigating DMT's effects and dose-response profile in human volunteers, the first new government-approved human hallucinogen research in the United States since the freeze began. Conducted between 1990 and 1995, involving around sixty volunteers, Strassman's study was narrow in scope and deliberately cautious in design, closer to basic pharmacology than to the therapeutic ambitions of the 1950s and 1960s literature. That caution was itself the point: after a field had once lost its funding, its public standing, and in places its own scientific rigour more or less simultaneously, the researchers rebuilding it from the 1990s onward had every reason to move slowly and prove the work could withstand exactly the kind of scrutiny the earlier era had not.
+  </p>
+</section>
+
+<section id="wider-landscape">
+  <h2>The Rest of the Clinical Boom</h2>
+
+  <p>
+    The Good Friday Experiment and the Concord Prison Experiment draw most of the retrospective attention, largely because their later re-examination makes such a clean story about academic rigour eroding under advocacy. They were not representative of the era's research in scale. Humphry Osmond and Abram Hoffer's programme at Weyburn Mental Hospital in Saskatchewan, begun in 1953, used LSD-assisted therapy to treat alcoholism and reported recovery rates that, loosely controlled as they were by later standards, drew international attention and helped establish LSD-assisted alcoholism treatment as a serious line of clinical work through the rest of the decade. In Maryland, the Spring Grove State Hospital programme, led by Albert Kurland and eventually joined by both Pahnke, after his departure from Harvard, and Stanislav Grof, newly arrived from Czechoslovakia, ran continuously from the early 1960s until 1976, treating alcoholics, neurotic outpatients, and, from the early 1970s, terminal cancer patients with LSD-assisted psychotherapy; it outlasted almost every comparable American programme and left behind one of the more extensive single-site case literatures of the period. Europe had its own centre of research in Ronald Sandison's LSD unit at Powick Hospital in Worcestershire, which treated several hundred NHS patients from 1953 into the early 1970s using repeated low-dose "psycholytic" sessions, a process distinct from the single high-dose "psychedelic" model favoured in most American research, and stood as the continent's largest dedicated programme for close to two decades.
+  </p>
+
+  <p>
+    None of this research happened inside a sealed clinical environment, and the boundary between the academic programme and the wider culture it moved through was porous in both directions. Some of that porousness was institutional: the psychologist Oscar Janiger ran a Los Angeles study between 1954 and 1962 that administered LSD to around nine hundred volunteers, a substantial share of them writers, artists, and film-industry figures, including Cary Grant, who later spoke publicly about the sessions helping him through years of psychotherapy. Formally a research protocol on creativity and personality, it functioned as a hinge between the clinical literature and Hollywood's private enthusiasm for the drug. Outside academia entirely, Aldous Huxley's 1954 essay The Doors of Perception, an account of his own mescaline experience cast in explicitly literary and mystical terms, gave lay readers a vocabulary for these substances years before most of them could have accessed a research protocol, and Ken Kesey's Merry Pranksters, staging public Acid Tests across California in 1965 and 1966, turned LSD into a mass countercultural symbol largely detached from any therapeutic framing at all. These currents were never fully separate from the research programme itself; Leary's own path from Harvard professor to counterculture figurehead is one obvious hinge between them. By the late 1960s the same visibility that had helped the field attract funding and public curiosity a decade earlier had become one of its clearest liabilities.
+  </p>
+</section>
+
+<section id="further-reading">
+  <h2>Further Reading</h2>
+  <p>Sidney Cohen's own 1960s writing on LSD's safety and later risks is a useful primary window into how the field's leading advocates changed their minds in real time. Rick Doblin's 1991 methodological follow-up on the Good Friday Experiment, and his separate re-analysis of the Concord Prison Experiment, are the primary sources for the reassessment of both studies described above. Declassified material and congressional testimony on Project MKUltra document the CIA's funding role in more detail than space allows here. Hoffer and Osmond's own published reports from the Saskatchewan alcoholism trials, and the Spring Grove group's papers under Kurland, Pahnke, and Grof, are the primary sources for the wider clinical programme described above; Sandison's own accounts of the Powick Hospital unit cover the parallel British effort. Huxley's The Doors of Perception is the primary source for his own mescaline account, and Todd Brendan Fahey's interviews with Oscar Janiger, along with Janiger's own published case data, are the fullest account of the Los Angeles study and its Hollywood participants. Tom Wolfe's The Electric Kool-Aid Acid Test remains the standard account of Kesey's Merry Pranksters and the public Acid Tests, written as New Journalism rather than as a research source. MAPS' own institutional history, and Rick Strassman's published account of his DMT research, cover the reopening period from the perspective of the people who did the work. None of these are cited for individual sentences above: treat this as a reading list for orientation, not a citation apparatus.
+  </p>
+</section>
