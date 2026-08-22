@@ -30,7 +30,13 @@
 
   document.addEventListener('click', function (e) {
     var target = e.target.closest && e.target.closest('.post-content img');
-    if (!target || target.closest('.interactive-widget')) return;
+    // The map page wraps its whole layout, Leaflet map included, in
+    // .post-content, so a click on a pin's popup photo matches this same
+    // selector — but that photo already has its own dedicated lightbox
+    // (assets/js/map.js, [data-lightbox-open]) built to sit above Leaflet's
+    // panes. Without this exclusion both lightboxes opened at once, and this
+    // one, never having accounted for Leaflet's z-index, rendered behind the map.
+    if (!target || target.closest('.interactive-widget') || target.hasAttribute('data-lightbox-open') || target.classList.contains('profile-photo')) return;
     e.preventDefault();
     open(target);
   });

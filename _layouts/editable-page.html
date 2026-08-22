@@ -1,0 +1,24 @@
+---
+layout: default
+---
+<article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">{{ page.title | escape }}</h1>
+  </header>
+
+  <div class="post-content" data-source-path="{{ page.path }}">
+    {{ content }}
+  </div>
+
+</article>
+
+{%- if jekyll.environment == 'development' -%}
+  {%- comment -%}
+    Same raw-source mirror the post layout uses, and for the same reason: a
+    literal "</script" inside the page's own content would otherwise close
+    this tag early, since HTML's tokenizer doesn't understand nesting here.
+  {%- endcomment -%}
+  <script type="text/plain" id="post-content-raw">{{ content | replace: '</script', '<\/script' }}</script>
+  {%- include edit-mode.html -%}
+{%- endif -%}

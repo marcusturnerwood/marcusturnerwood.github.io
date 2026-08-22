@@ -45,8 +45,9 @@
     if (place.note) html += '<p class="places-popup-note">' + escapeHtml(place.note) + '</p>';
     if (place.photos && place.photos.length) {
       html += '<div class="places-popup-photos">';
-      place.photos.forEach(function (src) {
-        html += '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(place.title || '') + '" loading="lazy">';
+      place.photos.forEach(function (src, i) {
+        html += '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(place.title || '') + '" loading="lazy" ' +
+          'data-lightbox-open data-place-id="' + escapeHtml(place.id) + '" data-photo-index="' + i + '">';
       });
       html += '</div>';
     }
@@ -97,6 +98,115 @@
 
   render();
   fitToPlaces();
+
+  // The map now fills a viewport-relative height/width rather than a fixed
+  // box, so it can be initialised before web fonts or late layout shifts
+  // settle its final size. Re-measure after load and on resize so tiles
+  // don't end up clipped to a stale initial size.
+  window.addEventListener('load', function () { map.invalidateSize(); });
+  window.addEventListener('resize', function () { map.invalidateSize(); });
+
+  // ---- Lightbox: Instagram-style photo viewer for a pin's popup images ----
+  // Always on (not gated behind `editable`) since this is a viewing feature
+  // for any visitor, not a local editing tool.
+  (function () {
+    var lightbox = document.getElementById('places-lightbox');
+    if (!lightbox) return;
+
+    var imgEl = document.getElementById('places-lightbox-img');
+    var counterEl = document.getElementById('places-lightbox-counter');
+    var titleEl = document.getElementById('places-lightbox-title');
+    var dateEl = document.getElementById('places-lightbox-date');
+    var noteEl = document.getElementById('places-lightbox-note');
+    var prevBtn = lightbox.querySelector('[data-lightbox-prev]');
+    var nextBtn = lightbox.querySelector('[data-lightbox-next]');
+
+    var currentPlace = null;
+    var currentIndex = 0;
+    var touchStartX = null;
+
+    function placeById(id) {
+      for (var i = 0; i < places.length; i++) {
+        if (places[i].id === id) return places[i];
+      }
+      return null;
+    }
+
+    function show() {
+      if (!currentPlace || !currentPlace.photos || !currentPlace.photos.length) return;
+      var photos = currentPlace.photos;
+      currentIndex = (currentIndex + photos.length) % photos.length;
+      imgEl.src = photos[currentIndex];
+      imgEl.alt = currentPlace.title || '';
+      counterEl.textContent = (currentIndex + 1) + ' / ' + photos.length;
+      counterEl.hidden = photos.length < 2;
+      prevBtn.hidden = photos.length < 2;
+      nextBtn.hidden = photos.length < 2;
+      titleEl.textContent = currentPlace.title || '';
+      var dateStr = formatDate(currentPlace.date);
+      dateEl.textContent = dateStr;
+      dateEl.hidden = !dateStr;
+      noteEl.textContent = currentPlace.note || '';
+      noteEl.hidden = !currentPlace.note;
+    }
+
+    function open(placeId, index) {
+      var place = placeById(placeId);
+      if (!place) return;
+      currentPlace = place;
+      currentIndex = index || 0;
+      show();
+      lightbox.hidden = false;
+      document.body.classList.add('places-lightbox-open');
+    }
+
+    function close() {
+      lightbox.hidden = true;
+      document.body.classList.remove('places-lightbox-open');
+      imgEl.src = '';
+      currentPlace = null;
+    }
+
+    function step(delta) {
+      currentIndex += delta;
+      show();
+    }
+
+    // Delegated: popup images are created/destroyed by Leaflet on the fly, so
+    // there's never a stable element to bind a direct listener to.
+    document.addEventListener('click', function (e) {
+      var trigger = e.target.closest && e.target.closest('[data-lightbox-open]');
+      if (trigger) {
+        e.preventDefault();
+        e.stopPropagation();
+        open(trigger.getAttribute('data-place-id'), parseInt(trigger.getAttribute('data-photo-index'), 10) || 0);
+        return;
+      }
+      if (e.target.closest && e.target.closest('[data-lightbox-close]')) { close(); return; }
+      if (e.target.closest && e.target.closest('[data-lightbox-prev]')) { step(-1); return; }
+      if (e.target.closest && e.target.closest('[data-lightbox-next]')) { step(1); return; }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (lightbox.hidden) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') step(-1);
+      else if (e.key === 'ArrowRight') step(1);
+    });
+
+    // Swipe left/right on touch devices, Instagram-style.
+    var stage = lightbox.querySelector('.places-lightbox-stage');
+    stage.addEventListener('touchstart', function (e) {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    stage.addEventListener('touchend', function (e) {
+      if (touchStartX === null) return;
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      touchStartX = null;
+      if (Math.abs(dx) < 40) return;
+      step(dx > 0 ? -1 : 1);
+    }, { passive: true });
+  })();
 
   if (!editable) return;
 

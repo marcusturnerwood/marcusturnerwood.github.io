@@ -2,4 +2,7 @@
   <a href="{{ "/articles/" | relative_url }}" class="section-tab{% if include.active == 'articles' %} active{% endif %}">Articles</a>
   <a href="{{ "/projects/" | relative_url }}" class="section-tab{% if include.active == 'projects' %} active{% endif %}">Projects</a>
   <a href="{{ "/series/" | relative_url }}" class="section-tab{% if include.active == 'series' %} active{% endif %}">Series</a>
+  {%- if jekyll.environment == 'development' -%}
+    <a href="{{ "/drafts/" | relative_url }}" class="section-tab{% if include.active == 'drafts' %} active{% endif %}">Drafts</a>
+  {%- endif -%}
 </nav>

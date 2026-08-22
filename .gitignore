@@ -40,3 +40,8 @@ vendor/bundle/
 *.log
 *.bak
 *.tmp
+
+# Raw photo staging area: originals pulled in for GPS extraction and map-pin
+# curation (assets/photos/no-location/ included). The resized, actually-used
+# copies live in assets/images/places/ and stay tracked; these don't.
+assets/photos/

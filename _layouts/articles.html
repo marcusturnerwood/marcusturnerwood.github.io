@@ -11,7 +11,7 @@ layout: default
 
   {{ content }}
 
-  {%- assign series_names = "Comments on,A Survey of" | split: "," -%}
+  {%- assign series_names = "Comments on,A Survey of,Fringe Culture and Its Associated Scientific Research,Business Skills" | split: "," -%}
   {%- assign pinned_posts = site.posts | where_exp: "post", "post.pinned == true" -%}
   {%- assign other_posts = site.posts | where_exp: "post", "post.pinned != true" -%}
   {%- assign posts = pinned_posts | concat: other_posts -%}

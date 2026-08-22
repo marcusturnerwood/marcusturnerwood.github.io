@@ -1,7 +1,36 @@
-<li class="post-card{% unless include.post.image %} post-card--no-image{% endunless %}"{% if include.series %} data-series="{{ include.series }}"{% endif %}{% if include.hidden %} hidden{% endif %}>
+<li class="post-card{% unless include.post.image %} post-card--no-image{% endunless %}{% if include.orderable %} draggable-item{% endif %}"{% if include.series %} data-series="{{ include.series }}"{% endif %}{% if include.hidden %} hidden{% endif %}{% if include.orderable and jekyll.environment == 'development' %} draggable="true" data-group="{{ include.series }}" data-source-path="{{ include.post.path }}"{% endif %}>
   {%- if include.post.image -%}
+    {%- comment -%}
+      assign-with-inline-comparison is not valid boolean-producing Liquid here
+      — Jekyll's Liquid just assigns the left-hand value and silently drops
+      the comparison, so this must go through a real conditional block
+      instead, or is_contain_card ends up truthy for every card (any
+      non-empty string, e.g. "posts", is truthy) rather than only projects.
+    {%- endcomment -%}
+    {%- assign is_contain_card = false -%}
+    {%- if include.post.collection == "projects" -%}{%- assign is_contain_card = true -%}{%- endif -%}
+    {%- assign default_position = "50% 50%" -%}
+    {%- if is_contain_card -%}{%- assign default_position = "0% 0%" -%}{%- endif -%}
+    {%- assign position = include.post.image_position | default: default_position -%}
+    {%- assign scale = include.post.image_scale | default: 1 -%}
     <a class="post-card-thumb" href="{{ include.post.url | relative_url }}" tabindex="-1" aria-hidden="true">
-      <img src="{{ include.post.image | relative_url }}" alt="" loading="lazy" style="object-position: {{ include.post.image_position | default: '50% 50%' }}; transform: scale({{ include.post.image_scale | default: 1 }});">
+      {%- if is_contain_card -%}
+        {%- comment -%}
+          Contain-fit cards (whole image visible, letterboxed) can't be panned via
+          object-position — object-position only has range within the gap CSS
+          leaves after fitting the image, and for many image/frame aspect-ratio
+          pairs that gap is zero on one axis, making that axis permanently
+          undraggable no matter the value. image_position here instead stores a
+          translate() offset (percent of frame size, pre-scale — scale is listed
+          after translate in the transform so it amplifies the same way a
+          drag's pixel delta does), which always has real range on both axes
+          once scale > 1. See assets/js/card-photo-editor.js.
+        {%- endcomment -%}
+        {%- assign pos_parts = position | split: " " -%}
+        <img src="{{ include.post.image | relative_url }}" alt="" loading="lazy" style="object-fit: contain; transform: scale({{ scale }}) translate({{ pos_parts[0] }}, {{ pos_parts[1] }});">
+      {%- else -%}
+        <img src="{{ include.post.image | relative_url }}" alt="" loading="lazy" style="object-position: {{ position }}; transform: scale({{ scale }});">
+      {%- endif -%}
     </a>
     {%- if jekyll.environment == 'development' -%}
       <button
@@ -10,8 +39,8 @@
         aria-label="Change or reposition this card's photo"
         data-source-path="{{ include.post.path }}"
         data-image="{{ include.post.image }}"
-        data-position="{{ include.post.image_position | default: '50% 50%' }}"
-        data-scale="{{ include.post.image_scale | default: 1 }}"
+        data-position="{{ position }}"
+        data-scale="{{ scale }}"
       >
         <svg viewBox="0 0 256 256" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96A16,16,0,0,0,227.31,73.37ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z"/></svg>
       </button>

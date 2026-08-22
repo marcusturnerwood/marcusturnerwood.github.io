@@ -466,6 +466,30 @@ body.search-open { overflow: hidden; }
   }
 }
 
+.draggable-item[draggable="true"] {
+  cursor: grab;
+
+  &::before {
+    content: "⠿";
+    position: absolute;
+    top: 0.6rem;
+    right: 0.75rem;
+    color: var(--text-soft);
+    font-size: 1rem;
+    line-height: 1;
+    opacity: 0.5;
+  }
+
+  &:active { cursor: grabbing; }
+  &.dragging { opacity: 0.4; }
+}
+
+.reorder-status {
+  min-height: 1.2em;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+
 .post-card-thumb {
   flex: 0 0 176px;
   border-radius: 8px;
@@ -478,6 +502,32 @@ body.search-open { overflow: hidden; }
     object-fit: cover;
     aspect-ratio: 4 / 3;
     display: block;
+  }
+}
+
+// Projects only: project thumbnails are diagrams, logos, and lab photos where
+// cropping to fill a fixed box was cutting off real content. contain plus a
+// fixed white mat shows the whole image instead. Scoped to .post-list--projects
+// rather than changing .post-card-thumb globally, since articles/series/drafts
+// share that same component and are meant to keep the cover-crop look.
+.post-list--projects .post-card-thumb {
+  // Bigger than the 176px articles/series/drafts share — project thumbnails are
+  // diagrams and plots that need to actually be legible at a glance, not just
+  // decorative.
+  flex-basis: 300px;
+  // .post-card uses align-items: stretch, which pulls this box's height up to
+  // match its sibling .post-card-body — fine for a cover-cropped fill,
+  // disastrous for contain: a landscape photo in a container stretched tall by
+  // three lines of description shrinks to a thin strip with huge white bars
+  // top and bottom. align-self opts this box back out of that stretch so it
+  // keeps a fixed, sensible 4:3 shape regardless of how much text sits next to it.
+  align-self: flex-start;
+  aspect-ratio: 4 / 3;
+  background: #ffffff;
+
+  img {
+    object-fit: contain;
+    aspect-ratio: auto;
   }
 }
 
@@ -548,9 +598,15 @@ body.card-photo-open { overflow: hidden; }
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: 10px;
-  border: 1px solid var(--border);
+  // Explicit white rather than var(--surface): in dark mode that token is a dark
+  // grey, so a zoomed-out (letterboxed) photo's edges blended straight into the
+  // frame with nothing to show where the actual image boundary was. A fixed
+  // white mat, plus a hairline outline so it still reads as a border in light
+  // mode too, keeps that boundary visible in both themes while repositioning.
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 1px var(--border);
   cursor: grab;
-  background: var(--surface);
+  background: #ffffff;
   touch-action: none;
 
   &:active { cursor: grabbing; }
@@ -794,6 +850,7 @@ body.lightbox-open { overflow: hidden; }
   .post-card { flex-direction: column; }
   .post-card-thumb { flex-basis: auto; }
   .post-card-thumb img { aspect-ratio: 16 / 9; }
+  .post-list--projects .post-card-thumb { aspect-ratio: 16 / 9; }
 }
 
 // ---- Pagination ----
@@ -1372,6 +1429,34 @@ body.lightbox-open { overflow: hidden; }
   }
 }
 
+.post-content figure.figure-logo img {
+  max-width: 220px;
+  display: block;
+  margin: 0 auto;
+}
+
+.post-content .logo-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin: 1.5rem 0;
+
+  figure.figure-logo {
+    margin: 0;
+    text-align: center;
+
+    img { max-width: 160px; }
+
+    figcaption {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      margin-top: 0.4rem;
+    }
+  }
+}
+
 .post-content figure.card {
   text-align: center;
   background: var(--bg-card);
@@ -1590,31 +1675,31 @@ body.lightbox-open { overflow: hidden; }
 }
 
 // ---- Places map ----
+// Contained within the normal content column, like a typical embedded map on a
+// travel/places page, not a full-screen takeover: fixed, moderate height, the
+// place list running below it.
 .places-layout {
   display: flex;
+  flex-direction: column;
   gap: 1.25rem;
-  align-items: flex-start;
-
-  @media (max-width: 640px) {
-    flex-direction: column;
-  }
 }
 
 .places-map {
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 60vh;
-  min-height: 22rem;
+  width: 100%;
+  height: 480px;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--surface);
 
   &.places-map--adding { cursor: crosshair; }
+
+  @media (max-width: 640px) {
+    height: 340px;
+  }
 }
 
 .places-list {
-  flex: 0 0 16rem;
-  max-height: 60vh;
+  max-height: 20rem;
   overflow-y: auto;
   margin: 0;
   padding: 0;
@@ -1622,11 +1707,6 @@ body.lightbox-open { overflow: hidden; }
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--bg-card);
-
-  @media (max-width: 640px) {
-    flex-basis: auto;
-    max-height: 12rem;
-  }
 }
 
 .places-list-item {
@@ -1706,21 +1786,152 @@ body.lightbox-open { overflow: hidden; }
   &:hover { background: var(--accent-surface); }
 }
 
-.places-toolbar {
+// ---- Places lightbox: Instagram-style photo viewer for a pin's popup images ----
+body.places-lightbox-open { overflow: hidden; }
+
+.places-lightbox {
   position: fixed;
-  bottom: 0.75rem;
-  right: 0.75rem;
-  z-index: 9999;
+  inset: 0;
+  // Leaflet's own panes and zoom controls run z-index up to 1000 and leak into
+  // the page's root stacking context (.leaflet-container never claims its own),
+  // so this has to clear that comfortably or the map paints over it. Same class
+  // of bug as the card-photo/place-form modals.
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+
+  &[hidden] { display: none; }
+}
+
+.places-lightbox-row {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.places-lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.places-lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+
+  &:hover { background: rgba(255, 255, 255, 0.22); }
+}
+
+.places-lightbox-nav {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  margin: 0 0.75rem;
+
+  &:hover { background: rgba(255, 255, 255, 0.22); }
+  &[hidden] { visibility: hidden; }
+}
+
+.places-lightbox-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 62rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.places-lightbox-img {
+  max-width: 100%;
+  max-height: calc(100vh - 12rem);
+  object-fit: contain;
+  border-radius: 6px;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.places-lightbox-counter {
+  position: absolute;
+  bottom: -1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+
+  &[hidden] { display: none; }
+}
+
+.places-lightbox-caption {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 32rem;
+  margin-top: 2.5rem;
+  text-align: center;
+  color: #fff;
+
+  h3 {
+    margin: 0 0 0.2rem;
+    font-size: 1.05rem;
+  }
+
+  p {
+    margin: 0 0 0.3rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.75);
+
+    &[hidden] { display: none; }
+  }
+}
+
+@include media-query($on-palm) {
+  .places-lightbox { padding: 1rem 0.25rem; flex-direction: column; }
+  .places-lightbox-nav { width: 2.25rem; height: 2.25rem; margin: 0 0.35rem; }
+  .places-lightbox-img { max-height: calc(100vh - 14rem); }
+}
+
+.places-toolbar {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 0.75rem;
+  border-radius: 8px;
   background: #1f2328;
   color: #eee;
-  padding: 0.5rem 0.7rem;
-  border-radius: 7px;
   font-family: -apple-system, sans-serif;
   font-size: 0.78rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 
   button {
     font-size: 0.78rem;
@@ -1738,7 +1949,12 @@ body.place-form-open { overflow: hidden; }
 .place-form-modal {
   position: fixed;
   inset: 0;
-  z-index: 110;
+  // Leaflet's own panes and zoom controls (.leaflet-pane, .leaflet-top/.leaflet-bottom)
+  // run z-index up to 1000, and .leaflet-container never establishes its own stacking
+  // context (z-index: auto), so they compete directly with page-level z-indexes rather
+  // than staying scoped inside the map. Must stay comfortably above that or the map's
+  // tiles/controls paint over this modal instead of behind it.
+  z-index: 10000;
   justify-content: center;
   align-items: center;
   padding: 4vh 1.25rem;
@@ -1829,4 +2045,19 @@ body.place-form-open { overflow: hidden; }
 
     &:disabled { opacity: 0.6; cursor: default; }
   }
+}
+
+// ---- About page profile photo ----
+// Its own block above the bio rather than floated inline: at any size worth
+// having, a float here squeezed the bio paragraph into a narrow, ragged
+// column down one side instead of just sitting above it normally.
+.profile-photo {
+  display: block;
+  width: 11rem;
+  height: 11rem;
+  border-radius: 999px;
+  object-fit: cover;
+  margin: 0 0 1.5rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-1);
 }

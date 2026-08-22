@@ -1,1 +1,756 @@
-[]
+[
+  {
+    "id": "vaticancity1",
+    "title": "Vatican City",
+    "lat": 41.905853,
+    "lng": 12.455228,
+    "date": "2025-06-27",
+    "note": "The Gallery of Maps, Vatican Museums.",
+    "photos": [
+      "/assets/images/places/vatican-city-2025-06-27.jpg",
+      "/assets/images/places/vatican-city-2.jpg",
+      "/assets/images/places/vatican-city-3.jpg",
+      "/assets/images/places/vatican-city-4.jpg",
+      "/assets/images/places/vatican-city-5.jpg",
+      "/assets/images/places/vatican-city-6.jpg",
+      "/assets/images/places/vatican-city-7.jpg",
+      "/assets/images/places/vatican-city-8.jpg",
+      "/assets/images/places/vatican-city-9.jpg"
+    ]
+  },
+  {
+    "id": "trevirome1",
+    "title": "Trevi, Rome",
+    "lat": 41.900806,
+    "lng": 12.483831,
+    "date": "2025-06-26",
+    "note": "",
+    "photos": [
+      "/assets/images/places/rome-trevi-2025-06-26.jpg",
+      "/assets/images/places/trevi-rome-2.jpg",
+      "/assets/images/places/trevirome1-manual-3.jpg",
+      "/assets/images/places/trevirome1-manual-4.jpg",
+      "/assets/images/places/trevirome1-manual-5.jpg",
+      "/assets/images/places/trevirome1-manual-6.jpg",
+      "/assets/images/places/trevirome1-manual-7.jpg",
+      "/assets/images/places/trevirome1-manual-8.jpg",
+      "/assets/images/places/trevirome1-manual-9.jpg",
+      "/assets/images/places/trevirome1-manual-10.jpg",
+      "/assets/images/places/trevirome1-manual-11.jpg",
+      "/assets/images/places/trevirome1-manual-12.jpg",
+      "/assets/images/places/trevirome1-manual-13.jpg",
+      "/assets/images/places/trevirome1-manual-14.jpg",
+      "/assets/images/places/trevirome1-manual-15.jpg",
+      "/assets/images/places/trevirome1-manual-16.jpg",
+      "/assets/images/places/trevirome1-manual-17.jpg",
+      "/assets/images/places/trevirome1-manual-18.jpg"
+    ]
+  },
+  {
+    "id": "westhoathly1",
+    "title": "West Hoathly, West Sussex",
+    "lat": 51.076142,
+    "lng": -0.07405,
+    "date": "",
+    "note": "",
+    "photos": [
+      "/assets/images/places/west-sussex-1.jpg",
+      "/assets/images/places/west-sussex-2.jpg",
+      "/assets/images/places/west-sussex-3.jpg",
+      "/assets/images/places/west-sussex-4.jpg",
+      "/assets/images/places/west-sussex-5.jpg",
+      "/assets/images/places/west-hoathly-west-sussex-6.jpg",
+      "/assets/images/places/west-hoathly-west-sussex-7.jpg",
+      "/assets/images/places/west-hoathly-west-sussex-8.jpg",
+      "/assets/images/places/west-hoathly-west-sussex-9.jpg",
+      "/assets/images/places/west-hoathly-west-sussex-10.jpg",
+      "/assets/images/places/west-hoathly-west-sussex-11.jpg",
+      "/assets/images/places/west-hoathly-west-sussex-12.jpg",
+      "/assets/images/places/west-hoathly-west-sussex-13.jpg"
+    ]
+  },
+  {
+    "id": "liverpool1",
+    "title": "Liverpool",
+    "lat": 53.403886,
+    "lng": -2.963969,
+    "date": "2026-04-17",
+    "note": "",
+    "photos": [
+      "/assets/images/places/liverpool-2026-04-17.jpg",
+      "/assets/images/places/liverpool-2.jpg",
+      "/assets/images/places/liverpool-3.jpg",
+      "/assets/images/places/liverpool-4.jpg",
+      "/assets/images/places/liverpool-5.jpg",
+      "/assets/images/places/liverpool-6.jpg",
+      "/assets/images/places/liverpool-7.jpg",
+      "/assets/images/places/liverpool-8.jpg",
+      "/assets/images/places/liverpool-9.jpg",
+      "/assets/images/places/liverpool1-manual-10.jpg",
+      "/assets/images/places/liverpool1-manual-11.jpg",
+      "/assets/images/places/liverpool1-manual-12.jpg",
+      "/assets/images/places/liverpool1-manual-13.jpg",
+      "/assets/images/places/liverpool1-manual-14.jpg",
+      "/assets/images/places/liverpool1-manual-15.jpg",
+      "/assets/images/places/liverpool1-manual-16.jpg",
+      "/assets/images/places/liverpool1-manual-17.jpg",
+      "/assets/images/places/liverpool1-manual-18.jpg",
+      "/assets/images/places/liverpool1-manual-19.jpg",
+      "/assets/images/places/liverpool1-manual-20.jpg",
+      "/assets/images/places/liverpool1-manual-21.jpg",
+      "/assets/images/places/liverpool1-manual-22.jpg",
+      "/assets/images/places/liverpool1-manual-23.jpg",
+      "/assets/images/places/liverpool1-manual-24.jpg",
+      "/assets/images/places/liverpool1-manual-25.jpg",
+      "/assets/images/places/liverpool1-manual-26.jpg",
+      "/assets/images/places/liverpool1-manual-27.jpg",
+      "/assets/images/places/liverpool1-manual-28.jpg"
+    ]
+  },
+  {
+    "id": "reykjavik1",
+    "title": "Reykjavik, Iceland",
+    "lat": 64.147383,
+    "lng": -21.932331,
+    "date": "2026-06-14",
+    "note": "",
+    "photos": [
+      "/assets/images/places/reykjavik-2026-06-14.jpg",
+      "/assets/images/places/reykjavik-iceland-2.jpg",
+      "/assets/images/places/reykjavik-iceland-3.jpg",
+      "/assets/images/places/reykjavik-iceland-4.jpg",
+      "/assets/images/places/reykjavik-iceland-5.jpg",
+      "/assets/images/places/reykjavik-iceland-6.jpg",
+      "/assets/images/places/reykjavik-iceland-7.jpg",
+      "/assets/images/places/reykjavik-iceland-8.jpg",
+      "/assets/images/places/reykjavik-iceland-9.jpg"
+    ]
+  },
+  {
+    "id": "milanoitalia",
+    "title": "Milan, Italy",
+    "lat": 45.466617,
+    "lng": 9.189267,
+    "date": "2025-07-12",
+    "note": "",
+    "photos": [
+      "/assets/images/places/milanoitalia-1.jpg",
+      "/assets/images/places/milanoitalia-2.jpg",
+      "/assets/images/places/milanoitalia-3.jpg"
+    ]
+  },
+  {
+    "id": "romaitalia",
+    "title": "Rome, Italy",
+    "lat": 41.901797,
+    "lng": 12.590683,
+    "date": "",
+    "note": "",
+    "photos": [
+      "/assets/images/places/romaitalia-1.jpg"
+    ]
+  },
+  {
+    "id": "sorrentoitalia",
+    "title": "Sorrento, Italy",
+    "lat": 40.626267,
+    "lng": 14.375989,
+    "date": "",
+    "note": "",
+    "photos": [
+      "/assets/images/places/sorrentoitalia-1.jpg"
+    ]
+  },
+  {
+    "id": "napoliitalia",
+    "title": "Naples, Italy",
+    "lat": 40.856553,
+    "lng": 14.274047,
+    "date": "",
+    "note": "",
+    "photos": [
+      "/assets/images/places/napoliitalia-1.jpg"
+    ]
+  },
+  {
+    "id": "napoliitalia2",
+    "title": "Naples, Italy",
+    "lat": 40.846745,
+    "lng": 14.251692,
+    "date": "2025-07-03",
+    "note": "",
+    "photos": [
+      "/assets/images/places/napoliitalia2-1.jpg",
+      "/assets/images/places/napoliitalia2-2.jpg",
+      "/assets/images/places/napoliitalia2-3.jpg"
+    ]
+  },
+  {
+    "id": "firenzeitalia",
+    "title": "Florence, Italy",
+    "lat": 43.770625,
+    "lng": 11.255989,
+    "date": "2025-07-05",
+    "note": "",
+    "photos": [
+      "/assets/images/places/firenzeitalia-1.jpg",
+      "/assets/images/places/firenzeitalia-2.jpg",
+      "/assets/images/places/firenzeitalia-3.jpg",
+      "/assets/images/places/firenzeitalia-4.jpg",
+      "/assets/images/places/firenzeitalia-5.jpg",
+      "/assets/images/places/firenzeitalia-6.jpg",
+      "/assets/images/places/firenzeitalia-7.jpg",
+      "/assets/images/places/firenzeitalia-8.jpg"
+    ]
+  },
+  {
+    "id": "priddyengland",
+    "title": "Priddy, England",
+    "lat": 51.253947,
+    "lng": -2.67775,
+    "date": "2024-08-30",
+    "note": "",
+    "photos": [
+      "/assets/images/places/priddyengland-1.jpg"
+    ]
+  },
+  {
+    "id": "place",
+    "title": "Athens, Greece",
+    "lat": 37.97262,
+    "lng": 23.729022,
+    "date": "2024-09-11",
+    "note": "",
+    "photos": [
+      "/assets/images/places/place-1.jpg",
+      "/assets/images/places/place-2.jpg",
+      "/assets/images/places/place-3.jpg",
+      "/assets/images/places/place-4.jpg",
+      "/assets/images/places/place-5.jpg",
+      "/assets/images/places/place-6.jpg"
+    ]
+  },
+  {
+    "id": "place2",
+    "title": "Athens, Greece",
+    "lat": 37.973831,
+    "lng": 23.744725,
+    "date": "2024-09-12",
+    "note": "",
+    "photos": [
+      "/assets/images/places/place2-1.jpg"
+    ]
+  },
+  {
+    "id": "greaterlondonengland",
+    "title": "Greater London, England",
+    "lat": 51.475718,
+    "lng": -0.296432,
+    "date": "2024-09-16",
+    "note": "",
+    "photos": [
+      "/assets/images/places/greaterlondonengland-1.jpg",
+      "/assets/images/places/greaterlondonengland-2.jpg",
+      "/assets/images/places/greaterlondonengland-3.jpg"
+    ]
+  },
+  {
+    "id": "greaterlondonengland2",
+    "title": "Greater London, England",
+    "lat": 51.47535,
+    "lng": -0.275628,
+    "date": "2024-09-16",
+    "note": "",
+    "photos": [
+      "/assets/images/places/greaterlondonengland2-1.jpg"
+    ]
+  },
+  {
+    "id": "chiswickengland",
+    "title": "Chiswick, England",
+    "lat": 51.492236,
+    "lng": -0.256725,
+    "date": "2024-09-16",
+    "note": "",
+    "photos": [
+      "/assets/images/places/chiswickengland-1.jpg",
+      "/assets/images/places/chiswickengland-2.jpg"
+    ]
+  },
+  {
+    "id": "romaitalia2",
+    "title": "Rome, Italy",
+    "lat": 41.906367,
+    "lng": 12.519644,
+    "date": "2025-06-13",
+    "note": "",
+    "photos": [
+      "/assets/images/places/romaitalia2-1.jpg",
+      "/assets/images/places/romaitalia2-2.jpg",
+      "/assets/images/places/romaitalia2-3.jpg"
+    ]
+  },
+  {
+    "id": "pisaitalia",
+    "title": "Pisa, Italy",
+    "lat": 43.715031,
+    "lng": 10.396411,
+    "date": "2025-07-04",
+    "note": "",
+    "photos": [
+      "/assets/images/places/pisaitalia-1.jpg"
+    ]
+  },
+  {
+    "id": "buranoitalia",
+    "title": "Burano, Italy",
+    "lat": 45.432609,
+    "lng": 12.332787,
+    "date": "2025-07-09",
+    "note": "",
+    "photos": [
+      "/assets/images/places/buranoitalia-1.jpg",
+      "/assets/images/places/buranoitalia-2.jpg",
+      "/assets/images/places/buranoitalia-3.jpg",
+      "/assets/images/places/buranoitalia-4.jpg",
+      "/assets/images/places/buranoitalia-5.jpg",
+      "/assets/images/places/buranoitalia-6.jpg",
+      "/assets/images/places/buranoitalia-7.jpg",
+      "/assets/images/places/buranoitalia-8.jpg"
+    ]
+  },
+  {
+    "id": "wiensterreich",
+    "title": "Vienna, Austria",
+    "lat": 48.197067,
+    "lng": 16.37845,
+    "date": "2025-07-13",
+    "note": "",
+    "photos": [
+      "/assets/images/places/wiensterreich-1.jpg"
+    ]
+  },
+  {
+    "id": "prahaesko",
+    "title": "Prague, Czechia",
+    "lat": 50.087167,
+    "lng": 14.421992,
+    "date": "2025-07-14",
+    "note": "",
+    "photos": [
+      "/assets/images/places/prahaesko-1.jpg",
+      "/assets/images/places/prahaesko-2.jpg",
+      "/assets/images/places/prahaesko-3.jpg",
+      "/assets/images/places/prahaesko-4.jpg",
+      "/assets/images/places/prahaesko-5.jpg",
+      "/assets/images/places/prahaesko-6.jpg",
+      "/assets/images/places/prahaesko-7.jpg",
+      "/assets/images/places/prahaesko-8.jpg"
+    ]
+  },
+  {
+    "id": "glyntarellcymruwales",
+    "title": "Glyn Tarell, Wales",
+    "lat": 51.878308,
+    "lng": -3.445372,
+    "date": "2025-08-09",
+    "note": "",
+    "photos": [
+      "/assets/images/places/glyntarellcymruwales-1.jpg"
+    ]
+  },
+  {
+    "id": "peakforestengland",
+    "title": "Peak Forest, England",
+    "lat": 53.347553,
+    "lng": -1.81541,
+    "date": "2026-02-13",
+    "note": "",
+    "photos": [
+      "/assets/images/places/peakforestengland-1.jpg",
+      "/assets/images/places/peakforestengland-2.jpg"
+    ]
+  },
+  {
+    "id": "whitehoughengland",
+    "title": "Whitehough, England",
+    "lat": 53.324926,
+    "lng": -1.959246,
+    "date": "2026-02-13",
+    "note": "",
+    "photos": [
+      "/assets/images/places/whitehoughengland-1.jpg",
+      "/assets/images/places/whitehoughengland-2.jpg"
+    ]
+  },
+  {
+    "id": "postbridgeengland",
+    "title": "Postbridge, England",
+    "lat": 50.595974,
+    "lng": -3.915503,
+    "date": "2026-04-06",
+    "note": "",
+    "photos": [
+      "/assets/images/places/postbridgeengland-1.jpg",
+      "/assets/images/places/postbridgeengland-2.jpg"
+    ]
+  },
+  {
+    "id": "westdevonengland",
+    "title": "West Devon, England",
+    "lat": 50.612744,
+    "lng": -3.941175,
+    "date": "2026-04-06",
+    "note": "",
+    "photos": [
+      "/assets/images/places/westdevonengland-1.jpg"
+    ]
+  },
+  {
+    "id": "westdevonengland2",
+    "title": "West Devon, England",
+    "lat": 50.630099,
+    "lng": -3.998588,
+    "date": "2026-04-06",
+    "note": "",
+    "photos": [
+      "/assets/images/places/westdevonengland2-1.jpg",
+      "/assets/images/places/westdevonengland2-2.jpg",
+      "/assets/images/places/westdevonengland2-3.jpg",
+      "/assets/images/places/westdevonengland2-4.jpg",
+      "/assets/images/places/westdevonengland2-5.jpg"
+    ]
+  },
+  {
+    "id": "westdevonengland3",
+    "title": "West Devon, England",
+    "lat": 50.599433,
+    "lng": -3.984692,
+    "date": "2026-04-07",
+    "note": "",
+    "photos": [
+      "/assets/images/places/westdevonengland3-1.jpg"
+    ]
+  },
+  {
+    "id": "westdevonengland4",
+    "title": "West Devon, England",
+    "lat": 50.581585,
+    "lng": -3.965008,
+    "date": "2026-04-07",
+    "note": "",
+    "photos": [
+      "/assets/images/places/westdevonengland4-1.jpg",
+      "/assets/images/places/westdevonengland4-2.jpg",
+      "/assets/images/places/westdevonengland4-3.jpg"
+    ]
+  },
+  {
+    "id": "westdevonengland5",
+    "title": "West Devon, England",
+    "lat": 50.558053,
+    "lng": -3.965647,
+    "date": "2026-04-07",
+    "note": "",
+    "photos": [
+      "/assets/images/places/westdevonengland5-1.jpg"
+    ]
+  },
+  {
+    "id": "churchillengland",
+    "title": "Churchill, England",
+    "lat": 51.326133,
+    "lng": -2.793319,
+    "date": "2026-04-08",
+    "note": "",
+    "photos": [
+      "/assets/images/places/churchillengland-1.jpg"
+    ]
+  },
+  {
+    "id": "elterwaterengland",
+    "title": "Elterwater, England",
+    "lat": 54.45787,
+    "lng": -3.023819,
+    "date": "2026-05-07",
+    "note": "",
+    "photos": [
+      "/assets/images/places/elterwaterengland-1.jpg",
+      "/assets/images/places/elterwaterengland-2.jpg",
+      "/assets/images/places/elterwaterengland-3.jpg"
+    ]
+  },
+  {
+    "id": "buttermereengland",
+    "title": "Buttermere, England",
+    "lat": 54.508944,
+    "lng": -3.231354,
+    "date": "2026-05-08",
+    "note": "",
+    "photos": [
+      "/assets/images/places/buttermereengland-1.jpg",
+      "/assets/images/places/buttermereengland-2.jpg",
+      "/assets/images/places/buttermereengland-3.jpg",
+      "/assets/images/places/buttermereengland-4.jpg",
+      "/assets/images/places/buttermereengland-5.jpg",
+      "/assets/images/places/buttermereengland-6.jpg",
+      "/assets/images/places/buttermereengland-7.jpg",
+      "/assets/images/places/buttermereengland-8.jpg"
+    ]
+  },
+  {
+    "id": "buttermereengland2",
+    "title": "Buttermere, England",
+    "lat": 54.523803,
+    "lng": -3.246211,
+    "date": "2026-05-08",
+    "note": "",
+    "photos": [
+      "/assets/images/places/buttermereengland2-1.jpg"
+    ]
+  },
+  {
+    "id": "borrowdaleengland",
+    "title": "Borrowdale, England",
+    "lat": 54.523103,
+    "lng": -3.149064,
+    "date": "2026-05-08",
+    "note": "",
+    "photos": [
+      "/assets/images/places/borrowdaleengland-1.jpg"
+    ]
+  },
+  {
+    "id": "stjohnscastleriggand",
+    "title": "St. John's Castlerigg and Wythburn, England",
+    "lat": 54.554999,
+    "lng": -3.050774,
+    "date": "2026-05-08",
+    "note": "",
+    "photos": [
+      "/assets/images/places/stjohnscastleriggand-1.jpg",
+      "/assets/images/places/stjohnscastleriggand-2.jpg"
+    ]
+  },
+  {
+    "id": "elterwaterengland2",
+    "title": "Elterwater, England",
+    "lat": 54.429394,
+    "lng": -3.088939,
+    "date": "2026-05-08",
+    "note": "",
+    "photos": [
+      "/assets/images/places/elterwaterengland2-1.jpg"
+    ]
+  },
+  {
+    "id": "liverpoolengland",
+    "title": "Liverpool, England",
+    "lat": 53.413801,
+    "lng": -2.995454,
+    "date": "2026-05-29",
+    "note": "",
+    "photos": [
+      "/assets/images/places/liverpoolengland-1.jpg",
+      "/assets/images/places/liverpoolengland-2.jpg"
+    ]
+  },
+  {
+    "id": "tynygroescymruwales2",
+    "title": "Ty'n y Groes, Wales",
+    "lat": 53.179724,
+    "lng": -3.937938,
+    "date": "2026-06-06",
+    "note": "",
+    "photos": [
+      "/assets/images/places/tynygroescymruwales2-1.jpg",
+      "/assets/images/places/tynygroescymruwales2-2.jpg",
+      "/assets/images/places/tynygroescymruwales2-3.jpg",
+      "/assets/images/places/tynygroescymruwales2-4.jpg",
+      "/assets/images/places/tynygroescymruwales2-5.jpg"
+    ]
+  },
+  {
+    "id": "caerhuncymruwales",
+    "title": "Caerhun, Wales",
+    "lat": 53.18275,
+    "lng": -3.917186,
+    "date": "2026-06-06",
+    "note": "",
+    "photos": [
+      "/assets/images/places/caerhuncymruwales-1.jpg"
+    ]
+  },
+  {
+    "id": "burringtonengland",
+    "title": "Burrington, England",
+    "lat": 51.342526,
+    "lng": -2.770281,
+    "date": "2026-06-11",
+    "note": "",
+    "photos": [
+      "/assets/images/places/burringtonengland-1.jpg",
+      "/assets/images/places/burringtonengland-2.jpg"
+    ]
+  },
+  {
+    "id": "skgarsland",
+    "title": "Skógar, Iceland",
+    "lat": 63.531635,
+    "lng": -19.512156,
+    "date": "2026-06-15",
+    "note": "",
+    "photos": [
+      "/assets/images/places/skgarsland-1.jpg",
+      "/assets/images/places/skgarsland-2.jpg"
+    ]
+  },
+  {
+    "id": "vksland",
+    "title": "Vik, Iceland",
+    "lat": 63.402878,
+    "lng": -19.042307,
+    "date": "2026-06-15",
+    "note": "",
+    "photos": [
+      "/assets/images/places/vksland-1.jpg",
+      "/assets/images/places/vksland-2.jpg"
+    ]
+  },
+  {
+    "id": "vksland2",
+    "title": "Vik, Iceland",
+    "lat": 63.415731,
+    "lng": -19.000922,
+    "date": "2026-06-15",
+    "note": "",
+    "photos": [
+      "/assets/images/places/vksland2-1.jpg"
+    ]
+  },
+  {
+    "id": "mrdalshreppursland",
+    "title": "Mýrdalshreppur, Iceland",
+    "lat": 63.530539,
+    "lng": -19.371724,
+    "date": "2026-06-15",
+    "note": "",
+    "photos": [
+      "/assets/images/places/mrdalshreppursland-1.jpg",
+      "/assets/images/places/mrdalshreppursland-2.jpg"
+    ]
+  },
+  {
+    "id": "rangringeystrasland",
+    "title": "Rangárþing eystra, Iceland",
+    "lat": 63.615604,
+    "lng": -19.989013,
+    "date": "2026-06-15",
+    "note": "",
+    "photos": [
+      "/assets/images/places/rangringeystrasland-1.jpg",
+      "/assets/images/places/rangringeystrasland-2.jpg",
+      "/assets/images/places/rangringeystrasland-3.jpg"
+    ]
+  },
+  {
+    "id": "blskgabyggsland",
+    "title": "Bláskógabyggð, Iceland",
+    "lat": 64.255725,
+    "lng": -21.117371,
+    "date": "2026-06-16",
+    "note": "",
+    "photos": [
+      "/assets/images/places/blskgabyggsland-1.jpg",
+      "/assets/images/places/blskgabyggsland-2.jpg",
+      "/assets/images/places/blskgabyggsland-3.jpg"
+    ]
+  },
+  {
+    "id": "reykjavkurborgsland",
+    "title": "Reykjavik, Iceland",
+    "lat": 64.138681,
+    "lng": -21.883547,
+    "date": "2026-06-17",
+    "note": "",
+    "photos": [
+      "/assets/images/places/reykjavkurborgsland-1.jpg"
+    ]
+  },
+  {
+    "id": "hveragerisbrsland",
+    "title": "Hveragerðisbær, Iceland",
+    "lat": 63.99535,
+    "lng": -21.189872,
+    "date": "2026-06-17",
+    "note": "",
+    "photos": [
+      "/assets/images/places/hveragerisbrsland-1.jpg"
+    ]
+  },
+  {
+    "id": "mrdalshreppursland2",
+    "title": "Mýrdalshreppur, Iceland",
+    "lat": 63.537011,
+    "lng": -19.343894,
+    "date": "2026-06-17",
+    "note": "",
+    "photos": [
+      "/assets/images/places/mrdalshreppursland2-1.jpg"
+    ]
+  },
+  {
+    "id": "grindavksland",
+    "title": "Grindavík, Iceland",
+    "lat": 63.880142,
+    "lng": -22.448658,
+    "date": "2026-06-18",
+    "note": "",
+    "photos": [
+      "/assets/images/places/grindavksland-1.jpg"
+    ]
+  },
+  {
+    "id": "kjsarhreppursland",
+    "title": "Kjósarhreppur, Iceland",
+    "lat": 64.373842,
+    "lng": -21.564247,
+    "date": "2026-06-19",
+    "note": "",
+    "photos": [
+      "/assets/images/places/kjsarhreppursland-1.jpg"
+    ]
+  },
+  {
+    "id": "hvalfjararsveitsland",
+    "title": "Hvalfjarðarsveit, Iceland",
+    "lat": 64.384229,
+    "lng": -21.264605,
+    "date": "2026-06-19",
+    "note": "",
+    "photos": [
+      "/assets/images/places/hvalfjararsveitsland-1.jpg",
+      "/assets/images/places/hvalfjararsveitsland-2.jpg",
+      "/assets/images/places/hvalfjararsveitsland-3.jpg",
+      "/assets/images/places/hvalfjararsveitsland-4.jpg"
+    ]
+  },
+  {
+    "id": "newcastleupontyneeng",
+    "title": "Newcastle upon Tyne, England",
+    "lat": 54.973685,
+    "lng": -1.608294,
+    "date": "2026-08-01",
+    "note": "",
+    "photos": [
+      "/assets/images/places/newcastleupontyneeng-1.jpg",
+      "/assets/images/places/newcastleupontyneeng-2.jpg",
+      "/assets/images/places/newcastleupontyneeng-3.jpg",
+      "/assets/images/places/newcastleupontyneeng-4.jpg",
+      "/assets/images/places/newcastleupontyneeng-5.jpg",
+      "/assets/images/places/newcastleupontyneeng-6.jpg",
+      "/assets/images/places/newcastleupontyneeng-7.jpg",
+      "/assets/images/places/newcastleupontyneeng-8.jpg"
+    ]
+  }
+]

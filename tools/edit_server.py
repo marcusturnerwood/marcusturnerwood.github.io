@@ -9,11 +9,15 @@ It listens on http://localhost:4001. Its main job: given a source-relative path
 (e.g. "_drafts/how-teams-and-businesses-should-integrate-ai.html") and a list of
 {original, updated} string pairs, it finds each `original` substring in that file and
 replaces it with `updated`, then writes the file back. Nothing else in the file is
-touched, and text edits are only written inside _drafts/, _posts/, or _projects/.
+touched, and text edits are only written inside _drafts/, _posts/, _projects/, or site/
+(the last of these backs standalone pages like About that opt into inline editing via
+the `editable-page` layout).
 
-It also backs two other dev-only tools: the card-photo editor (uploads/repositions
-a post's thumbnail via /upload-image and /update-front-matter) and the places map
-(/save-places, overwriting _data/places.json with the pinned locations).
+It also backs three other dev-only tools: the card-photo editor (uploads/repositions
+a post's thumbnail via /upload-image and /update-front-matter), the places map
+(/save-places, overwriting _data/places.json with the pinned locations), and the
+drag-and-drop reorder tool on /drafts/ and /series/ (/save-order, rewriting the
+`order` or `series_order` front-matter field across a batch of files after a drag).
 
 Jekyll's own file watcher (running in the other terminal) picks up the change and
 rebuilds automatically; just refresh the browser if you want the fully re-rendered page.
@@ -30,7 +34,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-ALLOWED_DIRS = ("_drafts", "_posts", "_projects")
+ALLOWED_DIRS = ("_drafts", "_posts", "_projects", "site")
 ALLOWED_SUFFIXES = (".html", ".md", ".markdown")
 IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".gif", ".webp")
 IMAGES_DIR = REPO_ROOT / "assets" / "images"
@@ -71,7 +75,7 @@ def resolve_safe_path(rel_path: str) -> Path:
     if candidate.suffix.lower() not in ALLOWED_SUFFIXES:
         raise ValueError("unsupported file type: %s" % candidate.suffix)
     if not any(part in ALLOWED_DIRS for part in candidate.relative_to(REPO_ROOT).parts[:1]):
-        raise ValueError("path must be inside _drafts/ or _posts/")
+        raise ValueError("path must be inside _drafts/, _posts/, _projects/, or site/")
     if not candidate.is_file():
         raise ValueError("file does not exist: %s" % rel_path)
     return candidate
@@ -112,6 +116,9 @@ class Handler(BaseHTTPRequestHandler):
             return
         if self.path == "/save-places":
             self._handle_save_places()
+            return
+        if self.path == "/save-order":
+            self._handle_save_order()
             return
         if self.path != "/save":
             self._json(404, {"ok": False, "error": "not found"})
@@ -244,6 +251,50 @@ class Handler(BaseHTTPRequestHandler):
 
             PLACES_FILE.parent.mkdir(parents=True, exist_ok=True)
             PLACES_FILE.write_text(json.dumps(places, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+            self._json(200, {"ok": True})
+        except Exception as exc:  # noqa: BLE001 - report any failure back to the client
+            self._json(400, {"ok": False, "error": str(exc)})
+
+    def _handle_save_order(self):
+        # Rewrites a single front-matter integer field (`order` for the drafts
+        # queue, `series_order` for position within a series) across a whole
+        # batch of files at once, so a drag-and-drop reorder can renumber
+        # every affected file in one request. Used by assets/js/reorder.js.
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+            raw = self.rfile.read(length)
+            payload = json.loads(raw.decode("utf-8"))
+            field = payload.get("field", "")
+            if field not in ("order", "series_order"):
+                raise ValueError("field must be 'order' or 'series_order'")
+            items = payload.get("items", [])
+
+            for item in items:
+                rel_path = item.get("path", "")
+                value = item.get("value")
+                if not isinstance(value, int):
+                    raise ValueError("value must be an integer for %s" % rel_path)
+
+                target = resolve_safe_path(rel_path)
+                text = target.read_text(encoding="utf-8")
+                if not text.startswith("---"):
+                    raise ValueError("file has no front matter: %s" % rel_path)
+                close_idx = text.index("\n---", 3)
+                fm_end = close_idx + len("\n---")
+                front = text[:fm_end]
+                rest = text[fm_end:]
+                lines = front.split("\n")
+
+                prefix = field + ":"
+                for i, line in enumerate(lines):
+                    if line.startswith(prefix):
+                        lines[i] = "%s: %d" % (field, value)
+                        break
+                else:
+                    lines.insert(len(lines) - 1, "%s: %d" % (field, value))
+
+                target.write_text("\n".join(lines) + rest, encoding="utf-8")
+
             self._json(200, {"ok": True})
         except Exception as exc:  # noqa: BLE001 - report any failure back to the client
             self._json(400, {"ok": False, "error": str(exc)})

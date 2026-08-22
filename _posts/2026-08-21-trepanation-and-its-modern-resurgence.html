@@ -1,0 +1,180 @@
+---
+layout: post
+title: "Trepanation and Its Modern Resurgence"
+categories: [Fringe Culture and Its Associated Scientific Research, Neuroscience, History]
+permalink: /neuroscience/history/:year/:month/:day/:title.html
+tags: [Trepanation, Neurosurgery, Medical History, Archaeology, Decompressive Craniectomy, Bart Huges, Amanda Feilding, Counterculture]
+image: /assets/images/amanda-fielding-headshot-300x245.webp
+description: "Trepanation, cutting or drilling a hole in the living skull, is among the oldest surgical procedures with direct physical evidence behind it. It now has two entirely separate modern descendants: decompressive craniectomy, a rigorous, evidence-based neurosurgical procedure performed daily in intensive care units, and a fringe self-trepanation subculture built on a 1962 pamphlet with no evidence behind it at all. This traces both lines back to the same ancient practice and explains why conflating them is a mistake."
+keywords: "trepanation, trephination, decompressive craniectomy, craniotomy, Bart Huges, brainbloodvolume, Amanda Feilding, Joey Mellen, International Trepanation Advocacy Group, Neolithic surgery, Hippocratic Corpus, intracranial pressure, medical history"
+image_position: "51.5% 44.6%"
+image_scale: 1.01
+series_order: 1
+---
+
+<p class="lede">
+  Trepanation, cutting, drilling, or scraping a hole through the living skull, is among the oldest surgical procedures for which direct physical evidence survives, and one of the few prehistoric operations patients regularly survived, sometimes more than once. It is also, unusually among ancient surgical practices, still performed today, in two forms that share a name and a basic principle but almost nothing else. One is decompressive craniectomy, a sterile, imaging-guided procedure carried out in intensive care units to relieve dangerous intracranial pressure after severe head injury or stroke. The other is a small, self-administered subculture built on a 1962 pamphlet arguing that trepanation restores a permanently expanded state of consciousness, a claim with no supporting evidence and a documented history of serious harm. Both trace themselves back to the same Neolithic practice. Only one of them is medicine.
+</p>
+
+<div class="interactive-widget" id="trepan-timeline-widget">
+  <p class="interactive-widget-title">Interactive: seven thousand years of trepanation</p>
+  <svg viewBox="0 0 900 130" width="900" height="130" id="trepan-timeline-svg" aria-label="Timeline of trepanation from Neolithic Europe to modern decompressive craniectomy">
+    <line x1="40" y1="70" x2="860" y2="70" stroke="#94a3b8" stroke-width="2"/>
+    <g id="trepan-dots"></g>
+  </svg>
+  <p class="interactive-widget-readout" id="trepan-readout"></p>
+  <p class="interactive-widget-caption">Select a point on the timeline to read about it. The gap between the last ancient milestone and the first modern one is not an oversight: trepanation for non-emergency reasons had largely disappeared from mainstream medical practice by the early modern period, and the twentieth century's revival split into the two, almost unrelated, lines of descent discussed in the sections below.</p>
+</div>
+
+<script>
+(function () {
+  var svg = document.getElementById('trepan-timeline-svg');
+  var dotsG = document.getElementById('trepan-dots');
+  var readout = document.getElementById('trepan-readout');
+  if (!svg || !dotsG) return;
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
+  var EVENTS = [
+    { x: 60, year: '~5000 BCE', label: 'Ensisheim, France', text: 'A skull from a burial at Ensisheim, in Alsace, provides the earliest unequivocal physical evidence of trepanation: a healed opening showing the patient survived the operation by years.' },
+    { x: 190, year: '~4300 BCE', label: 'Indus Valley', text: 'Bronze Age skeletal remains from the Indus Valley Civilisation show trepanation was practised independently across a wide geographic range, not limited to a single cultural origin.' },
+    { x: 320, year: '5th c. BCE', label: 'Hippocratic Corpus', text: 'Greek medical writing, including the treatise On Injuries of the Head, describes trepanation as a treatment for skull fracture, aimed at relieving pressure and removing bone fragments pressing on the brain.' },
+    { x: 450, year: '1000–1400 CE', label: 'Pre-Columbian Peru', text: 'Bioarchaeological surveys of Peruvian skulls find high rates of healed bone at the trepanation margins, with survival improving further in later pre-Columbian periods, evidence of a refined surgical tradition.' },
+    { x: 580, year: '1962', label: 'Bart Huges’ pamphlet', text: 'The Dutch writer Bart Huges self-publishes "The Mechanism of Brainbloodvolume", arguing upright posture permanently restricts blood flow to the brain and that trepanation reopens a channel closed since infancy.' },
+    { x: 700, year: '1970', label: 'Feilding and Mellen', text: 'Amanda Feilding drills a hole in her own skull with an electric dentist’s drill, filmed by her partner Joey Mellen, an act that became the founding document of the modern self-trepanation subculture.' },
+    { x: 830, year: 'present', label: 'Decompressive craniectomy', text: 'Neurosurgeons routinely remove a section of skull, under general anaesthetic, sterile conditions, and imaging guidance, to relieve life-threatening intracranial pressure after trauma or stroke, replacing the bone once swelling subsides.' }
+  ];
+
+  function select(ev) {
+    readout.textContent = ev.year + ': ' + ev.label + '. ' + ev.text;
+  }
+
+  EVENTS.forEach(function (ev) {
+    var dot = document.createElementNS(SVG_NS, 'circle');
+    dot.setAttribute('cx', ev.x);
+    dot.setAttribute('cy', 70);
+    dot.setAttribute('r', 8);
+    dot.setAttribute('fill', '#c1440e');
+    dot.setAttribute('stroke', '#fff');
+    dot.setAttribute('stroke-width', '2');
+    dot.style.cursor = 'pointer';
+    dot.setAttribute('tabindex', '0');
+    dot.setAttribute('role', 'button');
+    dot.setAttribute('aria-label', ev.year + ', ' + ev.label);
+    dot.addEventListener('click', function () { select(ev); });
+    dot.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(ev); } });
+    dotsG.appendChild(dot);
+
+    var label = document.createElementNS(SVG_NS, 'text');
+    label.setAttribute('x', ev.x);
+    label.setAttribute('y', 95);
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('font-size', '10');
+    label.setAttribute('fill', '#334155');
+    label.textContent = ev.year;
+    dotsG.appendChild(label);
+  });
+
+  select(EVENTS[0]);
+})();
+</script>
+
+<nav class="toc" aria-label="Table of contents">
+  <strong>On this page</strong>
+  <ul>
+    <li><a href="#oldest-surgery">The Oldest Surgery</a></li>
+    <li><a href="#what-they-got-right">What the Ancient Practitioners Got Right</a></li>
+    <li><a href="#brainbloodvolume">Bart Huges and the Brainbloodvolume Theory</a></li>
+    <li><a href="#feilding-mellen">Amanda Feilding, Joey Mellen, and Self-Trepanation as Practice</a></li>
+    <li><a href="#doesnt-hold-up">Why the Theory Doesn't Hold Up</a></li>
+    <li><a href="#craniectomy">The Legitimate Descendant: Decompressive Craniectomy</a></li>
+    <li><a href="#conclusion">Two Lines of Descent</a></li>
+    <li><a href="#further-reading">Further Reading</a></li>
+  </ul>
+</nav>
+
+<section id="oldest-surgery">
+  <h2>The Oldest Surgery</h2>
+
+  <p>
+    Trepanned skulls have been found across an extraordinary geographic and temporal range: Neolithic Europe, Bronze Age South Asia, dynastic and pre-dynastic China, pre-Columbian Mesoamerica and South America, and parts of Africa and the South Pacific where the practice, in modified form, continued into the twentieth century and in isolated cases continues today. A burial at Ensisheim in the French region of Alsace has produced the oldest unequivocal physical evidence, a skull roughly seven thousand years old showing a healed margin around the opening, direct proof the patient lived on afterwards. Skeletal remains from the Indus Valley Civilisation push documented trepanation back to at least the Bronze Age in South Asia, on a continent with no plausible route of cultural transmission from Neolithic France, strong evidence that people in unrelated places independently arrived at the same procedure.
+  </p>
+
+  <p>
+    The stated reasons for performing it varied by culture and period, and the historical record supports more than one motive operating at once rather than a single universal explanation. Greek medical writing in the Hippocratic Corpus, including the treatise <em>On Injuries of the Head</em>, treats trepanation as a response to skull fracture: a way to relieve pressure, remove bone fragments driven into the brain, and drain accumulated fluid, a rationale that is recognisably medical by modern standards even though the anatomical understanding behind it was limited. Elsewhere the record points toward what anthropologists usually call a magico-spiritual rationale: trepanation performed for headache, epilepsy, or what would now be described as mental illness, on the apparent assumption that the operation released something, pressure, a spirit, an evil influence, that was causing the symptom. Field accounts of trepanation among some African communities into the modern era describe both rationales coexisting within a single tradition, applied to different presenting complaints.
+  </p>
+</section>
+
+<section id="what-they-got-right">
+  <h2>What the Ancient Practitioners Got Right</h2>
+
+  <p>
+    The therapeutic strand of that history deserves to be taken seriously on its own terms. A skull fracture with an underlying haematoma, bleeding trapped between the skull and the brain, raises intracranial pressure in a way that can itself kill or permanently injure a patient independently of the original trauma, and physically removing a section of bone to relieve that pressure is, at the level of basic physiological principle, the correct intervention. Ancient practitioners had no concept of intracranial pressure as physiologists now define it and no imaging to confirm a haematoma was present before cutting. What they had was centuries of accumulated, orally transmitted experience of which head injuries tended to improve after the skull was opened and which did not, an empirical tradition arriving at a genuine physiological principle by observation rather than theory.
+  </p>
+
+  <p>
+    Survival evidence supports the claim that this empirical tradition was refined rather than static. Bioarchaeological surveys of trepanned skulls from multiple regions and periods, most extensively studied in pre-Columbian Peru, find substantial proportions with clearly healed bone at the opening's margin, direct evidence the patient survived the operation by a meaningful period afterwards, and some surveys report survival rates improving over time within a single cultural tradition, consistent with practitioners learning from experience across generations. Skulls bearing multiple healed trepanations, evidence of the same individual undergoing the procedure more than once and surviving each time, have also been recovered, which is difficult to explain except as evidence of a surgical tradition with real, if partial, competence.
+  </p>
+</section>
+
+<section id="brainbloodvolume">
+  <h2>Bart Huges and the Brainbloodvolume Theory</h2>
+
+  <p>
+    The modern resurgence begins somewhere else entirely. In 1962 the Dutch writer Bart Huges, who had been expelled from medical school, self-published a pamphlet titled <em>The Mechanism of Brainbloodvolume</em>, arguing that the transition to upright, bipedal posture in human evolution permanently reduced the volume of blood able to pulse through the brain, because gravity now worked against it in a way it had not for a quadrupedal ancestor. Huges proposed that a young child's fontanelle, the soft, unfused gap between skull plates present in infancy, allows a fuller, unrestricted pulse of blood into the brain with every heartbeat, and that the fontanelle's closure during childhood permanently curtails this pulse, producing the ordinary adult state of consciousness. His proposed remedy was to reopen a permanent hole in the adult skull, mechanically reproducing the infant's open fontanelle and, on his account, restoring a permanently expanded, more vivid state of consciousness for life.
+  </p>
+
+  <p>
+    None of this rests on any recognised finding in vascular physiology or neuroscience. Cerebral blood flow is tightly autoregulated by the brain's own vasculature specifically to keep it stable across changes in posture and blood pressure, the opposite of a system that would be meaningfully altered by drilling a hole in the skull of an adult whose sutures have already fused. Huges' theory nonetheless found an audience within the same broadly countercultural milieu that was, at the same historical moment, exploring LSD and other psychedelics as routes to altered consciousness, and it supplied that milieu with something LSD could not: a claimed permanent, drug-free method for reaching a similar state.
+  </p>
+</section>
+
+<section id="feilding-mellen">
+  <h2>Amanda Feilding, Joey Mellen, and Self-Trepanation as Practice</h2>
+
+  <p>
+    Huges' theory acquired its most visible practitioners through Amanda Feilding, an English artist who met Huges and adopted his theory, and her partner Joey Mellen. In 1970, Feilding trepanned herself with an electric dentist's drill, a roughly twelve-minute procedure filmed by Mellen and later screened publicly as the short film <em>Heartbeat in the Brain</em>. Mellen underwent the same procedure on himself, by his own later account only succeeding after more than one attempt. Both wrote and spoke about the experience afterwards in the vivid, first-person register of a genuine personal transformation, and their advocacy, along with Huges', helped establish an ongoing network, including the International Trepanation Advocacy Group, that has continued to promote the practice and collect self-reported accounts from others who have undergone it.
+  </p>
+
+  <p>
+    Feilding's later career took a considerably more conventional turn that is worth noting on its own merits. She went on to found the Beckley Foundation, a drug policy and research organisation that has funded and collaborated on rigorous, ethically approved clinical research into psilocybin, LSD, and other psychedelics, work of the same broad kind discussed elsewhere on this site, conducted under regulatory oversight and published in peer-reviewed journals. The contrast is instructive: the same person moved from an untested, self-administered procedure with no evidence base to funding exactly the kind of controlled evidence-gathering that self-trepanation as a movement has never subjected itself to.
+  </p>
+</section>
+
+<section id="doesnt-hold-up">
+  <h2>Why the Theory Doesn't Hold Up</h2>
+
+  <p>
+    No controlled study has ever tested Huges' brainbloodvolume hypothesis against a comparison group, and the mechanism it proposes is not consistent with what is independently known about cerebral autoregulation. The subjective improvements reported by self-trepanned individuals, typically described in terms of mood, clarity, or energy, are exactly the kind of outcome that placebo and expectation effects reliably produce, and they are especially likely to appear large after undertaking a procedure as extreme, deliberate, and irreversible as drilling into one's own skull: having committed to something with that much at stake, a participant has a strong psychological incentive to interpret the aftermath favourably. Licensed medical professionals who have commented on the practice have consistently made this same point, that the reported effects are readily explained without invoking any change in brain blood volume at all.
+  </p>
+
+  <p>
+    The risks, meanwhile, are not in dispute. Self-trepanation is by definition performed outside sterile operating conditions, without imaging to confirm the position and depth of the drill relative to the brain and its surrounding membranes, and without the antibiotic and post-operative care that make modern cranial surgery survivable at low complication rates. Infection, meningitis, haemorrhage from an accidentally punctured vessel or membrane, and direct injury to brain tissue are all realistic outcomes of an amateur, unsterile attempt to open the skull, and at least one documented case within the self-trepanation community ended in death. An ancient practice that Neolithic and pre-Columbian surgeons refined over centuries of accumulated experience, working within real anatomical and hygienic constraints they could not fully control, is considerably more dangerous, not less, when repeated by an individual with a dentist's drill and no surgical training at all.
+  </p>
+</section>
+
+<section id="craniectomy">
+  <h2>The Legitimate Descendant: Decompressive Craniectomy</h2>
+
+  <p>
+    The other line of descent looks almost nothing like this. Decompressive craniectomy is a standard neurosurgical procedure in which a section of skull is removed, under general anaesthetic and sterile conditions, in patients with dangerously elevated intracranial pressure following severe traumatic brain injury, large ischaemic stroke, or other causes of brain swelling that the closed skull cannot safely accommodate. The underlying physiological logic is identical to the one ancient practitioners arrived at empirically: a swelling brain confined within a rigid skull will compress itself against that skull with increasingly damaging force, and removing part of the skull gives the swelling somewhere to go. Everything else about the modern procedure is different. It is preceded by CT or MRI imaging that shows exactly where the pressure and any bleeding are located, carried out with precision cutting tools rather than a hand drill, followed by antibiotic cover and intensive post-operative monitoring, and, in most cases, reversed later with a cranioplasty that replaces the removed bone once the swelling has resolved.
+  </p>
+
+  <p>
+    That combination, imaging, sterile technique, antibiotics, and monitored critical care, is what turned an ancient procedure with substantial mortality risk into a standard, life-saving intervention performed in intensive care units worldwide. None of it is available to someone drilling into their own skull at home, which is precisely why the same underlying principle produces a legitimate treatment in one context and a serious, unsupported health risk in the other.
+  </p>
+</section>
+
+<section id="conclusion">
+  <h2>Two Lines of Descent</h2>
+
+  <p>
+    Trepanation's long survival as a live medical and cultural topic comes from the fact that its two modern descendants share a name, a target organ, and a superficial procedural description, while sharing almost nothing else that matters: not an evidence base, not a safety profile, not an institutional context, and not a theory of why the intervention should work. Decompressive craniectomy earns its place in modern medicine the ordinary way, through imaging, controlled evaluation, and a mechanism consistent with known physiology. Self-trepanation has never done any of that, and rests instead on a physiologically unsupported 1962 pamphlet and the self-reports of a small, self-selected group of advocates. Both can trace an unbroken conceptual line back to the same Neolithic burial ground. Only one of them belongs in a hospital.
+  </p>
+</section>
+
+<section id="further-reading">
+  <h2>Further Reading</h2>
+  <p>
+    This article is a synthesis rather than a primary source. On the archaeological history, surveys of trepanation in Neolithic Europe, Bronze Age South Asia, and pre-Columbian South America (particularly the bioarchaeological literature on Peruvian skulls) are a good starting point, as is the relevant section of the Hippocratic Corpus for the ancient Greek medical rationale. On the modern subculture, Bart Huges' original pamphlet and contemporary journalistic accounts of Amanda Feilding and Joey Mellen's self-trepanation document the movement in its own words. On the legitimate clinical descendant, recent neurosurgical reviews of decompressive craniectomy set out both its history and its current evidence base for traumatic brain injury and stroke. None of these are cited for individual sentences above: treat this as a reading list for orientation, not a citation apparatus.
+  </p>
+</section>

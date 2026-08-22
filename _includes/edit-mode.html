@@ -10,13 +10,22 @@
   file is touched.
 -->
 <style>
+  /* Reserved space so the fixed toolbar below never sits on top of the page's
+     own last line of content, which is exactly what happens on a narrow phone
+     viewport otherwise: there's no margin left for it to float in. The class
+     is added to <body> in edit-mode.js once the toolbar actually exists. */
+  body.has-edit-toolbar {
+    padding-bottom: 3.5rem;
+  }
   .edit-toolbar {
     position: fixed;
     bottom: 0.75rem;
     right: 0.75rem;
+    left: 0.75rem;
     z-index: 9999;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 0.4rem;
     background: #1f2328;
     color: #eee;
@@ -25,6 +34,9 @@
     font-family: -apple-system, sans-serif;
     font-size: 0.78rem;
     box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  }
+  @media (min-width: 480px) {
+    .edit-toolbar { left: auto; }
   }
   .edit-toolbar button {
     font-size: 0.78rem;

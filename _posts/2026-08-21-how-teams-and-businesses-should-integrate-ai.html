@@ -1,0 +1,215 @@
+---
+layout: post
+title: "How Teams and Businesses Should Integrate AI"
+categories: [Business Skills, Business, Technology]
+permalink: /business/technology/:year/:month/:day/:title.html
+tags: [AI Adoption, Change Management, Workflow Design, AI Governance, Productivity, Automation, AI Evals, Cost Management, AI Agents]
+image: /assets/images/mission-control-room-card.png
+description: "A structured approach to AI adoption that starts from the workflow rather than the tool: the build/buy/wrap decision, model evaluation, data readiness, evals, cost management and model routing, where AI actually saves time, agents and the specific risks of systems that take actions rather than just draft text, human-in-the-loop design, change management, organisational ownership, governance, legal exposure, measurement, and the adoption maturity curve."
+keywords: "AI adoption, AI integration, enterprise AI, change management, human in the loop, AI governance, shadow AI, retrieval augmented generation, task decomposition, automation complacency, AI ROI, AI evals, model routing, LLM cost management, AI center of excellence, AI liability, AI maturity model, AI agents, agentic workflows, tool use, agent guardrails, trajectory evaluation"
+---
+
+<p class="lede">
+  Most AI adoption inside organisations fails for the same reason most enterprise software initiatives have always failed: the tool arrived before the problem was specified. A team is handed a chatbot licence, or a mandate to "use more AI," and six months later has a pile of unused seats and a handful of individuals who found something useful entirely on their own initiative, in spite of the rollout, not because of it. Integrating AI well is a workflow redesign exercise that happens to involve a new class of tool, not a procurement decision or a training day, and it needs the same discipline any other operational change would get: start from the bottleneck, not the technology.
+</p>
+
+<figure>
+  <img src="/assets/images/mission-control-room.jpg" alt="Rows of consoles at NASA's Mission Control Center in Houston, with flight controllers monitoring screens of telemetry and a bank of large displays at the front of the room">
+  <figcaption><strong>Figure.</strong> Human-in-the-loop AI adoption looks less like a single approve button and more like a control room: specialists watching dashboards, each responsible for one slice of a complex, partly automated system, ready to intervene the moment something drifts outside tolerance. Photo: NASA/Lauren Harnett, public domain, via Wikimedia Commons.</figcaption>
+</figure>
+
+<h2>Start from the workflow, not the tool</h2>
+
+<p>
+  Before selecting any product, the useful question is "where does work stall, and why," not "where could we use AI." Map the workflow as it exists today: where time goes, where errors originate, where a task sits waiting on a person, not blocked by anything structural. Most of the durable wins turn out to live in unglamorous places: first-draft generation, summarisation of long documents nobody reads in full, extracting structured data from unstructured text, triaging inbound requests, searching internal knowledge that technically exists but is practically unfindable. These are boring precisely because they are well-specified: the input and desired output are both clear, which is exactly the property that makes a task tractable for a language model and easy to check. Starting from "what tool should we buy" instead inverts this, and reliably produces deployments optimised for demo appeal, not for removing an actual constraint.
+</p>
+
+<h2>Build, buy, or wrap</h2>
+
+<p>
+  Once a real bottleneck is identified, there are three different ways to address it with AI, and picking the wrong one is a common, expensive mistake. <strong>Buying</strong> an off-the-shelf tool (an enterprise chat assistant, a vertical SaaS product with AI features built in) is usually right when the task is generic and the tool's training data already covers it well: drafting, coding assistance, meeting summarisation. <strong>Wrapping</strong>, building a thin internal application around a foundation model's API, typically with retrieval over internal documents (RAG) so the model can answer questions grounded in the organisation's own data instead of only its training data, is usually right when the task is specific to the business but the underlying reasoning capability doesn't need to be specialised: customer support grounded in your own documentation, contract review against your own templates, internal search. <strong>Building</strong>, fine-tuning a model or investing in a custom pipeline with domain-specific evaluation, is rarely the right first move, and is usually only justified once a wrapped solution has proven the use case and hit a capability ceiling a general-purpose model plus good prompting and retrieval can't clear. Reaching for the most technically sophisticated option first is the equivalent of building custom ERP software before checking whether an off-the-shelf package would do.
+</p>
+
+<h2>Evaluating models and vendors without being sold to</h2>
+
+<p>
+  Model selection gets treated as a benchmark-chasing exercise (whichever provider currently tops a leaderboard) when the criteria that matter for a production deployment rarely show up on a leaderboard at all. Latency and throughput determine whether a model is usable inside an interactive workflow versus only a batch one; context window size determines how much of a document or conversation history can be given to the model at once without a separate retrieval step; data residency and training-on-your-data policies determine whether a vendor is even usable under the organisation's existing contractual and regulatory obligations, which for a regulated industry can eliminate most of the field before capability is even discussed. Cost per query matters less in isolation than cost per <em>successful</em> query, which is the same number divided by however often the output needs to be discarded and redone: a cheaper model with a higher failure rate on your specific task is not cheaper. None of this is a one-time decision either: the field moves quickly enough that a vendor evaluation done a year ago is stale, and locking a whole workflow to one provider's API without an abstraction layer in between makes switching, when it eventually becomes worth doing, far more expensive than it needed to be.
+</p>
+
+<h2>The unglamorous prerequisite: data readiness</h2>
+
+<p>
+  AI projects rarely stall in the pitch deck. They stall in production, and the cause is almost always data, not model capability. Retrieval-augmented systems are only as good as what they retrieve, which means document hygiene (consistent formatting, version control so the model isn't retrieving a superseded policy, clear ownership so someone is responsible for keeping a knowledge base current) is doing more work than the choice of model. Access control is the other half of this: an internal assistant with retrieval over "everything" is a data-governance incident waiting to happen the first time it surfaces a document to someone who shouldn't see it, and permissions need to be enforced at the retrieval layer, not bolted on afterward as a prompt instruction asking the model to behave. None of this is exciting work, and none of it shows up in a product demo, which is why it is the thing most often skipped and the thing whose absence most reliably kills a deployment six weeks after launch.
+</p>
+
+<h2>Evals: testing a probabilistic system like software</h2>
+
+<p>
+  Conventional software testing assumes determinism: the same input produces the same output, so a test suite that passed yesterday can be trusted to still mean something today unless the code changed. A language-model-based system breaks that assumption twice over: the same input can produce a different output from one call to the next, and a provider can silently update the underlying model behind an API that otherwise looks unchanged, quietly shifting behaviour on a workflow nobody touched. The discipline that fills this gap is building an evaluation set (an "evals" suite): a curated collection of representative inputs, paired with either a known correct answer or a rubric a human or a second model can score outputs against, run regularly and specifically after any change to a prompt, a retrieval configuration, or a model version. Without this, a "small tweak" to a system prompt to fix one observed failure routinely fixes that failure while silently breaking three others nobody was watching for, and the only way anyone finds out is a user complaint days or weeks later. An evals suite is the direct substitute for the regression-test safety net that ordinary software gets for free from being deterministic in the first place, not optional infrastructure for a serious deployment. For an agent, not a single-shot generator, evaluation has to extend to the whole trajectory, not just the final answer: two agent runs can reach the same correct final result by one efficient path and one that called an expensive tool five unnecessary times, or worse, reach the same final result after taking a risky, only-accidentally-non-harmful action along the way, and a trajectory-blind eval would score both runs identically.
+</p>
+
+<h2>Cost management and model routing</h2>
+
+<p>
+  Treating every query as though it needs the most capable, most expensive model available is a common and unnecessary cost, because task difficulty within a single workflow is rarely uniform. A support system fields plenty of simple, high-confidence questions alongside a smaller number of difficult ones, and routing the easy majority to a fast, cheap model while reserving an expensive frontier model for the queries that need it (flagged by low confidence, explicit complexity signals, or by first attempting the cheap model and escalating on failure) can cut spend substantially with little to no quality loss on the bulk of traffic. Prompt and response caching compounds this further: if a meaningful fraction of queries are exact or near-duplicates (common in customer support, internal FAQ-style tools, and any workflow with a long tail of repeat questions), serving a cached response costs nothing and returns instantly, and it is pure waste to pay full inference cost for an answer already computed once. Agents make this sharper, not optional: a single agent task can involve dozens of model calls and tool invocations chained together, so the same per-query routing choice is now multiplied across every step, and the step-count limits already recommended above for runaway-loop safety are doing double duty as a cost control, capping the worst case for both risk and spend at once.
+</p>
+
+<div class="interactive-widget" id="cost-widget">
+  <p class="interactive-widget-title">Interactive: what routing saves</p>
+  <div class="interactive-widget-controls">
+    <label>Monthly queries = <input type="number" id="cost-vol" value="500000" step="10000" style="width:7em"></label>
+    <label>% routable to the cheap model = <span id="cost-frac-val">80</span>%
+      <input type="range" id="cost-frac" min="0" max="100" step="1" value="80">
+    </label>
+  </div>
+  <div class="interactive-widget-controls">
+    <label>Cheap model, $ / 1,000 queries = <input type="number" id="cost-cheap" value="0.20" step="0.05" style="width:5em"></label>
+    <label>Frontier model, $ / 1,000 queries = <input type="number" id="cost-expensive" value="6.00" step="0.5" style="width:5em"></label>
+  </div>
+  <svg viewBox="0 0 420 200" width="420" height="200" id="cost-svg" aria-label="Two bar charts on a shared dollar axis: a solid bar for monthly spend with everything routed to the frontier model, next to a bar split into a green cheap-model segment and a rust frontier-model segment for spend with routing enabled"></svg>
+  <p class="interactive-widget-readout" id="cost-out"></p>
+  <p class="interactive-widget-caption">Watch the green segment grow, and the whole "with routing" bar shrink against the shared axis, as you raise the routable percentage: the gap between the two bar tops <em>is</em> the saving. This only models raw inference spend, not the (real, and harder to estimate) cost of the extra failed-then-escalated calls a too-aggressive routing threshold produces. Treat the savings figure as an upper bound, not a promise.</p>
+</div>
+
+<script>
+(function () {
+  var vol = document.getElementById('cost-vol'), frac = document.getElementById('cost-frac');
+  var cheap = document.getElementById('cost-cheap'), exp = document.getElementById('cost-expensive');
+  var fracVal = document.getElementById('cost-frac-val'), out = document.getElementById('cost-out');
+  var svg = document.getElementById('cost-svg');
+
+  var RUST = '#c1440e', GREEN = '#1a7a4c', GREY = '#94a3b8';
+  var chartTop = 20, chartBottom = 160, chartH = chartBottom - chartTop;
+  var barW = 90, bar1X = 90, bar2X = 260;
+
+  function fmt(n) {
+    return '$' + Math.round(n).toLocaleString();
+  }
+
+  function drawChart(allExpensive, cheapSpend, expRemainder, routed) {
+    var maxVal = Math.max(allExpensive, routed, 1) * 1.15;
+    var scale = chartH / maxVal;
+
+    function barTop(val) { return chartBottom - val * scale; }
+
+    var bar1H = allExpensive * scale;
+    var greenH = cheapSpend * scale;
+    var rustH = expRemainder * scale;
+
+    var parts = [];
+
+    // Shared $ axis: two gridlines for scale, plus the baseline.
+    [1 / 3, 2 / 3].forEach(function (frac2) {
+      var gv = maxVal * frac2;
+      var gy = barTop(gv);
+      parts.push('<line x1="55" y1="' + gy + '" x2="400" y2="' + gy + '" stroke="' + GREY + '" stroke-width="1" stroke-dasharray="3 3"/>');
+      parts.push('<text x="50" y="' + (gy + 4) + '" font-size="10" text-anchor="end" fill="' + GREY + '">' + fmt(gv) + '</text>');
+    });
+    parts.push('<line x1="55" y1="' + chartBottom + '" x2="400" y2="' + chartBottom + '" stroke="' + GREY + '" stroke-width="1.5"/>');
+
+    // Bar 1: no routing, a single solid rust bar at the frontier-only total.
+    parts.push('<rect x="' + bar1X + '" y="' + barTop(allExpensive) + '" width="' + barW + '" height="' + bar1H + '" fill="' + RUST + '"/>');
+    parts.push('<text x="' + (bar1X + barW / 2) + '" y="' + (barTop(allExpensive) - 6) + '" font-size="12" text-anchor="middle" fill="var(--text)" font-weight="bold">' + fmt(allExpensive) + '</text>');
+    parts.push('<text x="' + (bar1X + barW / 2) + '" y="176" font-size="12" text-anchor="middle" fill="var(--text)">No routing</text>');
+
+    // Bar 2: with routing, stacked green (cheap-model spend) under rust (remaining frontier spend).
+    parts.push('<rect x="' + bar2X + '" y="' + barTop(cheapSpend) + '" width="' + barW + '" height="' + greenH + '" fill="' + GREEN + '"/>');
+    parts.push('<rect x="' + bar2X + '" y="' + barTop(routed) + '" width="' + barW + '" height="' + rustH + '" fill="' + RUST + '"/>');
+    parts.push('<text x="' + (bar2X + barW / 2) + '" y="' + (barTop(routed) - 6) + '" font-size="12" text-anchor="middle" fill="var(--text)" font-weight="bold">' + fmt(routed) + '</text>');
+    parts.push('<text x="' + (bar2X + barW / 2) + '" y="176" font-size="12" text-anchor="middle" fill="var(--text)">With routing</text>');
+
+    svg.innerHTML = parts.join('');
+  }
+
+  function render() {
+    var v = parseFloat(vol.value) || 0;
+    var f = parseFloat(frac.value) / 100;
+    fracVal.textContent = Math.round(f * 100);
+    var c = parseFloat(cheap.value) || 0;
+    var e = parseFloat(exp.value) || 0;
+
+    var allExpensive = (v / 1000) * e;
+    var cheapSpend = (v * f / 1000) * c;
+    var expRemainder = (v * (1 - f) / 1000) * e;
+    var routed = cheapSpend + expRemainder;
+    var savings = allExpensive - routed;
+    var pct = allExpensive > 0 ? (savings / allExpensive) * 100 : 0;
+
+    out.innerHTML = 'Everything through the frontier model: <strong>$' + allExpensive.toLocaleString(undefined, {maximumFractionDigits: 0}) + '/month</strong><br>' +
+      'Routed: <strong>$' + routed.toLocaleString(undefined, {maximumFractionDigits: 0}) + '/month</strong><br>' +
+      'Savings: <strong>$' + savings.toLocaleString(undefined, {maximumFractionDigits: 0}) + '/month (' + pct.toFixed(0) + '%)</strong>';
+
+    drawChart(allExpensive, cheapSpend, expRemainder, routed);
+  }
+  [vol, frac, cheap, exp].forEach(function (el) { el.addEventListener('input', render); });
+  render();
+})();
+</script>
+
+<h2>Where AI saves time, and where it doesn't</h2>
+
+<p>
+  The useful distinction is which <em>tasks</em> within a role are automatable, not "which jobs will AI replace," since almost no real job is a single task. Tasks that are high-volume, well-specified, and individually low-stakes (a wrong answer is cheap to catch and cheap to fix) are the strongest candidates: drafting, not deciding; first-pass classification, not final judgment; generating options, not choosing between them. Tasks that are novel, judgment-heavy, or where a wrong answer is expensive and hard to detect (strategic decisions, anything requiring genuine accountability, situations with no historical precedent to draw on) are exactly where current models are least reliable and where the cost of an unnoticed error is highest. The organisations that get the most value are the ones that redesign roles around this split explicitly: freeing people from the high-volume, well-specified portion of their work so more of their time goes to the judgment-heavy portion that needed a person, not by assuming a tool that is excellent at drafting is therefore ready to decide.
+</p>
+
+<h2>Agents: when the system takes actions on its own</h2>
+
+<p>
+  Everything so far has mostly assumed a model that produces text a person then reads, uses, or discards: a fundamentally reviewable output. An agent is a different architecture: given a goal, it plans a sequence of steps, calls tools (searching a database, calling an internal API, sending an email, writing to a file, executing code) based on what each previous step returned, and decides what to do next largely on its own, often across many steps with no person looking at the intermediate ones. This is a genuine capability increase (a well-built agent can complete a multi-step task no single prompt-and-response exchange could, working through a research task, a data-cleanup job, or a customer request end to end), and it is also a categorically different risk profile from anything discussed above, because the thing being reviewed is no longer a draft, it's a sequence of actions, some of which may already be irreversible by the time anyone looks.
+</p>
+
+<p>
+  Three design disciplines matter specifically for agents and don't have a clean analogue in single-shot generation. <strong>Scoped, least-privilege tool access</strong>: an agent should hold only the specific tool permissions its task requires, and nothing broader "in case it's useful": an agent wired up with blanket database write access or an unrestricted email-sending tool because it was convenient during development is a standing liability, not a capability, and the permission scope is doing exactly the job a firewall rule or a user's access grant does for any other piece of software that acts on a system. <strong>Action-level approval gates, not just output review</strong>: for any action with real-world consequence (sending something externally, spending money, deleting or overwriting data, anything hard to undo), the approval checkpoint belongs immediately before that specific action, not at the end of the whole task, because by the end of the task the consequential step may already have happened. Which actions warrant a gate and which don't is the same reversibility-and-stakes judgment call the earlier task-versus-job distinction was already making, applied one level down: to individual steps inside a single task, not the task as a whole. <strong>Full trajectory logging</strong>: debugging or auditing an agent after the fact requires the entire chain (every intermediate tool call, its input, its output, and the reasoning step that led to it), not just the final result, since a wrong final answer is frequently the product of one bad decision several steps back that then compounded, and without the full trace there is no way to tell whether the fix belongs at step one or step five.
+</p>
+
+<p>
+  Agents also introduce a specific operational failure mode worth planning for explicitly: the runaway loop, where an agent gets stuck retrying a failing step, or a multi-agent setup falls into agents repeatedly calling each other without converging, burning tool calls and inference cost with nothing to show for it. The fix is the same one any autonomous system needs: hard limits (a maximum step count or time budget per task, past which the agent halts and escalates instead of continuing indefinitely), a circuit breaker that stops execution outright when the same failure repeats past a small threshold, and monitoring on cost and step count per task so a runaway is caught by an alert, not discovered at the end of the month in a bill. None of this is exotic; it's the same operational discipline any system that can take unsupervised, repeated action has always needed, applied to a system that can now decide its own next step, not just follow a fixed script.
+</p>
+
+<h2>Human-in-the-loop design, done properly</h2>
+
+<p>
+  "Human in the loop" is frequently satisfied on paper by a human clicking approve, which is not the same thing as a human checking the work. Automation complacency, well documented in aviation and medical-device human-factors research long before language models existed, is the tendency for a reviewer's vigilance to degrade in direct proportion to how rarely the system they are reviewing is wrong. A review step only functions as a real check if the reviewer has both the incentive and the practical ability to catch an error, which means the review interface has to make errors easy to spot (surfacing the model's sources and reasoning, not just its conclusion), the volume has to stay low enough that reviewers aren't rubber-stamping under time pressure, and the cases that matter most (novel situations, edge cases, anything the system flags as low-confidence) should be the ones routed to a human first, not the ones a tired reviewer happens to sample. Designing the loop around what keeps a human's judgment engaged is a substantially harder and more important problem than wiring up the approval button.
+</p>
+
+<h2>Change management is the actual bottleneck</h2>
+
+<p>
+  The limiting factor in most AI rollouts is adoption, not the technology's capability, and adoption is a change-management problem with a long, well-understood literature that predates AI by decades. Resistance rarely comes from technophobia. It comes from unclear incentives (does using this make my job easier, or does it just make me faster at the same workload with no corresponding change in expectations), from the way the introduction implicitly threatens job security without anyone addressing it directly, or from early versions rolled out before they worked well enough to be trustworthy, poisoning the well for the improved version that came later. What moves adoption: visible early wins from credible internal messengers (a respected peer describing a specific time they saved, not a mandate from leadership), enough training that people cross the threshold from "interesting but unfamiliar" to "faster than the old way for me personally," and explicit, honest communication about what the tool is and isn't meant to change about a role, instead of leaving people to fill that uncertainty in with their own, usually worse, assumptions.
+</p>
+
+<h2>Who owns it: organisational design for an AI capability</h2>
+
+<p>
+  Two failure modes sit at opposite ends of how organisations structure ownership of AI work, and most real setups are an uneasy, under-specified mix of both. Fully centralised ownership (a single AI or "innovation" team building on behalf of the whole organisation) tends to produce technically competent solutions that don't fit how any specific team works, because the people closest to a workflow's real constraints aren't the people building the tool for it, and the central team becomes a bottleneck every other team has to queue behind. Fully distributed ownership (every team picks its own tools and builds its own solutions) produces faster, better-fitted point solutions but no shared infrastructure, no consistent security review, and the same integration problem solved five slightly different, incompatible ways across the organisation. The pattern that tends to work is a platform-and-embedded split: a small central team owns the shared, hard infrastructure (approved model access, the retrieval pipeline, evaluation tooling, security review) as a service the rest of the organisation builds on, while the actual workflow-specific applications are built by, or in close partnership with, the teams who will use them and understand their real failure modes. Getting this wrong is rarely a technology failure; it shows up as either a queue of unshipped requests in front of an overloaded central team, or a sprawl of ungoverned point solutions nobody can secure or maintain.
+</p>
+
+<h2>Governance and the shadow AI problem</h2>
+
+<p>
+  In the absence of a sanctioned path, employees route around restrictions with personal accounts on public tools, pasting in whatever data the task requires: "shadow AI," directly analogous to the shadow IT problem of employees standing up their own SaaS subscriptions to route around slow procurement, except now the material being pasted into a third-party service can include customer data, source code, or unreleased strategy documents. Banning it pushes the behaviour further underground and further from any visibility. The real fix is providing a sanctioned, good enough alternative quickly, paired with a clear, specific usage policy (what data classes are and aren't permitted, which tools are approved, who to ask about an edge case) that is enforceable, not aspirational. An organisation with no visibility into what data is already leaving through unofficial AI use is already exposed, not still deciding whether to adopt AI, and it hasn't measured that exposure yet.
+</p>
+
+<h2>Legal, IP, and liability, briefly</h2>
+
+<p>
+  Three questions come up in almost every serious deployment and deserve a direct answer, not being left ambiguous until a dispute forces the issue. Who owns AI-generated output, and does the answer change if a customer, not an employee, is the one who prompted its creation? Contract and terms-of-service language should say this explicitly, not rely on default copyright rules that are still unsettled in several jurisdictions for wholly AI-generated work. What is the organisation's exposure if an AI system gives a customer-facing answer that turns out to be wrong (a wrong price quoted by a support bot, a wrong policy explanation, a fabricated citation in a professional-services context), and is that risk covered by existing liability insurance, or does it need a specific rider once a model is making representations to customers without a human necessarily reviewing each one first? And where training or context data includes third-party material (customer contracts, licensed content, scraped or purchased datasets), does the organisation's licence to that material extend to using it this way, since "we already had access to this data" and "we're licensed to feed this data into a model and act on its output" are not the same claim and are not automatically both true. None of these have uniform answers yet across jurisdictions, which is why they need a specific, current legal review before a customer-facing deployment, not an assumption that existing software contracts already cover it.
+</p>
+
+<h2>Measuring whether any of it worked</h2>
+
+<p>
+  The vanity metric is adoption for its own sake (seats licensed, queries run, "percentage of employees using AI weekly"), none of which says anything about whether the organisation is better off. The metrics that matter are tied to the original bottleneck the whole exercise was supposed to address: cycle time on the specific workflow that was targeted, error rate before and after (not just speed, since a faster wrong answer is a net loss), and a genuine cost comparison that includes the review and correction overhead a new tool introduces, not just the time it appears to save on the first pass. Measuring before deploying, against a real baseline, is the only way to tell a genuine improvement from a rollout that merely feels modern, and it is the step most often skipped, because measuring requires admitting upfront that the answer might be no.
+</p>
+
+<h2>Where an organisation sits on the maturity curve</h2>
+
+<p>
+  It's worth being honest about which of roughly four stages an organisation is in, since the right next move depends entirely on the answer and skipping a stage is a common way to waste the previous one's investment. <strong>Experimentation</strong> is individuals and small teams trying tools on their own initiative, with no shared infrastructure and no governance: valuable for surfacing real use cases, but not yet something to build durable process around. <strong>Point solutions</strong> is one or two specific workflows automated well, each often built somewhat in isolation, proving genuine value on a narrow scope without yet sharing infrastructure between them. <strong>Platform</strong> is when enough point solutions exist that the shared pieces (model access, retrieval, evaluation, governance) get consolidated into common infrastructure the previous section describes, turning "rebuild this from scratch every time" into "assemble this from existing parts." <strong>Embedded</strong> is the stage most organisations describe themselves as aiming for and few have reached: AI-assisted steps are part of how a workflow works, evaluated and maintained with the same ordinary rigour as any other piece of the process, no longer a distinct initiative with its own budget line and steering committee. Trying to build platform-stage infrastructure before any point solution has proven real value is a common and expensive way to get the ordering backwards.
+</p>
+
+<h2>Iterate, don't mandate</h2>
+
+<p>
+  The organisations that integrate AI well treat it as an ongoing capability to be built, not a project with a launch date and a ribbon-cutting. That means picking one real bottleneck, shipping a narrow solution to it, measuring, and only then expanding scope with the credibility (and the internal expertise) that a genuine early win provides. It is not a simultaneous, organisation-wide mandate that guarantees the rollout is only as good as its weakest, least-prepared team. The pattern is unglamorous and slower than a big-bang announcement, and it is also the version that is still working, and still improving, eighteen months later.
+</p>

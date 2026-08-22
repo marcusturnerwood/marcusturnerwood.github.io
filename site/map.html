@@ -5,9 +5,14 @@ permalink: /map/
 leaflet: true
 ---
 
-<p>Places I've been.{% if jekyll.environment == 'development' %} Click "Add pin" below, then click the map to drop a new one.{% endif %}</p>
-
 <div class="post-content">
+  {%- if jekyll.environment == 'development' -%}
+  <div class="places-toolbar" id="places-toolbar">
+    <button type="button" id="places-add-toggle">Add pin</button>
+    <span class="places-status" id="places-status"></span>
+  </div>
+  {%- endif -%}
+
   <div class="places-layout">
     <div id="places-map" class="places-map" data-editable="{% if jekyll.environment == 'development' %}true{% else %}false{% endif %}"></div>
     <ul class="places-list" id="places-list" aria-label="Visited places"></ul>
@@ -15,6 +20,30 @@ leaflet: true
 </div>
 
 <script type="application/json" id="places-data">{{ site.data.places | jsonify }}</script>
+
+<div id="places-lightbox" class="places-lightbox" hidden>
+  <div class="places-lightbox-backdrop" data-lightbox-close></div>
+  <button type="button" class="places-lightbox-close" data-lightbox-close aria-label="Close">
+    <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5l10 10M15 5L5 15"/></svg>
+  </button>
+  <div class="places-lightbox-row">
+    <button type="button" class="places-lightbox-nav places-lightbox-prev" data-lightbox-prev aria-label="Previous photo">
+      <svg viewBox="0 0 20 20" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12.5 4.5L6.5 10l6 5.5"/></svg>
+    </button>
+    <div class="places-lightbox-stage">
+      <img class="places-lightbox-img" id="places-lightbox-img" alt="">
+      <p class="places-lightbox-counter" id="places-lightbox-counter"></p>
+    </div>
+    <button type="button" class="places-lightbox-nav places-lightbox-next" data-lightbox-next aria-label="Next photo">
+      <svg viewBox="0 0 20 20" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7.5 4.5l6 5.5-6 5.5"/></svg>
+    </button>
+  </div>
+  <div class="places-lightbox-caption">
+    <h3 id="places-lightbox-title"></h3>
+    <p id="places-lightbox-date"></p>
+    <p id="places-lightbox-note"></p>
+  </div>
+</div>
 
 {%- if jekyll.environment == 'development' -%}
 <div id="place-form-modal" class="place-form-modal" hidden>
@@ -43,11 +72,6 @@ leaflet: true
       <button type="button" id="place-form-save" class="place-form-save">Save pin</button>
     </div>
   </div>
-</div>
-
-<div class="places-toolbar" id="places-toolbar">
-  <button type="button" id="places-add-toggle">Add pin</button>
-  <span class="places-status" id="places-status"></span>
 </div>
 {%- endif -%}
 
