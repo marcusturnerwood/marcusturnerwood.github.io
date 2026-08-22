@@ -11,7 +11,8 @@ layout: default
 
   {{ content }}
 
-  {%- assign projects = site.projects | sort: "date" | reverse -%}
+  {%- assign published_projects = site.projects | where_exp: "p", "p.draft != true" -%}
+  {%- assign projects = published_projects | sort: "date" | reverse -%}
 
   {%- if projects and projects.size > 0 -%}
     <ul class="post-list post-list--projects">

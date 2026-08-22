@@ -1,0 +1,29 @@
+---
+layout: project
+title: "Stellarator Plasma Modelling and PINNs"
+date: 2025-02-15
+status: "Paused"
+image: /assets/images/proxima-fusion-logo.svg
+tags: [Plasma Physics, Stellarators, VMEC, Neural Networks]
+description: "Stellarator equilibrium modelling in VMEC/SPFINCS, alongside a paused physics-informed neural network for confinement-time prediction."
+---
+
+<p class="lede">
+  Equilibrium modelling of stellarator plasmas using VMEC and SPFINCS, alongside a physics-informed neural network (PINN) intended to predict confinement time directly from equilibrium parameters, currently paused.
+</p>
+
+<h2>What it covers</h2>
+
+<p>
+  Unlike a tokamak, a stellarator confines plasma using a magnetic field shaped entirely by external coils, no driven plasma current required, which removes some tokamak instabilities at the cost of a much more complex three-dimensional coil and field geometry. Modelling that equilibrium is the first step in evaluating any stellarator design: VMEC (the Variational Moments Equilibrium Code) solves for the nested flux-surface equilibrium of a given coil/plasma configuration, and SPFINCS was used alongside it for further equilibrium and stability analysis. The further, still-paused, part of this project is a physics-informed neural network intended to take equilibrium parameters as input and predict energy confinement time directly, incorporating the governing MHD equilibrium relations as physical constraints on the network's training rather than leaving it to learn them purely from data.
+</p>
+
+<p>
+  The equilibrium dataset used to train and validate the models came from Proxima Fusion, a stellarator-focused fusion company, providing a substantially larger and more realistic set of configurations to work from than would have been practical to generate from scratch with VMEC/SPFINCS runs alone.
+</p>
+
+<h2>Status</h2>
+
+<p>
+  Equilibrium modelling in VMEC/SPFINCS is complete for the configurations examined. The PINN confinement-time predictor is paused, stopped short of a full training run by insufficient computational power rather than any conceptual blocker: incorporating the MHD equilibrium constraints into the loss function makes each training step considerably more expensive than a purely data-driven fit, and the available hardware wasn't enough to get through full training runs in reasonable time.
+</p>

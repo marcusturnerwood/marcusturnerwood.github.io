@@ -1,0 +1,32 @@
+---
+layout: project
+title: "NeuWave Ship Tracking"
+date: 2025-02-05
+status: "Completed"
+image: /assets/images/neuwave-ship-tracking-map.png
+tags: [Python, AIS, Geospatial, Data Visualisation]
+description: "A Python tool decoding AIS vessel broadcasts (speed, course, heading, anchor state) into a live, clustered map."
+---
+
+<p class="lede">
+  A Python tool for tracking vessels from their AIS (Automatic Identification System) broadcasts, decoding position, speed, course, heading, and navigational status into a live, clustered map.
+</p>
+
+<figure>
+  <img src="/assets/images/neuwave-ship-tracking-map.png" alt="A map of shipping around Malaysia, Singapore, and Borneo showing clustered vessel markers, with a popup for one ship showing its ID, received timestamp, status, speed, course, and heading">
+  <figcaption><strong>Figure.</strong> The tracking map: clustered vessel markers, with per-ship detail (ID, status, speed, course, heading) on click.</figcaption>
+</figure>
+
+<h2>What it covers</h2>
+
+<p>
+  Ships broadcast their position and state continuously over AIS, a maritime radio system originally intended for collision avoidance; that data stream is also a rich, freely available source of vessel-traffic information once it's decoded and put on a map. NeuWave ingests these broadcasts and extracts, per vessel, its Maritime Mobile Service Identity (MMSI, used as a ship ID), position, speed over ground (SOG), course over ground (COG), true heading, rate of turn, and navigational status (under way, at anchor, moored, and so on). With enough vessels in a busy shipping lane, plotting every marker individually gets unreadable fast, so the map clusters nearby ships and expands to individual markers with full detail on click or zoom.
+</p>
+
+<h2>Headline results</h2>
+
+<ul>
+  <li>Live decoding of AIS messages into per-vessel state: ID, timestamp, navigational status, speed, course, heading, and rate of turn, all shown in the click-through popup pictured.</li>
+  <li>Marker clustering keeps busy shipping lanes (the Strait of Malacca and the waters around Singapore and Borneo, pictured) readable at a glance, while still allowing drill-down to an individual ship's exact state.</li>
+  <li>The pictured area shows the kind of traffic density AIS tracking is most useful for: dense clusters at anchorages and port approaches, thinning out along open transit routes.</li>
+</ul>

@@ -1,0 +1,42 @@
+---
+layout: project
+title: "Velostat Pressure-Sensitive Bed Sheet"
+date: 2025-01-25
+status: "Completed"
+image: /assets/images/velostat-copper-sensor-sheet.png
+tags: [Sensors, Velostat, Microcontroller, Healthcare]
+description: "A pressure-sensitive sheet built from Velostat and copper tape, read by a microcontroller and rendered as a live heatmap, aimed at falls detection and pressure-ulcer management."
+---
+
+<p class="lede">
+  A low-cost pressure-mapping bed sheet, built from a layered grid of Velostat (a piezoresistive plastic film that lowers its resistance under pressure) and copper-tape electrodes, read out by a microcontroller and rendered as a live heatmap.
+</p>
+
+<figure>
+  <img src="/assets/images/velostat-wiring-breadboard.png" alt="The Arduino Mega and breadboard wiring for the row/column Velostat matrix readout">
+  <figcaption><strong>Figure.</strong> The readout electronics: an Arduino Mega wired to the row/column matrix over a breadboard.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/velostat-copper-sensor-sheet.png" alt="The folded copper-tape and Velostat sensor sheet">
+  <figcaption><strong>Figure.</strong> The copper-tape/Velostat sensor sheet itself, folded up.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/velostat-heatmap-output.png" alt="A 2D heatmap of pressure readings across the sensor sheet">
+  <figcaption><strong>Figure.</strong> An example pressure heatmap read from the sheet.</figcaption>
+</figure>
+
+<h2>What it covers</h2>
+
+<p>
+  Pressure ulcers and unwitnessed falls are both, in essence, problems of not knowing what's happening to someone's body against a surface over time. A grid of Velostat sandwiched between rows and columns of copper tape turns that into a readable signal: each intersection acts as a pressure-dependent resistor, and scanning rows against columns with a microcontroller gives a full pressure map of the sheet at a given moment. Wiring, described here, runs the row/column matrix into a microcontroller (an Arduino Mega, chosen for its high pin count) over a breadboard, with the readout loop scanning the matrix and streaming pressure values out for visualisation.
+</p>
+
+<h2>Headline results</h2>
+
+<ul>
+  <li>A working row/column Velostat matrix, wired end-to-end from sensor sheet through breadboard to microcontroller, producing a usable resistance-to-pressure signal at each grid intersection.</li>
+  <li>Live pressure readings render as a 2D heatmap (pictured), showing the concentration and distribution of load across the sheet, the basis for detecting sustained pressure in one place (relevant to ulcer risk) or its sudden absence (relevant to falls).</li>
+  <li>The copper-tape/Velostat construction keeps the whole sensor sheet low-cost and physically flexible compared with commercial pressure-mapping mattresses, at the cost of a coarser and noisier grid resolution.</li>
+</ul>

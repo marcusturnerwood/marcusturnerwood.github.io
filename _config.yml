@@ -14,6 +14,7 @@ minima:
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+  - jekyll-sitemap
 
 # Non-Jekyll source files that live inside content directories (e.g. an original
 # .docx alongside its converted .html draft in _drafts/) must be excluded, or

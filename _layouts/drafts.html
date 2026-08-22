@@ -62,6 +62,42 @@ layout: default
   {%- else -%}
     <p>No drafts found. Run <code>jekyll serve --drafts</code> locally to see and reorder <code>_drafts/</code> here.</p>
   {%- endif -%}
+
+  {%- comment -%}
+    Project drafts are a different mechanism from post drafts: _projects has
+    output: true and no --drafts-style flag, so a draft project is a normal
+    doc in site.projects at all times, in every environment, marked with
+    `draft: true` and filtered out of the public /projects/ list in
+    _layouts/projects_home.html instead. That filter only hides it from THAT
+    page though — it'd still render right here on a production /drafts/ page
+    unless this whole section is also environment-gated, so it is.
+  {%- endcomment -%}
+  {%- if jekyll.environment == 'development' -%}
+    {%- assign draft_projects_raw = site.projects | where_exp: "p", "p.draft == true" -%}
+    {%- assign draft_projects_size = draft_projects_raw | size -%}
+    {%- assign draft_projects_ordered = "" | split: "" -%}
+    {%- if draft_projects_size > 0 -%}
+      {%- assign draft_projects_pre = draft_projects_raw | where_exp: "d", "d.order" -%}
+      {%- assign draft_projects_pre_size = draft_projects_pre | size -%}
+      {%- if draft_projects_pre_size > 0 -%}
+        {%- assign draft_projects_ordered = draft_projects_pre | sort: 'order' -%}
+      {%- endif -%}
+      {%- assign draft_projects_unordered = draft_projects_raw | where_exp: "d", "d.order == nil" -%}
+      {%- if draft_projects_unordered == nil -%}{%- assign draft_projects_unordered = "" | split: "" -%}{%- endif -%}
+      {%- assign draft_projects = draft_projects_ordered | concat: draft_projects_unordered -%}
+    {%- endif -%}
+
+    <h2 class="post-list-heading">Draft projects</h2>
+    {%- if draft_projects.size > 0 -%}
+      <ul class="post-list post-list--projects" data-orderable data-group="draft-projects" data-order-field="order" data-status-for="drafts-reorder-status">
+        {%- for project in draft_projects -%}
+          {%- include post-card.html post=project date_format=date_format orderable=true series="draft-projects" -%}
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <p>No draft projects. Add <code>draft: true</code> to a project's front matter in <code>_projects/</code> to see it here.</p>
+    {%- endif -%}
+  {%- endif -%}
 </div>
 
 {%- if jekyll.environment == 'development' -%}

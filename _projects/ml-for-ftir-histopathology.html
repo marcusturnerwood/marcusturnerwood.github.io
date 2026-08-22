@@ -1,0 +1,32 @@
+---
+layout: project
+title: "Machine Learning for FTIR Histopathology"
+date: 2025-01-10
+status: "Completed"
+image: /assets/images/ftir-histopathology-ml-figures.png
+tags: [Machine Learning, Spectroscopy, Histopathology, SVM, KAN]
+description: "Comparing CNNs, hierarchical clustering, Kolmogorov-Arnold Networks, and SVMs on spectro-spatial FTIR biopsy data for tumour detection and localisation."
+---
+
+<p class="lede">
+  A comparison of several machine-learning approaches to classifying tissue type directly from Fourier-transform infrared (FTIR) spectra taken across biopsy sections, framed as both a classification and a spatial-localisation problem.
+</p>
+
+<figure>
+  <img src="/assets/images/ftir-histopathology-ml-figures.png" alt="Four panels: a confusion matrix for the RBF-kernel SVM, a PCA projection of support vectors, a 3D PCA projection, and a UMAP projection coloured by tissue class">
+  <figcaption><strong>Figure.</strong> RBF-kernel SVM confusion matrix, PCA/3D PCA projections of the same classifier's support vectors, and a UMAP projection of the full spectral dataset coloured by tissue class.</figcaption>
+</figure>
+
+<h2>What it covers</h2>
+
+<p>
+  Each pixel of an FTIR-imaged biopsy section carries a full infrared absorbance spectrum, so a slide is really a spectral cube: two spatial dimensions and one spectral one. That structure motivates comparing methods that treat the data very differently. Hierarchical clustering and dimensionality reduction (PCA, UMAP) were used first to see whether tissue classes separate at all in spectral space before any labels are used. Supervised classifiers were then trained on the labelled spectra directly: support vector machines with an RBF kernel, convolutional networks that treat local spectral neighbourhoods like a 1D image, and Kolmogorov&ndash;Arnold Networks (KANs), a more recent architecture that replaces fixed activation functions with learned univariate splines on each edge, tried here as an alternative to the usual CNN/MLP approaches for this kind of tabular-spectral data.
+</p>
+
+<h2>Headline results</h2>
+
+<ul>
+  <li>The RBF-kernel SVM separated normal tissue from non-transforming and transforming tissue with high accuracy, visible in the confusion matrix's strongly diagonal structure.</li>
+  <li>PCA and UMAP projections both show the three tissue classes forming largely distinct regions in reduced spectral space, with the clearest separation between normal tissue and the two abnormal classes, and a smaller amount of overlap between the non-transforming and transforming classes themselves.</li>
+  <li>Spatial coherence in the UMAP projection (points close in spectral space tend to come from the same region of a section) supports using these methods for localisation, not just per-pixel classification.</li>
+</ul>
