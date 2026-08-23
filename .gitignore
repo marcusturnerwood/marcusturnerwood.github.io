@@ -36,6 +36,11 @@ vendor/bundle/
 # global gitignore, but kept here too so a fresh clone doesn't accidentally track it)
 .claude/
 
+# Third-party agent skills installed via `npx skills add` (dev tooling, not
+# site content — reproducible any time, not meant to live in this repo's history)
+.agents/
+skills-lock.json
+
 # Misc
 *.log
 *.bak

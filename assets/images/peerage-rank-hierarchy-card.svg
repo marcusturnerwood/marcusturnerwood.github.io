@@ -1,0 +1,30 @@
+<svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t d">
+  <title id="t">The five ranks of the British peerage</title>
+  <desc id="d">A stepped diagram showing the five ranks of the British peerage in descending order of precedence: Duke, Marquess, Earl, Viscount, and Baron, each with its female-holder equivalent title.</desc>
+  <rect x="0" y="0" width="900" height="400" fill="#f8f9fa"/>
+
+  <!-- five descending steps -->
+  <g font-family="Roboto, Arial, sans-serif">
+    <rect x="60" y="60" width="780" height="46" rx="6" fill="#6d28d9"/>
+    <text x="90" y="90" font-size="19" font-weight="600" fill="#ffffff">Duke</text>
+    <text x="740" y="90" font-size="14" fill="#e9e2fb" text-anchor="end">Duchess</text>
+
+    <rect x="60" y="122" width="700" height="42" rx="6" fill="#7c3aed"/>
+    <text x="90" y="150" font-size="18" font-weight="600" fill="#ffffff">Marquess</text>
+    <text x="700" y="150" font-size="13" fill="#e9e2fb" text-anchor="end">Marchioness</text>
+
+    <rect x="60" y="180" width="620" height="42" rx="6" fill="#8b5cf6"/>
+    <text x="90" y="208" font-size="18" font-weight="600" fill="#ffffff">Earl</text>
+    <text x="620" y="208" font-size="13" fill="#ede9fe" text-anchor="end">Countess</text>
+
+    <rect x="60" y="238" width="540" height="42" rx="6" fill="#a78bfa"/>
+    <text x="90" y="266" font-size="18" font-weight="600" fill="#ffffff">Viscount</text>
+    <text x="540" y="266" font-size="13" fill="#f3f0fe" text-anchor="end">Viscountess</text>
+
+    <rect x="60" y="296" width="460" height="42" rx="6" fill="#c4b5fd"/>
+    <text x="90" y="324" font-size="18" font-weight="600" fill="#3b2a6b">Baron (Lord)</text>
+    <text x="460" y="324" font-size="13" fill="#3b2a6b" text-anchor="end">Baroness (Lady)</text>
+  </g>
+
+  <text x="450" y="368" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="14" fill="#5f6368">Descending order of precedence — bar width is purely illustrative, not to any scale</text>
+</svg>

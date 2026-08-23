@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" font-family="Roboto, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#a8792f"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="630" fill="#f3ede2"/>
+
+  <!-- instrument-dial rings -->
+  <circle cx="600" cy="330" r="222" fill="none" stroke="#c9beac" stroke-width="1"/>
+  <circle cx="600" cy="330" r="238" fill="none" stroke="#c9beac" stroke-width="1"/>
+
+  <!-- the disc: two true semicircles, split by a hairline diameter -->
+  <path d="M 600,140 A 190,190 0 0,0 600,520 Z" fill="#3f6b78"/>
+  <path d="M 600,140 A 190,190 0 0,1 600,520 Z" fill="#b5533f"/>
+  <circle cx="600" cy="330" r="190" fill="none" stroke="#2b241c" stroke-width="2.5"/>
+  <line x1="600" y1="140" x2="600" y2="520" stroke="#f3ede2" stroke-width="3" stroke-dasharray="3 11"/>
+
+  <!-- signal: straight through the middle, right hemisphere to left -->
+  <line x1="740" y1="330" x2="462" y2="330" stroke="#a8792f" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <text x="486" y="452" text-anchor="middle" fill="#f3ede2" font-size="21" font-weight="600" letter-spacing="0.08em">LEFT</text>
+  <text x="714" y="452" text-anchor="middle" fill="#f3ede2" font-size="21" font-weight="600" letter-spacing="0.08em">RIGHT</text>
+
+  <!-- museum-placard title -->
+  <rect x="435" y="551" width="330" height="2" fill="#2b241c"/>
+  <text x="600" y="589" text-anchor="middle" fill="#2b241c" font-size="25" font-weight="700" letter-spacing="0.14em">THE BICAMERAL MIND</text>
+</svg>

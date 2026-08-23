@@ -1,0 +1,59 @@
+---
+layout: project
+title: "Wild Thang: Embroidery Production Digital Twin"
+date: 2026-04-05
+status: "Active (VEC internship)"
+image: /assets/images/logo-twin-thang.png
+tags: [Digital Twins, Manufacturing, Computer Vision, AI Agents, NFC]
+description: "A live digital twin of an embroidery production line: NFC-tagged operator tracking, machine production data, an integrated AI assistant, and computer-vision research into factory-floor tracking."
+published: false
+---
+
+<p class="lede">
+  A live digital twin of an embroidery production line, built around a fleet of HCR3 embroidery machines: real-time machine data, NFC-tagged operator tracking, an integrated AI assistant for querying the factory floor in natural language, and research into computer-vision tracking as a further data source.
+</p>
+
+<figure>
+  <img src="/assets/images/wild-thang-dashboard-overview.png" alt="The Twin Thang dashboard: a 3D factory layout showing three embroidery machines with operator names, a machine detail panel, and a live production Gantt chart">
+  <figcaption><strong>Figure.</strong> The dashboard's overview: 3D factory layout, per-machine detail (current job, predicted time remaining, utilisation), and a live production Gantt chart.</figcaption>
+</figure>
+
+<h2>What it covers</h2>
+
+<p>
+  Each HCR3 machine logs its own production data as it runs (stitch counts, per-job run reports, thread breaks, errors); a backend pipeline pulls that off the machines and into MongoDB, structured by job, design, and operator rather than left as raw per-shift exports. Operator identity and shift attendance come from a separate NFC pipeline: a phone or badge tap against an NFC tag logs which employee is working which machine, read by a Raspberry Pi at each station, queued locally if the network drops and flushed to the database once it's back, so a temporary connectivity loss doesn't lose data.
+</p>
+
+<p>
+  Sitting on top of both data sources is an AI assistant built into the dashboard itself, answering natural-language questions about the factory floor. A separate, earlier-stage research track looks at multi-camera multi-target (MCMT) tracking, using camera-based tracking datasets and literature to work out whether computer vision could add a further, independent layer of floor-activity data alongside the machine logs and NFC taps.
+</p>
+
+<h3>An assistant that isn't allowed to make numbers up</h3>
+
+<p>
+  The assistant is a five-stage pipeline, not a single LLM call: a planner turns the question into a structured analysis request (entities, measures, dimensions, filters, required tools), a validator checks that request against a data catalog of what actually exists before anything runs, an executor calls the real tools and is the <em>only</em> place any number gets computed, an answer composer turns those results into prose without doing any computation of its own, and a critic does a final independent check, including tracing every number in the drafted answer back to a real tool result by value, before it's allowed to reach the user. If the critic fails it, the assistant asks a clarifying question rather than returning the answer.
+</p>
+
+<p>
+  The planning step itself is deterministic-first: a glossary maps words and phrases (not whole canned questions) to known concepts, so new phrasings of an existing question route correctly without needing a hardcoded string added for every variant, with an optional LLM-assist pass to refine the plan further, itself filtered back through the same catalog vocabulary before being trusted. That data catalog also encodes what <em>isn't</em> real: there's no per-embroidery-head fault log, for instance, so the Gantt view's per-head rows are documented as a client-side visual heuristic (jobs packed into lanes by overlapping time) rather than measured data, and a question like "why does the Gantt only show two heads" gets an honest explanation of that heuristic instead of a fabricated head count. Where a requested measure genuinely doesn't exist, the validator substitutes a real, documented fallback (a missing stop-event count, for example, gets answered from lost time plus thread breaks plus errors instead) rather than the assistant inventing a plausible-sounding number.
+</p>
+
+<figure>
+  <img src="/assets/images/wild-thang-design-tab.png" alt="The dashboard's design statistics view, ranking embroidery designs by job count, output, run ratio, and lost minutes over the last 24 hours">
+  <figcaption><strong>Figure.</strong> Design-level statistics: jobs, output, run ratio, and lost minutes per design, ranked and searchable.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/wild-thang-nfc-flow.png" alt="Flow diagram: phone taps NFC tag, employee selects machine/job, the Pi logs the event, then either saves directly to MongoDB or queues locally if Mongo is unreachable until the connection is restored">
+  <figcaption><strong>Figure.</strong> The NFC attendance/job-selection pipeline, with local queueing on the Pi if the database connection drops.</figcaption>
+</figure>
+
+<h2>Headline results</h2>
+
+<ul>
+  <li>Live per-machine dashboard (3D factory layout, current job, predicted completion time with a confidence level, utilisation split into run/interval/pause) driven directly from the machines' own logs.</li>
+  <li>NFC-based operator and job tracking with resilient offline queueing on the reader Pi, so network drops at the machine don't cost attendance or job-selection data.</li>
+  <li>An integrated AI assistant answering natural-language questions about the floor by querying live production and NFC data through its own tool set, rather than a static report.</li>
+  <li>Design-level analytics (job count, output, run ratio, lost minutes) ranked and searchable per embroidery design, surfacing which designs are actually costing the most machine time.</li>
+  <li>Early-stage MCMT computer-vision research as a prospective further data source, independent of the machine logs and NFC taps.</li>
+</ul>

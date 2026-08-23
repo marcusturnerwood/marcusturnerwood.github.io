@@ -1,0 +1,56 @@
+---
+layout: project
+title: "Chester Racecourse Crowd and Queue Simulation"
+date: 2026-03-20
+status: "Active (VEC internship)"
+image: /assets/images/chester-racecourse-live-sim.png
+tags: [Simulation, Data Visualisation, JavaScript, Digital Twins]
+description: "An interactive raceday crowd, queue, and spending simulation for Chester Racecourse, overlaid directly on the venue's own real site map."
+published: false
+image_position: "0.0% 0.0%"
+image_scale: 1.25
+---
+
+<p class="lede">
+  A raceday crowd, wait-time, and spending simulation for Chester Racecourse, played back over a full simulated raceday and rendered directly on top of the venue's own real site map rather than a from-scratch 3D reconstruction.
+</p>
+
+<figure>
+  <img src="/assets/images/chester-racecourse-live-sim.png" alt="The simulation running mid-raceday: a heatmapped site map with wait-time markers, a live payments feed in the corner, and a bars-versus-food demand sparkline">
+  <figcaption><strong>Figure.</strong> The simulation mid-playback: live wait times, crowd heatmap, a live payments feed, and the bars-vs-food demand sparkline, all running on top of the real site map.</figcaption>
+</figure>
+
+<h2>What it covers</h2>
+
+<p>
+  An earlier attempt at a from-scratch 3D reconstruction of the venue kept fighting itself: buildings landing in the wrong place, aerial imagery that looked subtly stretched relative to the illustrated map. The approach that actually worked was simpler and more honest about what it was showing: take the racecourse's own published site map image and draw the simulation directly on top of it, so there is never any question of whether the venue "looks right" &ndash; it's the venue's own map. Every gate, bar, food stall, betting point, toilet block, and named enclosure from the map's legend was digitised to its actual pixel position on that image (around 40 individually placed landmarks, with a small set of minor markers falling back to a deterministic ring around their zone centre).
+</p>
+
+<p>
+  Underneath that map sits a coupled destination-choice and queueing model. Gates, toilets, and enclosures, nothing to meaningfully choose between, use a direct Erlang-C queueing baseline. Bars, food, and betting points instead run through a choice model that captures venues pulling demand from each other, so a queue building up at one bar visibly shows up as more demand at its neighbours. The underlying model samples every 5 minutes (the level the arrival-rate curves are actually meaningful at); the interactive slider then scrubs in 10-second steps, linearly interpolating node colour, heatmap intensity, path tint, and on-course headcount between the bracketing 5-minute samples, smoothing for display without inventing precision that isn't there.
+</p>
+
+<h3>One data model, two views</h3>
+
+<p>
+  A single source-of-truth file lists every gate, bar, food stall, betting point, toilet block, and named enclosure straight off the map's legend; both the 2D map overlay and the standalone 3D model read from that same list, so the two views can't quietly drift apart from each other over time. The 3D model layers a further, independently sourced piece of ground truth on top: real, surveyed building footprints for 18 structures around the course, pulled from Ordnance Survey's open Data Hub Features API rather than crowd-sourced mapping data. Only two of those footprints could be confidently matched to a named building by proximity to known landmarks (the Weighing Room and the Owners &amp; Trainers Pavilion); the rest render as an unlabelled but structurally real backdrop rather than guessed names. The large grandstands don't appear in that dataset at all, most likely because their open-sided roof canopies aren't captured as enclosed "buildings" in a topographic survey, so those stay as hand-built geometry, positioned by eye against the verified aerial photo instead.
+</p>
+
+<figure>
+  <img src="/assets/images/chester-racecourse-3d-model.png" alt="The standalone 3D model: an interpretive rendering of the racecourse with real aerial imagery as ground texture, hand-built track and building geometry, and a landmark-exploration control panel">
+  <figcaption><strong>Figure.</strong> The standalone 3D model, with real aerial imagery as ground texture and a landmark-exploration panel for flying to any gate, bar, or enclosure by name.</figcaption>
+</figure>
+
+<p>
+  The 3D model also has a live editing mode: click any marker and a drag gizmo lets you move, resize, or rotate it directly in the browser to nudge it closer to the real map, with edits autosaved to the browser and a one-click export back to plain JSON for baking a correction into the source data permanently, rather than every positioning fix needing a code change.
+</p>
+
+<h2>Headline results</h2>
+
+<ul>
+  <li>A full 7-hour raceday plays back in roughly 2.5 minutes, with paths between locations coloured and thickened live by the average wait/crowd level of the two nodes they connect, on a green&ndash;amber&ndash;red scale.</li>
+  <li>A live crowd heatmap, driven by the same choice-model occupancy and computed via Little's Law, renders as additive radial-gradient blobs sized and coloured by headcount rather than static dots.</li>
+  <li>A "bars vs. food" demand sparkline, summed across every bar and food node for the whole day, shows a clear six-peak cyclical pattern tracking the race schedule in both series.</li>
+  <li>A live payments panel replays the simulation's actual itemised transaction log (7,000+ entries: item, venue, price) as time advances, with each purchase triggering a brief highlight on its venue's marker.</li>
+  <li>A companion 3D model (hand-built geometry plus verified Ordnance Survey building footprints, cross-checked pixel-for-pixel against the aerial imagery before trusting it) provides an alternative, more explorable view of the same venue and node data.</li>
+</ul>

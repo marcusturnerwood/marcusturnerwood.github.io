@@ -1,0 +1,15 @@
+<svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t d">
+  <title id="t">UK Spin-out Tracker</title>
+  <desc id="d">The UK Spin-out Tracker wordmark: a circle breaking away from a curved trajectory into a small dot, next to the app name, in its own purple accent colour.</desc>
+  <rect x="0" y="0" width="900" height="400" fill="#ffffff"/>
+
+  <g transform="translate(120,104) scale(6)" fill="none" stroke="#6d4bd6" stroke-width="2.4">
+    <circle cx="13" cy="19" r="8" />
+    <path d="M18 12 C 22 8, 27 7, 29 9" stroke-linecap="round" />
+    <circle cx="29" cy="7.5" r="3" fill="#6d4bd6" stroke="none" />
+  </g>
+
+  <text x="330" y="217" text-anchor="start" font-family="Roboto, Arial, sans-serif" font-size="50" font-weight="600" fill="#202124">
+    UK Spin<tspan fill="#202124">-</tspan><tspan fill="#6d4bd6">out</tspan> Tracker
+  </text>
+</svg>

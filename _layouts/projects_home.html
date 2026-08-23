@@ -11,7 +11,14 @@ layout: default
 
   {{ content }}
 
-  {%- assign published_projects = site.projects | where_exp: "p", "p.draft != true" -%}
+  {%- comment -%}
+    In production this filter is a no-op: a doc with `published: false` is
+    excluded from site.projects entirely unless the build is run with
+    --unpublished (which only the local dev server does, so drafts can be
+    edited via /drafts/ — see _layouts/drafts.html). This filter is what
+    keeps them off the *public* list specifically when that flag is active.
+  {%- endcomment -%}
+  {%- assign published_projects = site.projects | where_exp: "p", "p.published != false" -%}
   {%- assign projects = published_projects | sort: "date" | reverse -%}
 
   {%- if projects and projects.size > 0 -%}

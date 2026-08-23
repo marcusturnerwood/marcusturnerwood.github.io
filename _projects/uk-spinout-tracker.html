@@ -1,0 +1,51 @@
+---
+layout: project
+title: "UK Spin-out Tracker"
+date: 2026-04-15
+status: "Active (VEC internship)"
+image: /assets/images/uk-spinout-tracker-logo.svg
+tags: [Data Analysis, Machine Learning, FastAPI, React]
+description: "An interactive dashboard tracking UK university spin-out activity against institutional research funding, built on HESA, UKRI, and Companies House data."
+published: false
+image_position: "-3.6% 0.0%"
+image_scale: 1.25
+---
+
+<p class="lede">
+  An interactive dashboard for exploring UK university spin-out activity: where spin-outs are founded, who's funding them, and how that connects back to each institution's own research income, built on real HESA, UKRI, and Companies House data rather than survey estimates.
+</p>
+
+<figure>
+  <img src="/assets/images/uk-spinout-tracker-landing.png" alt="The UK Spin-out Tracker landing page: the wordmark and tagline on the left, and example questions (which universities get more or less funding than predicted, where is investor money going, how does a university compare to others) on a purple panel on the right">
+  <figcaption><strong>Figure.</strong> The landing page, framed around the actual questions the dashboard answers rather than a generic feature list.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/uni-spinout-tracker-preview.png" alt="Dashboard tables and charts showing predicted-versus-actual research council funding by institution, and per-research-council model predictability scores">
+  <figcaption><strong>Figure.</strong> Predicted-versus-actual funding by institution, and per-research-council predictability, from the dashboard's funding model.</figcaption>
+</figure>
+
+<h2>What it covers</h2>
+
+<p>
+  The dashboard sits on top of a DuckDB data warehouse built from raw HESA and UKRI downloads, with a separate pipeline enriching the HESA spin-out register itself using Companies House filings and web search, since the register alone doesn't say much about what a given spin-out actually does or how it's funded. A FastAPI backend serves live queries over that warehouse (research council income, institution income and expenditure, a chart assistant) alongside a set of trained models: a funding-prediction model and a survival model, both used to compare an institution's actual research council income against what its size and profile alone would predict. The frontend (React 19 + Vite + TypeScript) turns that into the interactive dashboard: per-institution funding tables, per-research-council predictability charts, and drill-down explanations of individual figures.
+</p>
+
+<p>
+  Every one of the 70 institutions in scope, University of Liverpool included, gets its own drill-down report generated live from the warehouse rather than as a static document: income and expenditure trends over time, predicted-versus-actual research council funding, and spin-out activity attributed back to that institution specifically.
+</p>
+
+<h3>Enriching the spin-out register itself</h3>
+
+<p>
+  HESA's own spin-out register records that a company exists and which institution it came from, and not much else, no sector, no funding history, no exit status. A separate enrichment pipeline fills that in for roughly 2,500 companies: each one is resolved to a Companies House company number, then a set of enrichment agents append what they find, sector classification, investment events (both a full historical backfill and an ongoing incremental diff), and exit signals (acquisition, dissolution, and so on), to an append-only SQLite fact store, corroborating with web search where Companies House filings alone don't settle a question. Nothing is overwritten, so the provenance of any given fact stays inspectable; the latest fact per company is then joined back against the original register and exported into the warehouse, and from there into the static JSON the frontend actually bundles.
+</p>
+
+<h2>Headline results</h2>
+
+<ul>
+  <li>A reproducible data pipeline (raw HESA/UKRI downloads &rarr; DuckDB warehouse &rarr; both a live query API and static frontend datasets) rather than a one-off spreadsheet analysis.</li>
+  <li>A funding-prediction model compared against actual research council income across all 70 institutions in scope, surfacing which institutions are notably over- or under-funded relative to their predicted profile.</li>
+  <li>Per-council predictability varies substantially: EPSRC and MRC income are well explained by institutional size/profile (R&sup2; of 0.84 and 0.91 respectively), while STFC funding is effectively unpredictable from those features alone (R&sup2; of &minus;0.18), consistent with STFC funding being concentrated in a small number of specialist institutions the model's features can't see.</li>
+  <li>The HESA spin-out register enrichment pipeline (Companies House + web search) adds the "what is this company and how is it funded" context the raw register doesn't provide on its own.</li>
+</ul>

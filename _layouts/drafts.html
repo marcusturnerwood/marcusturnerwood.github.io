@@ -38,25 +38,7 @@ layout: default
   {%- if drafts.size > 0 -%}
     <ul class="post-list" data-orderable data-order-field="order" data-status-for="drafts-reorder-status">
       {%- for post in drafts -%}
-        <li class="post-card draggable-item{% unless post.image %} post-card--no-image{% endunless %}"{% if jekyll.environment == 'development' %} draggable="true" data-source-path="{{ post.path }}"{% endif %}>
-          {%- if post.image -%}
-            <a class="post-card-thumb" href="{{ post.url | relative_url }}" tabindex="-1" aria-hidden="true">
-              <img src="{{ post.image | relative_url }}" alt="" loading="lazy" style="object-position: {{ post.image_position | default: '50% 50%' }}; transform: scale({{ post.image_scale | default: 1 }});">
-            </a>
-          {%- endif -%}
-          <div class="post-card-body">
-            {%- if post.categories.size > 0 -%}
-              <ul class="post-card-tags">
-                {%- for category in post.categories limit: 3 -%}
-                  <li>{{ category }}</li>
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
-            <h3><a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3>
-            <p class="post-card-excerpt">{{ post.description | default: post.excerpt | strip_html | truncate: 180 }}</p>
-            <a class="post-card-more" href="{{ post.url | relative_url }}" aria-hidden="true" tabindex="-1">Read more <span aria-hidden="true">&rarr;</span></a>
-          </div>
-        </li>
+        {%- include post-card.html post=post date_format=date_format orderable=true -%}
       {%- endfor -%}
     </ul>
   {%- else -%}
@@ -64,16 +46,20 @@ layout: default
   {%- endif -%}
 
   {%- comment -%}
-    Project drafts are a different mechanism from post drafts: _projects has
-    output: true and no --drafts-style flag, so a draft project is a normal
-    doc in site.projects at all times, in every environment, marked with
-    `draft: true` and filtered out of the public /projects/ list in
-    _layouts/projects_home.html instead. That filter only hides it from THAT
-    page though — it'd still render right here on a production /drafts/ page
-    unless this whole section is also environment-gated, so it is.
+    Project drafts use Jekyll's own `published: false` rather than a custom
+    flag, specifically so an unpublished project gets no page built for it at
+    all in a normal build (true 404, no sitemap entry) — a custom flag
+    filtered only in the *listing* would still leave the individual page
+    reachable by direct URL. The trade-off: `published: false` docs vanish
+    from site.projects entirely unless the build passes --unpublished, so
+    the local dev server (tools/serve-editable.ps1) runs with both --drafts
+    and --unpublished, and this whole section is still environment-gated on
+    top of that — production never passes --unpublished, so site.projects
+    won't contain these at all there regardless, but better to not rely on
+    that alone.
   {%- endcomment -%}
   {%- if jekyll.environment == 'development' -%}
-    {%- assign draft_projects_raw = site.projects | where_exp: "p", "p.draft == true" -%}
+    {%- assign draft_projects_raw = site.projects | where_exp: "p", "p.published == false" -%}
     {%- assign draft_projects_size = draft_projects_raw | size -%}
     {%- assign draft_projects_ordered = "" | split: "" -%}
     {%- if draft_projects_size > 0 -%}

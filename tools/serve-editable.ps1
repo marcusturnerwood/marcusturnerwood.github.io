@@ -6,7 +6,12 @@
 #
 # Equivalent to running these in two terminals:
 #   python tools/edit_server.py
-#   bundle exec jekyll serve --drafts
+#   bundle exec jekyll serve --drafts --unpublished
+#
+# --unpublished is what lets a project marked `published: false` in its own
+# front matter (see _layouts/drafts.html) still build and stay editable
+# locally, the same way --drafts does for _drafts/ posts. Production never
+# passes either flag, so both stay genuinely unbuilt there.
 #
 # Gemfile lives in site/ (not the repo root) — point bundler at it explicitly.
 $env:BUNDLE_GEMFILE = Join-Path $PSScriptRoot "..\site\Gemfile"
@@ -20,7 +25,7 @@ Write-Host "Started edit_server.py as background job (id $($editServer.Id)) on h
 Write-Host "Starting Jekyll on http://localhost:4000 ... (Ctrl+C to stop both)"
 
 try {
-    bundle exec jekyll serve --drafts
+    bundle exec jekyll serve --drafts --unpublished
 }
 finally {
     Write-Host "Stopping edit_server.py background job..."

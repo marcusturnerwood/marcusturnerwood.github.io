@@ -1,0 +1,78 @@
+---
+layout: project
+title: "Agentic Factory"
+date: 2026-03-10
+status: "Active (VEC internship)"
+image: /assets/images/agent-thang-logo.png
+tags: [AI Agents, Benchmarking, Simulation, Python]
+description: "A three-part investigation into AI agents running a factory: a benchmark comparing agent frameworks, an academic comparison against discrete-event simulation, and a natural-language design demonstrator."
+published: false
+image_position: "0.0% 0.0%"
+image_scale: 1.41
+---
+
+<p class="lede">
+  A three-part investigation into what it actually takes for AI agents to run a factory: a benchmark comparing coding-agent frameworks against each other under identical conditions, an academic comparison of agent-coordinated production against the traditional discrete-event simulation (DES) approach, and a natural-language demonstrator where describing a production design out loud gets it built and run live on the factory floor.
+</p>
+
+<figure>
+  <img src="/assets/images/agentic-factory-compare-dashboard.png" alt="The live compare dashboard: a natural-language instruction box for the running agent, side-by-side Agent and DES Shadow factory-station rows, live metric panels (throughput, cycle time, queue time, tardiness, utilisation), and a live agent-vs-DES time-series chart">
+  <figcaption><strong>Figure.</strong> The live compare dashboard, running both the agent and a DES shadow side by side against the same factory floor, with a box to send the running agent a natural-language instruction mid-run.</figcaption>
+</figure>
+
+<h2>Why this, and why now</h2>
+
+<p>
+  Every vendor claims their agent framework is the one that gets real work done unsupervised; almost none of that is backed by a fair, repeatable comparison run under identical conditions. Agentic Factory starts from that gap and works outward in three directions at once: can these frameworks be benchmarked fairly against each other at all (HarnessBench), does agent-based coordination actually beat the traditional operations-research approach to modelling a factory (the DES comparison), and, if it does work, can that be shown rather than just claimed (the natural-language demonstrator).
+</p>
+
+<figure>
+  <img src="/assets/images/agentic-factory-adoption-chasm.png" alt="A technology-adoption-lifecycle diagram marking where autonomous agents, agentic workflows, AI assistants, and passive AI search results each sit relative to the adoption chasm, with a note that most successful production applications seen fall into the AI Agentic Workflows category">
+  <figcaption><strong>Figure.</strong> From the project proposal: where different classes of AI system sit on the adoption curve. Most successful production applications observed fall in the agentic-workflow category, short of fully autonomous agents, which is part of the motivation for testing that boundary directly rather than assuming it.</figcaption>
+</figure>
+
+<h2>Part one: HarnessBench</h2>
+
+<p>
+  Comparing agent frameworks fairly is harder than it sounds: each one has its own CLI, its own way of reporting what it did, and its own idea of success. HarnessBench standardises this by running every framework through a common adapter interface (OpenClaw, PicoClaw, NanoBot, NanoClaw, and a local demo mode for self-testing the benchmark itself, with over 100 defined tasks spanning file operations, terminal use, and other real-workspace actions) against fixtures mounted into a sandboxed workspace, so the same task, the same starting files, and the same grading criteria apply regardless of which framework ran it.
+</p>
+
+<h3>How a run actually happens</h3>
+
+<p>
+  The CLI (<code>harnessbench.cli</code>) parses the command and task/model configuration and hands off to the runner, which is where the real work happens: it creates a per-task sandbox under a configurable <code>work_root</code>, copies that task's fixtures into <code>sandbox/workspace</code> (the only directory the agent actually reads and writes), renders the task's prompt, runs any task-specific hooks, then calls the adapter for whichever framework is under test. Once the adapter returns, the runner scores the result two ways: an oracle pass over the resulting workspace state for the outcome score, and, separately, a usage-proxy trace of the session fed to an LLM rubric for the process score. Both land in a single results JSON, keyed by model and task ID, alongside a token/usage summary when the framework's own session logs or the usage proxy can supply one.
+</p>
+
+<h3>How it's scored</h3>
+
+<p>
+  The headline number is <code>combined_score = outcome_effective &times; process_effective &times; security_score</code>. <code>process_effective</code> is the arithmetic mean of three rubric-scored dimensions read off the usage-proxy trace, tool-use appropriateness, consistency, and robustness, with a separate binary security gate that can zero out the whole run regardless of how good the output looked. <code>outcome_effective</code> is normally just the oracle's programmatic <code>outcome_score</code> (did the workspace end up in the right state, checked directly rather than inferred); for the two tasks where correctness is genuinely fuzzy rather than binary (image recognition and image editing specifically), that oracle score is blended with an LLM quality judgement at a fixed 0.9 weighting in the oracle's favour, everywhere else the LLM quality signal isn't used for outcome scoring at all, deliberately, so a framework can't talk its way to a good result score on tasks where "did it work" has an actual, checkable answer.
+</p>
+
+<h2>Part two: agentic coordination vs. discrete-event simulation</h2>
+
+<p>
+  Discrete-event simulation is the established way to model manufacturing throughput: define the process statistically (arrival rates, service times, resource constraints) and simulate the queue. It's mature and well-understood, but it assumes the process is stable and its statistics are known in advance, an assumption that breaks down around exactly the disruptions and edge cases a real factory floor deals with. The academic side of Agentic Factory sets that DES baseline up against agent-based coordination on the same underlying factory model, to see where each approach actually wins rather than assuming agentic coordination is strictly better because it's newer: DES for the well-behaved, statistically stable parts of the process, agent coordination for handling the disruptions DES has to model away or ignore.
+</p>
+
+<h2>Part three: the natural-language demonstrator</h2>
+
+<p>
+  The third part is deliberately marketing-facing rather than a benchmark: describe a production design in natural language and watch a real agent carry it through the actual factory floor, live, rather than a static mockup of what the system could do if it existed. "Design My Order" is a standalone 3D configurator, pick a garment, describe a design (a prompt box example reads "a roaring lion badge in gold and navy"), hit "Make it", and the request goes to a real running agent to schedule and produce, with a direct link through to watch that exact order move through the live factory dashboard above.
+</p>
+
+<figure>
+  <img src="/assets/images/agentic-factory-design-my-order.png" alt="The Design My Order demonstrator: a garment picker (Classic Tee, V-Neck Tee, Photo-Print Tee, hoodies, tote, polo, jacket, caps), a rotating 3D garment preview, and a text box reading 'Describe your design — e.g. a roaring lion badge in gold and navy'">
+  <figcaption><strong>Figure.</strong> "Design My Order": pick a garment, describe a design in plain English, and a real agent schedules and produces it on the live factory floor.</figcaption>
+</figure>
+
+<h2>Headline results</h2>
+
+<ul>
+  <li>A common adapter interface lets a new agent framework be added and benchmarked against the existing 100+ task suite without changing the scoring or task definitions themselves.</li>
+  <li>Process scoring from the usage-proxy trace gives a read on <em>how</em> an agent worked (tool use, consistency, robustness, security) independently of whether the final output happened to be correct, separating "got the right answer" from "got there safely and sensibly."</li>
+  <li>Outcome scoring is deliberately oracle-first: only two of the 100+ tasks let an LLM quality judgement influence the result score at all, and even then at a fixed, oracle-dominant weighting, so the benchmark can't be gamed by an agent that's good at sounding convincing.</li>
+  <li>Token and usage accounting is tracked per run, making cost/performance trade-offs between frameworks directly comparable rather than anecdotal.</li>
+  <li>The DES-vs-agent comparison runs live, not just as a one-off offline result: the same seeded factory floor is worked simultaneously by a real agent and a DES shadow, with throughput, cycle time, queue time, tardiness, and machine utilisation streamed to both sides of the dashboard as they happen.</li>
+  <li>"Design My Order" closes the loop from natural language to physical schedule: an order typed into the configurator is a real instruction to the running agent, not a canned animation, and is traceable through to the same live factory view the DES comparison uses.</li>
+</ul>

@@ -370,11 +370,22 @@
       });
       Object.keys(anchorAccum).forEach(function (idx) { edits.push(anchorAccum[idx]); });
 
+      // A tag change or an Enter-split shifts block boundaries in the source
+      // file in a way the in-memory `state` array can't safely patch itself —
+      // those cases need a reload afterwards to re-derive `state` from the
+      // file. A plain text edit to an existing block doesn't move any
+      // boundaries, so it can be resynced in place instead (see below).
+      var structural = Object.keys(handledAsOuter).length > 0;
+
       // Everything else: the original simple case, an inner-html-only diff.
+      var simpleEditIndices = [];
       state.forEach(function (s, i) {
         if (s.isNew || handledAsOuter[i]) return;
         var updated = serialize(s);
-        if (updated !== s.original) edits.push({ original: s.original, updated: updated });
+        if (updated !== s.original) {
+          edits.push({ original: s.original, updated: updated });
+          simpleEditIndices.push(i);
+        }
       });
 
       if (edits.length === 0) {
@@ -396,14 +407,38 @@
           var failCount = 0;
           (data.results || []).forEach(function (ok) { if (!ok) failCount++; });
           if (failCount) {
-            setStatus(failCount + ' block(s) failed to save (unchanged on disk) — reload before editing further');
+            // A partial failure still writes whatever DID match, so `state`
+            // for the blocks that succeeded in this same batch would
+            // otherwise be left stale too (their `original` never gets
+            // updated below) — every later save touching any of them would
+            // then keep failing the same way, compounding indefinitely.
+            // Reloading is the only way to get every block back in sync
+            // with what's actually on disk now, same as a structural save.
+            setStatus(failCount + ' block(s) failed to save (unchanged on disk) — reloading…');
+            setTimeout(function () { window.location.reload(); }, 1400);
             return;
           }
-          // A successful save can have restructured the block list (splits,
-          // retags), so the cleanest way to get `state` back in sync with the
-          // file rather than re-deriving originals by hand is a reload.
-          setStatus('saved, reloading…');
-          setTimeout(function () { window.location.reload(); }, 400);
+          if (structural) {
+            setStatus('saved, reloading…');
+            setTimeout(function () { window.location.reload(); }, 400);
+            return;
+          }
+          // No split or retag in this save, so every block that was sent
+          // still corresponds 1:1 with its `state` entry — resync `original`/
+          // `originalOuter` from what was just written and keep editing, the
+          // same way saves worked before splits/retags existed. No reload
+          // means no window where a concurrent external edit (or another
+          // save fired before this one's reload lands) can make the next
+          // save's snapshot go stale.
+          simpleEditIndices.forEach(function (i, j) {
+            var s = state[i];
+            s.original = edits[j].updated;
+            s.originalOuter = buildOuter(s);
+            s.dirty = false;
+            s.el.classList.remove('edit-block-dirty');
+          });
+          setStatus('saved ');
+          if (statusEl) statusEl.appendChild(icon(ICON_CHECK, 12));
         })
         .catch(function (err) {
           setStatus('save failed: ' + err.message + ' (is tools/edit_server.py running?)');
