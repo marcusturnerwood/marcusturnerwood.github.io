@@ -25,4 +25,25 @@ layout: default
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
 
+{%- assign related_projects = "" | split: "" -%}
+{%- for t in page.tags -%}
+  {%- assign matches = site.projects | where_exp: "p", "p.tags contains t" -%}
+  {%- assign related_projects = related_projects | concat: matches -%}
+{%- endfor -%}
+{%- assign related_projects = related_projects | uniq | where_exp: "p", "p.url != page.url" | where_exp: "p", "p.published != false" -%}
+{%- assign related_projects = related_projects | sort: "date" | reverse | slice: 0, 3 -%}
+{%- if related_projects.size > 0 -%}
+  <aside class="related-posts">
+    <h2 class="related-posts-heading">More on this theme</h2>
+    <ul class="related-posts-list">
+      {%- for p in related_projects -%}
+        <li>
+          <a href="{{ p.url | relative_url }}">{{ p.title }}</a>
+          <span class="post-meta">{{ p.date | date: "%b %-d, %Y" }}</span>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </aside>
+{%- endif -%}
+
 {%- include comments.html -%}
