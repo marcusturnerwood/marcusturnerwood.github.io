@@ -50,3 +50,10 @@ skills-lock.json
 # curation (assets/photos/no-location/ included). The resized, actually-used
 # copies live in assets/images/places/ and stay tracked; these don't.
 assets/photos/
+
+# Video script production: Manim render cache/output and sourced stock
+# images are large, reproducible binaries, not meant to live in git history.
+# The scripts themselves (*.py, *.md) stay tracked.
+video-scripts/render/media/
+video-scripts/output/
+video-scripts/assets/
