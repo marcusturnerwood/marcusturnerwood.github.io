@@ -28,6 +28,56 @@ published: false
   Sitting on top of both data sources is an AI assistant built into the dashboard itself, answering natural-language questions about the factory floor. A separate, earlier-stage research track looks at multi-camera multi-target (MCMT) tracking, using camera-based tracking datasets and literature to work out whether computer vision could add a further, independent layer of floor-activity data alongside the machine logs and NFC taps.
 </p>
 
+<h3>Closing the data gap: no API, no problem</h3>
+
+<figure>
+  <img src="/assets/images/wild-thang-hcr3-hardware.png" alt="The HCR3, a six-head commercial embroidery machine on casters, with thread spools, needle heads, and an integrated touchscreen control panel">
+  <figcaption><strong>Figure.</strong> The HCR3: the machine everything downstream is built to read data off, with no vendor API of its own.</figcaption>
+</figure>
+
+<p>
+  The HCR3 machines themselves expose no API at all: the only way to get a job's stitch counts, run ratio, and thread-break history off a machine is to stand at its touchscreen, navigate to the report view, and copy the log to a USB stick by hand.
+</p>
+
+<figure>
+  <img src="/assets/images/wild-thang-screen-1.jpg" alt="The HCR3's native touchscreen home menu, a 4x5 grid of icon buttons: Read, Pattern, Needle, Frame, Setting, Option, Letter, Queue, Other, Report, Guide, Screen, i-Custom, User, Layout, Thread Set">
+  <figcaption><strong>Figure.</strong> The HCR3's entire interface: a touchscreen icon grid, with no other way in or out for data.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/wild-thang-screen-3.jpg" alt="The HCR3 embroidery machine's on-screen production report, listing jobs by operator, design, stitch count, run and pause minutes, run percentage, and thread breaks">
+  <figcaption><strong>Figure.</strong> The HCR3's native report screen: the same per-job data the pipeline now pulls automatically, previously only extractable by hand via USB.</figcaption>
+</figure>
+
+<p>
+  The fix was a Raspberry Pi wired to each machine as a USB gadget, presenting itself to the HCR3 simultaneously as a mouse and a flash drive: it can drive the machine's own touchscreen menus programmatically and then receive the exported CSV the machine writes to it, without the machine ever knowing it isn't talking to a human with a USB stick. An NFC tap on the shop floor is what triggers the pull, so an operator finishing a job taps a tag, the Pi navigates the report menu and grabs the CSV, and the data is in the database moments later with no one having stood at the machine on purpose to extract it.
+</p>
+
+<figure>
+  <img src="/assets/images/wild-thang-pi-control-panel.png" alt="The HCR3 pipeline control panel: a web page explaining that the NFC site's 'Collect Data from Machine' button triggers the real pipeline on the Pi, with a choice of 'Python clicker (fixed positions)' or 'Recorded (TinyTask-style)' automation mode, a Preview now button, and status line reading mode: taps_csv, mongo: ok, last uploaded row No.: 106">
+  <figcaption><strong>Figure.</strong> The Pi's own control panel for the click-through automation: a choice of clicking strategy, a live status line, and a way to preview a run by hand before trusting a real NFC trigger to it.</figcaption>
+</figure>
+
+<h3>Job tracking, and its access boundary</h3>
+
+<p>
+  A second, complementary use of the NFC taps tracks how people move from job to job across the day, aimed at optimising downtime and triaging bottlenecks rather than at production data itself. Job and order information arrives by email rather than through any structured feed, so a reader built on the Microsoft Graph Mail API pulls job emails directly, alongside a calendar reader for scheduling information.
+</p>
+
+<figure>
+  <img src="/assets/images/wild-thang-machine-log.png" alt="The NFC tap landing page, Machine Log: a machine selector dropdown and three large buttons, Check In (green), Change Your Job (amber), and Extract Data (red)">
+  <figcaption><strong>Figure.</strong> What an operator actually sees after an NFC tap: pick the machine, then check in, change job, or trigger a data extraction.</figcaption>
+</figure>
+
+<p>
+  That job-movement data is deliberately locked down: it's only queryable over an admin account, not exposed through the same routes as the production dashboard itself.
+</p>
+
+<figure>
+  <img src="/assets/images/wild-thang-job-history.png" alt="An employee and design activity panel failing to load, with the error message: API request failed: 403 Forbidden - {'detail':'Admin role required.'}">
+  <figcaption><strong>Figure.</strong> The access boundary in practice: an employee-activity view refusing to load outside an admin session.</figcaption>
+</figure>
+
 <h3>An assistant that isn't allowed to make numbers up</h3>
 
 <p>
@@ -48,12 +98,40 @@ published: false
   <figcaption><strong>Figure.</strong> The NFC attendance/job-selection pipeline, with local queueing on the Pi if the database connection drops.</figcaption>
 </figure>
 
+<h3>CCTV as a further, independent data source</h3>
+
+<p>
+  The client's existing CCTV network covers the shop floor already, which raises an obvious question: could it inform layout decisions the machine logs and NFC taps can't, by tracking how people actually move between stations rather than only when they tap a tag. The MCMT prototype, built and validated on an open-source multi-camera dataset before pointing it at anything client-specific, chains four stages: homography calibration to project every camera's view onto a shared floor plane, YOLO-based person detection per camera, cross-camera re-identification (Re-ID) to keep a consistent identity for the same person across overlapping views, and 3D pose triangulation from the resulting multi-view detections.
+</p>
+
+<figure>
+  <img src="/assets/images/wild-thang-cctv-viewer.png" alt="The live MCMT warehouse viewer: two calibrated camera floor-plan views with numbered tracked people either side of a live camera feed showing bounding-box detections around three people, with playback controls and a Find person search box">
+  <figcaption><strong>Figure.</strong> The end result: a live, searchable multi-camera viewer, with detections and consistent person IDs shown against calibrated floor plans either side of the camera feed.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/wild-thang-mcmt-homography.png" alt="The homography calibration tool: click a point on the camera image, then the same real-world point on the top-down map, repeated to compute the camera-to-floor-plane transform, with a separate height field for full 3D calibration">
+  <figcaption><strong>Figure.</strong> Stage one, homography calibration: matching camera-image points to real-world floor points to project every camera onto one shared plane.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/wild-thang-mcmt-reid.png" alt="The ReID embedding diagnostics page: sampling controls plus t-SNE, UMAP, cosine similarity histogram, and track length plots for evaluating how well the re-identification embeddings distinguish different people across cameras">
+  <figcaption><strong>Figure.</strong> Stage three, Re-ID diagnostics: t-SNE/UMAP projections and similarity histograms used to sanity-check that the embeddings actually separate different people rather than just different cameras.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/wild-thang-mcmt-3d-skeleton.png" alt="The 3D skeleton viewer: camera footage with three tracked people boxed and labelled, alongside a note that each tracked person's 3D body pose is rebuilt frame by frame from every camera that saw them">
+  <figcaption><strong>Figure.</strong> Stage four, 3D pose triangulation: each tracked person's body pose rebuilt frame by frame from every camera that saw them, not just the nearest one.</figcaption>
+</figure>
+
 <h2>Headline results</h2>
 
 <ul>
   <li>Live per-machine dashboard (3D factory layout, current job, predicted completion time with a confidence level, utilisation split into run/interval/pause) driven directly from the machines' own logs.</li>
+  <li>A Raspberry Pi USB-gadget bridge (presenting as a mouse and flash drive) turns an API-less machine's manual USB export into an NFC-tap-triggered automatic pull, closing the hardware data gap without any cooperation from the machine vendor.</li>
   <li>NFC-based operator and job tracking with resilient offline queueing on the reader Pi, so network drops at the machine don't cost attendance or job-selection data.</li>
+  <li>A separate job-movement tracker, built on the Microsoft Graph Mail and Calendar APIs for order and scheduling data, deliberately gated behind an admin-only account rather than exposed on the main dashboard.</li>
   <li>An integrated AI assistant answering natural-language questions about the floor by querying live production and NFC data through its own tool set, rather than a static report.</li>
   <li>Design-level analytics (job count, output, run ratio, lost minutes) ranked and searchable per embroidery design, surfacing which designs are actually costing the most machine time.</li>
-  <li>Early-stage MCMT computer-vision research as a prospective further data source, independent of the machine logs and NFC taps.</li>
+  <li>A working MCMT prototype (homography calibration, YOLO detection, cross-camera Re-ID, 3D pose triangulation) validated on an open dataset, as a prospective further data source independent of the machine logs and NFC taps.</li>
 </ul>

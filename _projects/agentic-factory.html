@@ -31,6 +31,46 @@ image_scale: 1.41
   <figcaption><strong>Figure.</strong> From the project proposal: where different classes of AI system sit on the adoption curve. Most successful production applications observed fall in the agentic-workflow category, short of fully autonomous agents, which is part of the motivation for testing that boundary directly rather than assuming it.</figcaption>
 </figure>
 
+<h2>Background: is a simple controller enough?</h2>
+
+<p>
+  Before building any of the three parts above, it was worth asking a more basic question first: for a bounded operations problem, how much does an autonomous LLM agent actually buy you over a plain rule-based controller? Vending-Bench (Backlund &amp; Petersson, 2025) is a published benchmark for exactly this: it scores autonomous LLM agents managing a simulated vending machine, inventory, restocking, pricing, cash, supplier emails, over a long horizon, and reports results for nine LLMs plus a human baseline, ranked on final net worth.
+</p>
+
+<p>
+  Rather than take that at face value, a discrete-event simulation (DES) of the same environment was built, driven by a fixed, deterministic controller reading only a restricted observation of the environment, the same information an LLM agent would have, not privileged access to the simulation's internal state. Across 50 seeds, that simple controller reached a mean net worth of $3,643.90 by simulated day 102, ahead of every published LLM agent's reported result and the human baseline.
+</p>
+
+<figure>
+  <img src="/assets/images/agentic-factory-vendbench-networth.png" alt="Line chart: DES mean net worth (with a shaded one-standard-deviation band across 50 runs) rising steadily to roughly $3,600 by day 102, plotted against scattered points for nine published LLM agents and a human baseline, none of which reach the DES line's endpoint">
+  <figcaption><strong>Figure.</strong> DES controller net worth (mean &plusmn; 1&sigma;, 50 runs) against the published Vending-Bench results: every LLM agent and the human baseline finish below the simple controller's trajectory.</figcaption>
+</figure>
+
+<h3>How the DES actually models the vending machine</h3>
+
+<p>
+  The comparison is only meaningful if the DES genuinely plays by the same rules the LLM agents faced: it never sees the environment's raw internal state, only a whitelisted observation snapshot, and every restocking, pricing, or cash decision goes through the same time-costed tool calls an LLM agent would have to make, rather than mutating the simulation directly.
+</p>
+
+<figure>
+  <img src="/assets/images/agentic-factory-vendbench-observation-boundary.png" alt="Diagram: the Environment's raw state (cash, inventory, prices, active shocks, RNG streams, hidden demand parameters) only reaches the Controller through a whitelisted Observation snapshot; the Controller's decisions are applied back to the Environment only via a Kernel that charges time for each tool call">
+  <figcaption><strong>Figure.</strong> The observation boundary: the controller only ever sees a whitelisted snapshot, and only ever acts through the same time-costed tool calls an LLM agent would use.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/agentic-factory-vendbench-order-lifecycle.png" alt="Sequence diagram: an order is placed with cost deducted immediately, a random negotiation delay is applied, then rejection, partial-fulfilment, and late-delivery are each rolled probabilistically before the fulfilled quantity is delivered into storage">
+  <figcaption><strong>Figure.</strong> One restocking order's full lifecycle: immediate cost deduction, a random negotiation delay, then independent rolls for rejection, partial fulfilment, and late delivery.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/agentic-factory-vendbench-daily-cycle.png" alt="Flowchart of one simulated day: realise sales, update statistics, weekly price review, deduct the daily operating fee, check for bankruptcy, roll background hazards, build the observation, let the controller decide restocking, apply decisions via time-costed tool calls, optionally collect the cash box, then advance to the next day or terminate">
+  <figcaption><strong>Figure.</strong> One simulated day end to end: sales, weekly price review, the operating fee and bankruptcy check, restocking decisions, and cash collection, all logged to the trajectory before advancing.</figcaption>
+</figure>
+
+<p>
+  That result isn't an argument that agents are pointless, it's the actual justification for Agentic Factory's shape: a bounded, well-specified operations problem doesn't obviously need an autonomous agent to solve it well, so the interesting question shifts from "can an agent do this" to "where specifically does agent-based coordination start winning over a rule-based or DES approach, and where does it not." Parts one and two below are built to answer that directly rather than assume an answer either way.
+</p>
+
 <h2>Part one: HarnessBench</h2>
 
 <p>
@@ -55,6 +95,34 @@ image_scale: 1.41
   Discrete-event simulation is the established way to model manufacturing throughput: define the process statistically (arrival rates, service times, resource constraints) and simulate the queue. It's mature and well-understood, but it assumes the process is stable and its statistics are known in advance, an assumption that breaks down around exactly the disruptions and edge cases a real factory floor deals with. The academic side of Agentic Factory sets that DES baseline up against agent-based coordination on the same underlying factory model, to see where each approach actually wins rather than assuming agentic coordination is strictly better because it's newer: DES for the well-behaved, statistically stable parts of the process, agent coordination for handling the disruptions DES has to model away or ignore.
 </p>
 
+<figure>
+  <img src="/assets/images/agentic-factory-birdseye.png" alt="A top-down view of the simulated factory floor: an agent figure near a labelled workstation, pallets, shelving, and equipment scattered across the floor plan">
+  <figcaption><strong>Figure.</strong> The shared simulated factory floor, viewed from above: the same environment an agent and a DES shadow are set to work simultaneously in the live comparison.</figcaption>
+</figure>
+
+<p>
+  Six coordination architectures are compared head-to-head against the DES baseline, not just one: a single agent working alone, a supervisor/worker split, a dual-loop design, a shared blackboard, an AI-informed DES, and an approval-gated variant. Every architecture runs against the same environment, the same fixed seed set, and the same tool interface, with operational, computational, and system-level metrics captured identically before a paired statistical comparison is run per scenario, per seed, and per architecture group.
+</p>
+
+<figure>
+  <img src="/assets/images/agentic-factory-methodology.png" alt="Methodology diagram: a shared environment and an 18-scenario suite feed a fixed seed set, which drives both a DES baseline and six treatment architectures (single agent, supervisor/worker, dual-loop, blackboard, AI-informed DES, approval-gated), all captured by the same metric pipeline before a paired statistical comparison produces a per-architecture, per-group report">
+  <figcaption><strong>Figure.</strong> The comparison methodology: one shared environment and scenario suite, six agent architectures plus the DES baseline, identical metric capture, and a paired statistical comparison at the end.</figcaption>
+</figure>
+
+<p>
+  The scenario suite itself is deliberately tiered rather than a single difficulty level: eighteen problems climbing from a deterministic single-order baseline, through stochastic timing, machine contention and routing, mid-run disruption (breakdowns, stock shortages, shift-change capacity dips, operator absence), priority and natural-language context, up to multi-agent and compounded-complexity scenarios, grouped further by how many production routes a floor actually runs.
+</p>
+
+<figure>
+  <img src="/assets/images/agentic-factory-scenario-suite.png" alt="The 18-scenario suite grouped into six tiers of increasing difficulty: deterministic baseline, stochastic timing, contention and routing, disruption, priority and NL context, and multi-agent/compounded, further split by route-composition group (pure screen-printing, screen-printing plus other routes, full multi-route floor)">
+  <figcaption><strong>Figure.</strong> The full eighteen-scenario suite, tiered from a deterministic single order up to compounded multi-agent disruption, so the comparison isn't resting on one easy case.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/agentic-factory-environment-comparison.png" alt="Environment comparison page: Agent and DES shadow panels side by side, each showing pending/finished/unfulfillable/queued order counts and a full order table with route, quantity, due time, reworks, and status, plus a 'Problems for this seed' section flagging genuinely unfulfillable orders">
+  <figcaption><strong>Figure.</strong> Order-level detail behind the headline metrics: the same seeded scenario run by both sides, down to which specific orders are late, queued, or genuinely unfulfillable.</figcaption>
+</figure>
+
 <h2>Part three: the natural-language demonstrator</h2>
 
 <p>
@@ -66,13 +134,30 @@ image_scale: 1.41
   <figcaption><strong>Figure.</strong> "Design My Order": pick a garment, describe a design in plain English, and a real agent schedules and produces it on the live factory floor.</figcaption>
 </figure>
 
+<p>
+  The same free-text channel also lets a person mid-run redirect the agent, not just place new orders through it, "deprioritise ORD-014, it's not urgent" typed into the compare dashboard's instruction box has to be attributed to a real order, classified into an actual scheduling effect, and executed through the agent's normal tool surface with a human-readable log entry, not silently acknowledged and dropped.
+</p>
+
+<figure>
+  <img src="/assets/images/agentic-factory-nl-pipeline.png" alt="Pipeline diagram: a free-text instruction is first seen by one of six possible architecture components, then ingested, attributed to a concrete order, classified into an intent and proposed effect, and finally executed via a normal tool call, logged for attribution correctness, behavioural change, and traceability">
+  <figcaption><strong>Figure.</strong> What happens to a typed instruction after "Send": ingest, attribute it to a real order, classify the intended effect, then execute it through the same tool surface as any other decision.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/agentic-factory-explore.png" alt="A first-person 'agent point of view' view of the simulated factory floor: a brick wall with a window, a tiled floor, and a purple KPI card visible in the corner">
+  <figcaption><strong>Figure.</strong> The explore view: walking the factory floor from the agent's own first-person point of view, rather than only the bird's-eye or dashboard perspectives.</figcaption>
+</figure>
+
 <h2>Headline results</h2>
 
 <ul>
+  <li>A from-scratch DES baseline, reading the same restricted observation an LLM agent would, outperformed all nine published Vending-Bench LLM agents and the human baseline on final net worth across 50 seeds, directly motivating where the rest of the project focuses agentic coordination.</li>
   <li>A common adapter interface lets a new agent framework be added and benchmarked against the existing 100+ task suite without changing the scoring or task definitions themselves.</li>
   <li>Process scoring from the usage-proxy trace gives a read on <em>how</em> an agent worked (tool use, consistency, robustness, security) independently of whether the final output happened to be correct, separating "got the right answer" from "got there safely and sensibly."</li>
   <li>Outcome scoring is deliberately oracle-first: only two of the 100+ tasks let an LLM quality judgement influence the result score at all, and even then at a fixed, oracle-dominant weighting, so the benchmark can't be gamed by an agent that's good at sounding convincing.</li>
   <li>Token and usage accounting is tracked per run, making cost/performance trade-offs between frameworks directly comparable rather than anecdotal.</li>
-  <li>The DES-vs-agent comparison runs live, not just as a one-off offline result: the same seeded factory floor is worked simultaneously by a real agent and a DES shadow, with throughput, cycle time, queue time, tardiness, and machine utilisation streamed to both sides of the dashboard as they happen.</li>
+  <li>Six coordination architectures, not one, are compared against the DES baseline across an eighteen-scenario tiered suite, so "agents beat DES" or vice versa is a scenario-and-architecture-specific finding, not a single headline claim.</li>
+  <li>The DES-vs-agent comparison runs live, not just as a one-off offline result: the same seeded factory floor is worked simultaneously by a real agent and a DES shadow, with throughput, cycle time, queue time, tardiness, and machine utilisation streamed to both sides of the dashboard as they happen, down to which individual orders are late or unfulfillable.</li>
   <li>"Design My Order" closes the loop from natural language to physical schedule: an order typed into the configurator is a real instruction to the running agent, not a canned animation, and is traceable through to the same live factory view the DES comparison uses.</li>
+  <li>Mid-run natural-language steering (re-prioritising or holding an order by typing an instruction) is attributed, classified, and executed through the agent's normal tool surface with a logged reason, rather than being a free-text box that quietly does nothing.</li>
 </ul>

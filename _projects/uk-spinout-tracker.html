@@ -16,13 +16,8 @@ image_scale: 1.25
 </p>
 
 <figure>
-  <img src="/assets/images/uk-spinout-tracker-landing.png" alt="The UK Spin-out Tracker landing page: the wordmark and tagline on the left, and example questions (which universities get more or less funding than predicted, where is investor money going, how does a university compare to others) on a purple panel on the right">
-  <figcaption><strong>Figure.</strong> The landing page, framed around the actual questions the dashboard answers rather than a generic feature list.</figcaption>
-</figure>
-
-<figure>
-  <img src="/assets/images/uni-spinout-tracker-preview.png" alt="Dashboard tables and charts showing predicted-versus-actual research council funding by institution, and per-research-council model predictability scores">
-  <figcaption><strong>Figure.</strong> Predicted-versus-actual funding by institution, and per-research-council predictability, from the dashboard's funding model.</figcaption>
+  <img src="/assets/images/uk-spinout-tracker-map.png" alt="The Map tab, and the dashboard's actual landing page: spin-out density plotted across UK regions, with a National overview panel (2,557 spin-outs tracked, 2,109 active, 88 founded in 2025, 82% survival) and an Investment & Funding panel (£2,618.3m combined QR/REG and HEIF/KEIF funding, 153 institutions covered, £13,161.7m total known spin-out investment)">
+  <figcaption><strong>Figure.</strong> The landing page: a live national map, not a marketing splash screen, since the default view is geographic rather than tabular.</figcaption>
 </figure>
 
 <h2>What it covers</h2>
@@ -41,11 +36,70 @@ image_scale: 1.25
   HESA's own spin-out register records that a company exists and which institution it came from, and not much else, no sector, no funding history, no exit status. A separate enrichment pipeline fills that in for roughly 2,500 companies: each one is resolved to a Companies House company number, then a set of enrichment agents append what they find, sector classification, investment events (both a full historical backfill and an ongoing incremental diff), and exit signals (acquisition, dissolution, and so on), to an append-only SQLite fact store, corroborating with web search where Companies House filings alone don't settle a question. Nothing is overwritten, so the provenance of any given fact stays inspectable; the latest fact per company is then joined back against the original register and exported into the warehouse, and from there into the static JSON the frontend actually bundles.
 </p>
 
+<h2>Guided tour</h2>
+
+<p>
+  From the map above, the same nav bar walks through every other view.
+</p>
+
+<figure>
+  <img src="/assets/images/uk-spinout-tracker-02-overview.png" alt="The Overview tab: headline KPIs (99 institutions, 12 regions, 2557 spin-outs), a spin-outs-founded-per-year chart showing sharp acceleration since the mid-2000s, a top-5-institutions leaderboard, register status split, and a sector/industry breakdown">
+  <figcaption><strong>Figure.</strong> Overview: headline KPIs, formation trends since 2006, the top institutions by spin-out count, register status, and sector mix, each with a link through to the page that covers it in full.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/uk-spinout-tracker-03-universities.png" alt="The Institutions tab: a searchable grid of 99 higher education institutions, each card showing the institution's logo, name, and region">
+  <figcaption><strong>Figure.</strong> Institutions: every one of the 99 higher education institutions on the HESA register, searchable and logo-carded rather than a bare list.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/uk-spinout-tracker-04-regions.png" alt="The Regions tab: the same UK map as the national overview, but click-through by region to drill into that region's institutions and spin-outs">
+  <figcaption><strong>Figure.</strong> Regions: the same real ONS boundary map as the national view, but click-through, grouping every institution and spin-out by UK region.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/uk-spinout-tracker-05-spinouts.png" alt="The Spin-outs tab: a searchable, sortable, filterable register of all 2,557 spin-out companies, shown as cards with institution, sector, and known funding">
+  <figcaption><strong>Figure.</strong> Spin-outs: the full 2,557-company register, searchable by name or institution and filterable by status, loaded incrementally rather than all at once.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/uk-spinout-tracker-06-funding.png" alt="The Funding tab: a multi-line chart of research-council income by year, a donut chart and table of institutions by total funding, and per-research-council funding totals with a drill-down selector">
+  <figcaption><strong>Figure.</strong> Funding: block-grant and per-research-council income by year and by institution, from QR/REG and HEIF/KEIF down to individual councils like EPSRC and MRC.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/uk-spinout-tracker-07-investors.png" alt="The Investors tab: a searchable, sortable directory of private investment companies ranked by total known investment, each row showing companies backed and funding rounds">
+  <figcaption><strong>Figure.</strong> Investors: 2,485 named investors identified from corroborated Companies House share-allotment filings, explicitly documented as a floor on real venture activity rather than a complete directory.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/uk-spinout-tracker-08-predictions.png" alt="The Predictions tab: a feature-importance chart for what drives predicted funding, tables of the most under- and over-predicted institutions by actual-versus-predicted research council income, and a per-research-council predictability chart">
+  <figcaption><strong>Figure.</strong> Predictions: the funding-prediction model's own feature weights, its most under- and over-predicted institutions, and how well it explains funding separately for each research council.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/uk-spinout-tracker-09-favorites.png" alt="The Favorites tab, shown empty: a prompt to click the star icon next to any institution, investor, or spin-out to pin it here">
+  <figcaption><strong>Figure.</strong> Favorites: any institution, investor, or spin-out can be pinned here for quick return, shown here in its empty default state.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/uk-spinout-tracker-11-sandbox.png" alt="The Sandbox tab, shown empty: an infinite-canvas workspace with zoom controls and buttons to add text, arrows, or an AI-generated chart, prompting the user to snapshot KPI tiles or charts from any page into it">
+  <figcaption><strong>Figure.</strong> Sandbox: a free-form canvas for pulling KPI tiles and charts off any other page and arranging them together, annotating with text and arrows, or asking for a new chart outright.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/uk-spinout-tracker-10-logo-editor.png" alt="An internal Logo positioning tool: a searchable institution list, each with a checkmark, and a drag-to-pan, slider-to-zoom editor for calibrating that institution's logo position on the map, reading '96 of 98 calibrated'">
+  <figcaption><strong>Figure.</strong> Behind the scenes: the internal logo-positioning tool used to hand-calibrate each institution's crest against the map, drag to pan and a slider to zoom, like setting a profile picture.</figcaption>
+</figure>
+
 <h2>Headline results</h2>
 
 <ul>
   <li>A reproducible data pipeline (raw HESA/UKRI downloads &rarr; DuckDB warehouse &rarr; both a live query API and static frontend datasets) rather than a one-off spreadsheet analysis.</li>
+  <li>A geocoded national map as the default view, surfacing spin-out density, funding density, and sector hotspots by region alongside live formation and investment totals, rather than requiring an institution search first.</li>
   <li>A funding-prediction model compared against actual research council income across all 70 institutions in scope, surfacing which institutions are notably over- or under-funded relative to their predicted profile.</li>
   <li>Per-council predictability varies substantially: EPSRC and MRC income are well explained by institutional size/profile (R&sup2; of 0.84 and 0.91 respectively), while STFC funding is effectively unpredictable from those features alone (R&sup2; of &minus;0.18), consistent with STFC funding being concentrated in a small number of specialist institutions the model's features can't see.</li>
   <li>The HESA spin-out register enrichment pipeline (Companies House + web search) adds the "what is this company and how is it funded" context the raw register doesn't provide on its own.</li>
+  <li>2,485 named investors identified purely from corroborated Companies House filings, explicitly framed as a floor rather than a complete picture, since most funding rounds in the register name no investor at all.</li>
+  <li>A sandbox workspace for building bespoke comparisons out of any other page's charts and KPI tiles, rather than the dashboard's own page layouts being the only way to view the data.</li>
 </ul>
