@@ -962,6 +962,12 @@ body.lightbox-open { overflow: hidden; }
       letter-spacing: 0.04em;
     }
 
+    // Override the base theme's fixed grey text and white even-row stripes,
+    // which break in dark mode.
+    color: var(--text);
+    margin: 0;
+    tr, tr:nth-child(even) { background: transparent; }
+
     tr:last-child td { border-bottom: none; }
   }
 

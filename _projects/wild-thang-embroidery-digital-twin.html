@@ -6,7 +6,6 @@ status: "Active (VEC internship)"
 image: /assets/images/logo-twin-thang.png
 tags: [Digital Twins, Manufacturing, Computer Vision, AI Agents, NFC]
 description: "A live digital twin of an embroidery production line: NFC-tagged operator tracking, machine production data, an integrated AI assistant, and computer-vision research into factory-floor tracking."
-published: false
 ---
 
 <p class="lede">
@@ -18,6 +17,22 @@ published: false
   <figcaption><strong>Figure.</strong> The dashboard's overview: 3D factory layout, per-machine detail (current job, predicted time remaining, utilisation), and a live production Gantt chart.</figcaption>
 </figure>
 
+<h2>Context and funding</h2>
+
+<p>
+  Wild Thang is a Liverpool garment-decoration company, and this work was carried out with them during my internship at the Virtual Engineering Centre (VEC), University of Liverpool, in two funded parts. Part one, digitalising production (the dashboard, the machine data pipeline, and job tracking), was funded by Horizon Europe. Part two, research and innovation, was funded through LCR Innovations by the Liverpool City Region Combined Authority; it covers the CCTV tracking research below, and the benchmarking and simulation work described in <a href="{{ '/projects/agentic-factory/' | relative_url }}">Agentic Factory</a>, which uses Wild Thang's factory floor as its first use case.
+</p>
+
+<div style="display:flex;flex-wrap:wrap;gap:2rem;align-items:center;justify-content:center;margin:1.5rem 0">
+  <img src="/assets/images/funder-horizon-europe-logo.png" alt="Horizon Europe logo" style="height:70px;width:auto">
+  <img src="/assets/images/funder-lcr-combined-authority-logo.png" alt="Liverpool City Region Combined Authority logo" style="height:70px;width:auto">
+</div>
+
+<figure>
+  <img src="/assets/images/wild-thang-landing.png" alt="The Wild Thang Digital Twin landing page: four coloured window frames on a light background, with the title Wild Thang Digital Twin, the line Look through the windows into the factory, and an Open dashboard button">
+  <figcaption><strong>Figure.</strong> The dashboard's landing page: clicking through the frames opens the live factory view.</figcaption>
+</figure>
+
 <h2>What it covers</h2>
 
 <p>
@@ -26,6 +41,26 @@ published: false
 
 <p>
   Sitting on top of both data sources is an AI assistant built into the dashboard itself, answering natural-language questions about the factory floor. A separate, earlier-stage research track looks at multi-camera multi-target (MCMT) tracking, using camera-based tracking datasets and literature to work out whether computer vision could add a further, independent layer of floor-activity data alongside the machine logs and NFC taps.
+</p>
+
+<h3>What the dashboard shows</h3>
+
+<p>
+  The problem at the start was that production decisions were not backed by data, so time lost to stalled machines, thread breaks, and slow designs went unnoticed. The dashboard is read-only: it never controls the machines, and its job is to make that data readable for operators and supervisors.
+</p>
+
+<ul>
+  <li><strong>3D factory view.</strong> Each machine is a labelled 3D model with a coloured ring for its status: running, idle, low run ratio, or thread break.</li>
+  <li><strong>KPI cards.</strong> Jobs running now, output per hour and per day, and a run-ratio gauge. Each card opens a chart or table with comparison against the factory average or the previous period.</li>
+  <li><strong>Alerts and recommendations.</strong> A banner surfaces automatic suggestions in three tiers (urgent, useful, optional), triggered by rules on thread breaks and idle time, such as a machine standing idle for 30 minutes or more during working hours.</li>
+  <li><strong>Predicted time remaining.</strong> An estimate for the current job based on past jobs with the same design on the same machine, scaled by progress so far and the current run ratio, shown with a confidence label and the number of historical jobs behind it.</li>
+  <li><strong>Design tab.</strong> Designs grouped into collections and ranked by jobs, output, or lost time, with the job history for each, which shows whether a design is slow or prone to thread breaks across machines.</li>
+  <li><strong>Weekly summary export.</strong> A print-ready seven-day report (KPIs, machine breakdown, daily output, top designs, thread breaks, and recommendations) designed for production meetings.</li>
+  <li><strong>A glossary.</strong> The user guide separates fields the HCR3 reports directly (run time, pause time, output) from values the dashboard derives (run ratio, total stitches, design collections), so any figure can be traced back to how it was produced.</li>
+</ul>
+
+<p>
+  A legacy version of the assistant was an OpenAI-powered chatbot that could produce charts and used retrieval over the machine manuals to answer operating questions alongside production advice. The current assistant, described below, uses a stricter pipeline.
 </p>
 
 <h3>Closing the data gap: no API, no problem</h3>
@@ -53,10 +88,6 @@ published: false
   The fix was a Raspberry Pi wired to each machine as a USB gadget, presenting itself to the HCR3 simultaneously as a mouse and a flash drive: it can drive the machine's own touchscreen menus programmatically and then receive the exported CSV the machine writes to it, without the machine ever knowing it isn't talking to a human with a USB stick. An NFC tap on the shop floor is what triggers the pull, so an operator finishing a job taps a tag, the Pi navigates the report menu and grabs the CSV, and the data is in the database moments later with no one having stood at the machine on purpose to extract it.
 </p>
 
-<figure>
-  <img src="/assets/images/wild-thang-pi-control-panel.png" alt="The HCR3 pipeline control panel: a web page explaining that the NFC site's 'Collect Data from Machine' button triggers the real pipeline on the Pi, with a choice of 'Python clicker (fixed positions)' or 'Recorded (TinyTask-style)' automation mode, a Preview now button, and status line reading mode: taps_csv, mongo: ok, last uploaded row No.: 106">
-  <figcaption><strong>Figure.</strong> The Pi's own control panel for the click-through automation: a choice of clicking strategy, a live status line, and a way to preview a run by hand before trusting a real NFC trigger to it.</figcaption>
-</figure>
 
 <h3>Job tracking, and its access boundary</h3>
 
@@ -65,17 +96,17 @@ published: false
 </p>
 
 <figure>
-  <img src="/assets/images/wild-thang-machine-log.png" alt="The NFC tap landing page, Machine Log: a machine selector dropdown and three large buttons, Check In (green), Change Your Job (amber), and Extract Data (red)">
-  <figcaption><strong>Figure.</strong> What an operator actually sees after an NFC tap: pick the machine, then check in, change job, or trigger a data extraction.</figcaption>
+  <img src="/assets/images/wild-thang-machine-log.png" alt="The Wild Thang beta job tracking portal's Job Log page: a prompt to select your department and name, and four department cards with icons: Embroidery Production, Screenprint, Digital, and Warehouse and Finishing">
+  <figcaption><strong>Figure.</strong> The job tracking portal: an operator chooses a department, then their name, then logs which job they are working on.</figcaption>
 </figure>
 
 <p>
-  That job-movement data is deliberately locked down: it's only queryable over an admin account, not exposed through the same routes as the production dashboard itself.
+  The job-movement data sits in a separate Job History view. It shows activity by department and employee, design jobs filtered by their Outlook calendar category (order live, order complete, fulfilment, dispatch), and a day-by-day employee timeline. The dashboard and Job History both sit behind a shared password screen, and the NFC page is only reachable over the company's private Tailscale network, because it shows staff names.
 </p>
 
 <figure>
-  <img src="/assets/images/wild-thang-job-history.png" alt="An employee and design activity panel failing to load, with the error message: API request failed: 403 Forbidden - {'detail':'Admin role required.'}">
-  <figcaption><strong>Figure.</strong> The access boundary in practice: an employee-activity view refusing to load outside an admin session.</figcaption>
+  <img src="/assets/images/wild-thang-job-history.png" alt="The Job History view: an Employee activity panel with department buttons (Embroidery Production, Screenprint, Digital, Warehouse and Finishing), a Design activity panel with job search, calendar-category filters and job cards, and an Employee timeline for the selected day">
+  <figcaption><strong>Figure.</strong> Job History: employee activity by department, design jobs by calendar category, and the employee timeline for a chosen day.</figcaption>
 </figure>
 
 <h3>An assistant that isn't allowed to make numbers up</h3>
@@ -120,6 +151,16 @@ published: false
 </figure>
 
 <figure>
+  <img src="/assets/images/wild-thang-reid-tsne.png" alt="Two t-SNE plots of re-identification embeddings: on the left, points coloured by camera forming tight clusters; on the right, the same layout with the actual detected person crop drawn at each point">
+  <figcaption><strong>Figure.</strong> Re-ID embeddings projected with t-SNE, coloured by camera (left) and with each point's detected crop drawn in place (right). The plots are used to check whether the embeddings group detections of the same person seen from different cameras.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/wild-thang-mcmt-topdown.jpg" alt="A top-down render of the open-source warehouse dataset's floor: shelving, pallets, workstations, and marked floor zones, used as the shared floor plane for tracking">
+  <figcaption><strong>Figure.</strong> The shared floor plane from the open-source warehouse dataset, onto which every camera's detections are projected.</figcaption>
+</figure>
+
+<figure>
   <img src="/assets/images/wild-thang-mcmt-3d-skeleton.png" alt="The 3D skeleton viewer: camera footage with three tracked people boxed and labelled, alongside a note that each tracked person's 3D body pose is rebuilt frame by frame from every camera that saw them">
   <figcaption><strong>Figure.</strong> Stage four, 3D pose triangulation: each tracked person's body pose rebuilt frame by frame from every camera that saw them, not just the nearest one.</figcaption>
 </figure>
@@ -129,8 +170,9 @@ published: false
 <ul>
   <li>Live per-machine dashboard (3D factory layout, current job, predicted completion time with a confidence level, utilisation split into run/interval/pause) driven directly from the machines' own logs.</li>
   <li>A Raspberry Pi USB-gadget bridge (presenting as a mouse and flash drive) turns an API-less machine's manual USB export into an NFC-tap-triggered automatic pull, closing the hardware data gap without any cooperation from the machine vendor.</li>
+  <li>Three-tier alerts from thread-break and idle-time rules, per-job completion predictions with a stated confidence, and a print-ready weekly summary for production meetings.</li>
   <li>NFC-based operator and job tracking with resilient offline queueing on the reader Pi, so network drops at the machine don't cost attendance or job-selection data.</li>
-  <li>A separate job-movement tracker, built on the Microsoft Graph Mail and Calendar APIs for order and scheduling data, deliberately gated behind an admin-only account rather than exposed on the main dashboard.</li>
+  <li>A separate job-movement tracker, built on the Microsoft Graph Mail and Calendar APIs for order and scheduling data, kept behind a shared password screen, with the NFC page reachable only over a private network.</li>
   <li>An integrated AI assistant answering natural-language questions about the floor by querying live production and NFC data through its own tool set, rather than a static report.</li>
   <li>Design-level analytics (job count, output, run ratio, lost minutes) ranked and searchable per embroidery design, surfacing which designs are actually costing the most machine time.</li>
   <li>A working MCMT prototype (homography calibration, YOLO detection, cross-camera Re-ID, 3D pose triangulation) validated on an open dataset, as a prospective further data source independent of the machine logs and NFC taps.</li>

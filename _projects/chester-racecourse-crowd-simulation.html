@@ -5,8 +5,7 @@ date: 2026-03-20
 status: "Active (VEC internship)"
 image: /assets/images/chester-racecourse-live-sim.png
 tags: [Simulation, Data Visualisation, JavaScript, Digital Twins]
-description: "An interactive raceday crowd, queue, and spending simulation for Chester Racecourse, overlaid directly on the venue's own real site map."
-published: false
+description: "A race-day digital twin for Chester Racecourse: a crowd, queue, and spending simulation on the venue's own site map, an operations dashboard with incident prediction, and a georeferenced 3D model of the estate."
 image_position: "0.0% 0.0%"
 image_scale: 1.25
 ---
@@ -36,13 +35,62 @@ image_scale: 1.25
   A single source-of-truth file lists every gate, bar, food stall, betting point, toilet block, and named enclosure straight off the map's legend; both the 2D map overlay and the standalone 3D model read from that same list, so the two views can't quietly drift apart from each other over time. The 3D model layers a further, independently sourced piece of ground truth on top: real, surveyed building footprints for 18 structures around the course, pulled from Ordnance Survey's open Data Hub Features API rather than crowd-sourced mapping data. Only two of those footprints could be confidently matched to a named building by proximity to known landmarks (the Weighing Room and the Owners &amp; Trainers Pavilion); the rest render as an unlabelled but structurally real backdrop rather than guessed names. The large grandstands don't appear in that dataset at all, most likely because their open-sided roof canopies aren't captured as enclosed "buildings" in a topographic survey, so those stay as hand-built geometry, positioned by eye against the verified aerial photo instead.
 </p>
 
-<figure>
-  <img src="/assets/images/chester-racecourse-3d-model.png" alt="The standalone 3D model: an interpretive rendering of the racecourse with real aerial imagery as ground texture, hand-built track and building geometry, and a landmark-exploration control panel">
-  <figcaption><strong>Figure.</strong> The standalone 3D model, with real aerial imagery as ground texture and a landmark-exploration panel for flying to any gate, bar, or enclosure by name.</figcaption>
-</figure>
 
 <p>
   The 3D model also has a live editing mode: click any marker and a drag gizmo lets you move, resize, or rotate it directly in the browser to nudge it closer to the real map, with edits autosaved to the browser and a one-click export back to plain JSON for baking a correction into the source data permanently, rather than every positioning fix needing a code change.
+</p>
+
+<h2>Phase two: an operational digital twin</h2>
+
+<p>
+  The map-overlay simulation above became the first stage of a fuller digital twin, built during my internship at the Virtual Engineering Centre (VEC), University of Liverpool. It has one simulation engine and three ways of looking at it: an operations dashboard, a 3D explorer of the real estate, and a viewer for the Matterport scans of the buildings. The engine runs as a separate model API, which publishes live state every second and accepts commands, scenario branches, replays, and observation data through a documented interface.
+</p>
+
+<figure>
+  <img src="/assets/images/chester-racecourse-raceday-dashboard.jpg" alt="The Race-day operations dashboard for an Autumn Festival Saturday: attendance, staff pay, run mode and speed controls; a strip of seven races with off times; headline figures for people on site, average wait, guest experience, takings, and staff and wages; a chart of people on site through the day with dashed lines at each race; an incidents panel with Fight, Police intervention and Medical emergency options; and panels for queue waits, enclosure occupancy and risk">
+  <figcaption><strong>Figure.</strong> The race-day operations dashboard at the end of a simulated day: the seven-race strip, headline figures, attendance through the day with each race marked, incident controls, queue waits, enclosure occupancy, and the risk panel.</figcaption>
+</figure>
+
+<h3>The engine and the dashboard</h3>
+
+<p>
+  The engine simulates race-relative arrivals, traffic and parking, gate service, walking between areas, zone occupancy, destination choice, queues at bars, food outlets, betting points and toilets, customers abandoning long queues, payments, staff and wages, and departures. The dashboard controls it. Attendance can follow the day's random draw (17,000 to 19,000) or be set to quiet, typical, or busy. Staff pay can be set to the planned roster, a flat minimum wage, race-peak premium shifts, or the Real Living Wage, which changes who turns up, how fast they serve, and the wage bill. Headline figures include people on site against the expected total, average and longest queue, a guest-experience score out of 100, takings before and after wages, and staff on duty.
+</p>
+
+<p>
+  Incidents can be inserted by hand (a fight, a police intervention, or a medical emergency at a chosen location), and they play out in both the dashboard and the 3D explorer, with responders arriving. In stochastic mode, incidents also arise on their own at rates driven by time of day, crowding, bars, and weather, and each carries a "Predicted" tag stating what drove it. The risk panel shows expected incidents in the next hour and the riskiest places, and "Predict rest of day" runs 16 simulated copies of the remaining day to give an expected count and likely range for each incident type.
+</p>
+
+<h3>A georeferenced model of the estate</h3>
+
+<figure>
+  <img src="/assets/images/chester-racecourse-3d-estate.jpg" alt="A wide oblique 3D view of Chester Racecourse, the Roodee, with the oval course and infield in the centre, the River Dee and railway viaduct to the left, and the city of Chester behind">
+  <figcaption><strong>Figure.</strong> The 3D explorer's view of the Roodee on photorealistic 3D tiles, where the live crowd, horses, and incidents are drawn. Imagery: Google.</figcaption>
+</figure>
+
+<p>
+  The reconstruction is anchored to British National Grid (EPSG:27700) with the OSTN15 horizontal and OSGM15 vertical transformations. During the build, the coordinate library silently chose a lower-accuracy Helmert transformation, which differed from OSTN15 by about 1.7 metres in northing at the site, so the pipeline now refuses to run without the proper grid. An audit of open data confirmed that OpenStreetMap has no racetrack geometry for Chester and that none of the 18 buildings inside the course boundary is identified as a grandstand. Building heights derived from elevation data were checked against published heights for 2,041 buildings, with an RMSE of 1.51 metres, inside the 2.5-metre threshold for a level-of-detail 1 model.
+</p>
+
+<figure>
+  <img src="/assets/images/chester-racecourse-lod1-massing.jpg" alt="An untextured grey-green 3D massing model of the racecourse and the surrounding city blocks, with the course outline visible">
+  <figcaption><strong>Figure.</strong> Building massing from open elevation and footprint data, used to validate heights before any textured model was trusted.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/chester-racecourse-scan-on-aerial.jpg" alt="An oblique aerial view of the racecourse enclosures, where brightly coloured Matterport scan geometry of the paddock and buildings is merged into the surrounding aerial imagery of the city">
+  <figcaption><strong>Figure.</strong> Matterport scans of the enclosures registered into the aerial model of the estate.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/images/chester-racecourse-matterport-scan.jpg" alt="An isolated oblique view of the Matterport scan of the racecourse buildings and paddock, floating on a grey background">
+  <figcaption><strong>Figure.</strong> The scanned buildings on their own, with reconstructed roofs and photographed detail.</figcaption>
+</figure>
+
+<h3>What is still assumed</h3>
+
+<p>
+  The engine's inputs are seeded assumptions until real data are connected. The roadmap covers calibrating incident rates against Chester's incident and first-aid logs, connecting gate scans, EPOS takings, car-park counts, and weather through the existing ingest API, validating crowd densities against CCTV or footfall counts, and, over a longer horizon, multi-day fixtures, evacuation and crowd-safety scenarios, and step-free routing.
 </p>
 
 <h2>Headline results</h2>
@@ -52,5 +100,7 @@ image_scale: 1.25
   <li>A live crowd heatmap, driven by the same choice-model occupancy and computed via Little's Law, renders as additive radial-gradient blobs sized and coloured by headcount rather than static dots.</li>
   <li>A "bars vs. food" demand sparkline, summed across every bar and food node for the whole day, shows a clear six-peak cyclical pattern tracking the race schedule in both series.</li>
   <li>A live payments panel replays the simulation's actual itemised transaction log (7,000+ entries: item, venue, price) as time advances, with each purchase triggering a brief highlight on its venue's marker.</li>
+  <li>An operations dashboard over a separate model API, with combinable attendance and staff-pay scenarios, manual and stochastic incidents, and a 16-run prediction of the rest of the day.</li>
+  <li>A reconstruction on British National Grid with validated building heights (RMSE 1.51 m over 2,041 buildings) and Matterport scans registered into the aerial model.</li>
   <li>A companion 3D model (hand-built geometry plus verified Ordnance Survey building footprints, cross-checked pixel-for-pixel against the aerial imagery before trusting it) provides an alternative, more explorable view of the same venue and node data.</li>
 </ul>

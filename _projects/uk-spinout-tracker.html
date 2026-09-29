@@ -6,7 +6,6 @@ status: "Active (VEC internship)"
 image: /assets/images/uk-spinout-tracker-logo.svg
 tags: [Data Analysis, Machine Learning, FastAPI, React]
 description: "An interactive dashboard tracking UK university spin-out activity against institutional research funding, built on HESA, UKRI, and Companies House data."
-published: false
 image_position: "-3.6% 0.0%"
 image_scale: 1.25
 ---
@@ -19,6 +18,23 @@ image_scale: 1.25
   <img src="/assets/images/uk-spinout-tracker-map.png" alt="The Map tab, and the dashboard's actual landing page: spin-out density plotted across UK regions, with a National overview panel (2,557 spin-outs tracked, 2,109 active, 88 founded in 2025, 82% survival) and an Investment & Funding panel (£2,618.3m combined QR/REG and HEIF/KEIF funding, 153 institutions covered, £13,161.7m total known spin-out investment)">
   <figcaption><strong>Figure.</strong> The landing page: a live national map, not a marketing splash screen, since the default view is geographic rather than tabular.</figcaption>
 </figure>
+
+<h2>Purpose and audience</h2>
+
+<p>
+  I built the tracker during my internship at the Virtual Engineering Centre (VEC), University of Liverpool. It connects UK university spin-out activity to each institution's income and research funding, and it was designed around four questions:
+</p>
+
+<ul>
+  <li>Where are spin-outs founded, and who funds them?</li>
+  <li>How does that connect to an institution's research income?</li>
+  <li>Which institutions are strongest by return on investment and financial health?</li>
+  <li>Is current funding healthy, and does it predict start-ups?</li>
+</ul>
+
+<p>
+  The intended users are university finance and research offices, technology transfer and commercialisation offices, institutional leadership, policymakers and funders such as Research England and UKRI, venture capital investors, and regional business and investment officers.
+</p>
 
 <h2>What it covers</h2>
 
@@ -91,6 +107,42 @@ image_scale: 1.25
   <img src="/assets/images/uk-spinout-tracker-10-logo-editor.png" alt="An internal Logo positioning tool: a searchable institution list, each with a checkmark, and a drag-to-pan, slider-to-zoom editor for calibrating that institution's logo position on the map, reading '96 of 98 calibrated'">
   <figcaption><strong>Figure.</strong> Behind the scenes: the internal logo-positioning tool used to hand-calibrate each institution's crest against the map, drag to pan and a slider to zoom, like setting a profile picture.</figcaption>
 </figure>
+
+<h2>Analysis for the University of Liverpool</h2>
+
+<p>
+  The same warehouse supported two longer analyses for the University of Liverpool, delivered as reports with accompanying figure packages. The figure below is an example finding from the dashboard's data: research income per FTE researcher by faculty, against a set of peer universities.
+</p>
+
+<figure>
+  <img src="/assets/images/uk-spinout-tracker-faculty-income.png" alt="Four line charts of research income per FTE researcher from 2015/16 to 2022/23 for Chemistry and Chemical Engineering, Physics, General Engineering, and Mathematics, each comparing Liverpool (highlighted in red) against Birmingham, Bristol, Glasgow, Leeds, Queen Mary, Sheffield, Southampton and Warwick">
+  <figcaption><strong>Figure.</strong> Research income per FTE researcher in four science and engineering departments, Liverpool (red) against eight peer institutions, from HESA data.</figcaption>
+</figure>
+
+<ul>
+  <li><strong>Grant allocation.</strong> Examines research funding levels across Liverpool's science and engineering departments, differences between departments, how concentrated award value is among individual grant-holders, dependence on particular research councils, and how reliably departmental income can be forecast. Methods include log-linear growth models with partial pooling across institutions, hierarchical models, backtests of competing forecasts, and two classifiers that assign UKRI awards to departments, combined through an agreement rule and validated externally.</li>
+  <li><strong>Times Higher Education rankings.</strong> Examines Liverpool's position in the THE World University Rankings 2026 and the gap to the top 100: which parts of the composite score can be reconstructed from institutional data and which cannot (reputation, citations and international co-authorship among them), where the available evidence supports action, and how research income, subject mix, pay, bibliometrics, and REF results compare with funding peers.</li>
+</ul>
+
+<p>
+  Both reports were written for the university, so they are behind a password.
+</p>
+
+<h3>Research grant allocation: the University of Liverpool in comparison with the Russell Group</h3>
+
+{% include password-lock.html
+   enc_src="/assets/protected/uk-spinout-tracker-grant-allocation.enc.json"
+   mode="view"
+   label="Enter the password to view the grant allocation report"
+   viewer_title="University of Liverpool grant allocation analysis" %}
+
+<h3>Institutional funding and citation performance at the University of Liverpool</h3>
+
+{% include password-lock.html
+   enc_src="/assets/protected/uk-spinout-tracker-the-rankings.enc.json"
+   mode="view"
+   label="Enter the password to view the THE rankings report"
+   viewer_title="University of Liverpool THE World University Rankings analysis" %}
 
 <h2>Headline results</h2>
 

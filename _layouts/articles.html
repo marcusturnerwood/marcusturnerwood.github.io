@@ -12,8 +12,11 @@ layout: default
   {{ content }}
 
   {%- assign series_names = "Comments on,A Survey of,Fringe Culture and Its Associated Scientific Research,Business Skills" | split: "," -%}
-  {%- assign pinned_posts = site.posts | where_exp: "post", "post.pinned == true" -%}
-  {%- assign other_posts = site.posts | where_exp: "post", "post.pinned != true" -%}
+  {%- comment -%} `jekyll serve --drafts` merges _drafts/ into site.posts; drafts
+    belong on the Drafts tab only, so keep just the posts sourced from _posts/. {%- endcomment -%}
+  {%- assign published_posts = site.posts | where_exp: "p", "p.path contains '_posts/'" -%}
+  {%- assign pinned_posts = published_posts | where_exp: "post", "post.pinned == true" -%}
+  {%- assign other_posts = published_posts | where_exp: "post", "post.pinned != true" -%}
   {%- assign posts = pinned_posts | concat: other_posts -%}
 
   {%- if posts and posts.size > 0 -%}
